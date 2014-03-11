@@ -4,19 +4,17 @@ import java.io.IOException;
 
 import communication.Communicator;
 
-public class Main {
+public class Main2 {
 
 	public static void main(String[] args) throws IOException {
 		
 		Communicator comm =  new Communicator("230.0.0.5", 7700);
 		
-		System.out.println("Receiving");
+		String message = new String("Hello World!");
 		
-		String message = new String();
+		comm.sendMessage(message);
 		
-		message = comm.receiveMessage();
-		
-		System.out.println("Received: " + message);
+		System.out.println("Sent!");
 		
 	}
 

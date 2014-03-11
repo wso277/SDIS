@@ -4,19 +4,21 @@ import java.io.IOException;
 import java.net.*;
 
 public class Communicator {
-	public static MulticastSocket socket;
+	private static int PSIZE = 65536;
+	private static MulticastSocket socket;
 	private static InetAddress address;
 	private static DatagramPacket packet = null;
 	private static DatagramPacket rpacket = null;
 	private static String ip;
 	private static int port;
+	private static byte[] buf;
 
-	Communicator(String newip, int newport) throws IOException {
+	public Communicator(String newip, int newport) throws IOException {
 		ip = newip;
 		port = newport;
 
 		try {
-			socket = new MulticastSocket();
+			socket = new MulticastSocket(newport);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -94,13 +96,15 @@ public class Communicator {
 	}
 
 	public String receiveMessage() {
+		buf = new byte[PSIZE];
+		rpacket = new DatagramPacket(buf, PSIZE);
 		
 		try {
 			socket.receive(rpacket);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
+		
 		String response = new String(rpacket.getData());
 		return response;
 		
