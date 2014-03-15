@@ -1,0 +1,100 @@
+1 - Suposições
+
+- Rede LAN. Cada computador é um servidor. Um servidor gere o espaço de disco onde armazena os chunks e é identificado pelo seu IP (estático);
+- A Rede pode perder ou duplicar mensagens mas se o sender continuar a retransmitir a mensagem eventualmente chega ao seu destino;
+- Os computadores crasham mas também recuper(perdigotos)am. Crashes podem levar a perdas de ficheiros (originais e cópias);
+- A Rede é administrada por uma única entidade num ambiente amigável. Todos os participantes seguem as regras e os chunks de backup nunca são alterados.
+
+2 - Serviço
+2.1 - Descrição do Serviço
+
+Cada ficheiro tem um computador fonte que tem a cópia original do ficheiro. Cada ficheiro a ser backed up tem um identificador único, obtido aplicando uma encriptação SHA256 a uma string de bits. A string de bits é escolhida pelo implementador, garantindo que cada ficheiro terá uma hash única. O serviço não reconhece versões de ficheiros por isso a string de bits deverá conter a data e outra metadata (owner, data de modificação, nome do ficheiro) que garanta que o ficheiro modificado tem um id diferente do original.
+
+Cada ficheiro é dividido em chunks e faz backup de cada chunk individualmente. Cada chunk é identificado pelo par (fileId, chunkNo). O tamanho de cada chunk é 64KB e o último chunk é sempre mais pequeno que este valor. Se o tamanho do ficheiro for múltiplo do tamanho do chunk o último chunk tem tamanho 0. Cada peer não precisa de ter os chunks todos de um ficheiro ou sequer um chunk de cada ficheiro. O recovery de cada chunk é independente do recovery de outros chunks.
+(perdigotos)
+Cada chunk tem um grau de replicação (número de peers em que terá de estar presente). Cada ficheiro pode ter um grau de replicação diferente mas cada chunk desse ficheiro tem o mesmo grau de replicação. A qualquer altura o grau de replicação poderá ser diferente do desejado.
+
+O serviço deverá permitir a cada servidor recuparar espaço em disco atribuído ao serviço de backup. Se um administrador decidir recuperar espaço no disco poderá ter de apagar alguns chunks. Isto (perdigotos)modificará o grau de replicação para abaixo do esperado. Desta forma o serviço tera de criar novas cópias e espalhar pela rede para voltar a atingir o grau de replicação.
+Um ficheiro poderá também ser apagado e por consequência todos os chunks desse ficheiro deverão ser apagados. Quando um ficheiro é modificado também deverão ser apagados os seus chunks porque para o serviço isto conta como um novo ficheiro.
+
+2.2 - Interface do Serviço
+É como nós quisermos desde que permita executar todas as funções necessárias:
+- Fazer backup de um ficheiro com um dado grau de replicação;
+- Restaurar um ficheiro que foi previamente replicado;
+- Apagar um(perdigotos) ficheiro previamente replicado;
+- Libertar algum espaço em disco que está a ser utilizado para armazenar chunks.
+
+Não há valorização na interface. Tanto vale por cli, gui ou ficheiro.
+
+3 - Protocolo
+
+Pode ser dividido em 4 subprotocolos:
+1 - backup
+2 - restauro
+3 - eliminação de ficheiros(perdigotos)
+4 - libertação de ficheiros
+
+Muitos destes subprotocolos são iniciados por um peer. Qualquer peer pode iniciar um protocolo.
+
+Todos os subprotocolos usam um canal de controlo (MC), para enviar mensagens de controlo. Todos os peers estão ligados a este canal. Todos os canais de comunicação são multicast. Alguns (perdigotos)protocolos usam tambem os canais de backup (MCB) e restauro (MCR).
+Os IPs e ports dos multicasts são passados como argumento do programa na seguinte ordem - IPMC portMC ipMDB portMDB ipMDR portMDR
+
+3.1 - Formato da Mensagem e Codificação de Campos
+
+As mensagens são compostas por duas partes: o header e o body. O body só é usado nalgumas mensagens.
+
+Header
+O header é composto por uma linha de campos separados por ' ' terminada pela sequência '0xD' '0xA' que simboliza <CRLF>.
+
+Estrutura:
+<MessageType> <Version> <FileId> <ChunkNo> <ReplicationDeg> <CRLF>
+
+Alguns destes campos podem não ser utilizados por algumas mensagens mas a ordem é sempre esta.
+
+<MessageType> - Auto-Explicativo(perdigotos)
+<Version> - 1.0
+<FileId> - Obtido usando a função de hash criptográfica SHA256. Como o nome indica o seu tamanho é 256 bits (32 bytes) e deve ser codificada coma uma sequência de 64 caracteres. Cada byte da hash é codificado com dois caracteres ascii correspondentes à representação hexadecimal desse byte (0xB2 -> 'B''2') e é representada do byte mais significativo ao menos significativo (au contrário (because))
+<ChunkNo> - Inteiro e começa em 0. Codificado na sequenci de caracteres ASCII correspondente à representação decimal deste número. Não deve ser maior que 6 caracteres (o máximo é 999999).
+<ReplicationDef> - um dígito, grau de replicação até 9. Representado pelo código ASCII desse dígito.
+(perdigotos)
+Body
+Quando presente representa o chunk em si. Tamanho variável. Se for menor que 64KB é o último chunk do ficheiro.
+
+3.2 - Subprotocolo de Backup
+
+Para fazer backup o peer-iniciador envia uma mensagem para o canal MDB cujo body é o conteúdo desse chunk. A mensagem também inclui o id do chunk (FileId + ChunkNo) e o grau de replicação.
+(perdigotos)
+Estrutura:
+PUTCHUNK <Version> <FileId> <ChunkNo> <ReplicationDeg> <CRLF> <CRLF> <Body>
+
+Quando um peer recebe um PUTCHUNK envia para o MC uma mensagem  com o seguinte formato:
+STORED <Version> <FileId> <ChunkNo> <CRLF> <CRLF>
+apos um intervalo aleatório entre 0 e 400 ms.
+
+O iniciador recolhe mensagens de confirmação durante meio segundo e se o número de mensagens recebidas for me nor que o grau de replicação volta a mandar esse PUTCHUNK e duplica o tempo de recepção de mensagens de confirmação. Este procedimento é repetido até um máximo de 5 vezes.
+
+Um peer deve tambem contar o número de confirmações para cada chunk que tem guardado e guardar essa informação em memória não volátil (ficheiro). Essa informação é utilizada se o peer fica(perdigotos) sem espaço e nessa altura ele deve apagar chunks cujo grau de replicação está superior ao desejado.
+
+3.3 - Subprotocolo de Restauro
+
+Este protocolo também usa o MC para controlo mas usa o MDR para data.
+Para recuperar um chunk envia a seguinte mensagem para o MC:
+GETCHUNK <Version> <FileId> <ChunkNo> <CRLF> <CRLF>
+
+Quando um peer que tem uma cópia deste(perdigotos) chunk recebe a mensagem acima responde com a seguinte mensagem pelo canal MDR:
+CHUNK <Version> <FileId> <ChunkNo> <CRLF> <CRLF> <Body>
+
+Para evitar flood ao host com mensagens chunk cada peer espera um período entre 0 e 400ms até enviar a mensagem CHUNK. Se recebe um CHUNK com o mesmo ID antes desse período acabar não envia o CHUNK.
+
+3.4 - Subprotocolo de Eliminação de Ficheiros
+Quando um ficheiro é eliminado na origem também é eliminado no serviço. Para isto o protocolo envia a seguinte mensagem ao MC:
+DELETE <FileId> <CRLF>
+
+Um peer ao receber esta (perdigotos)mensagem deverá eliminar todos os chunks com esse FileId. Esta mensagem não recebe resposta e o peer-iniciador pode envia-la as vezes que quiser para garantir a eliminação.
+
+3.5 - Subprotocolo de Libertação de Espaço em Disco
+
+O algoritmo para manter o espaço em disco reservado para backup não é especificado. Cada pessoa pode fazer o seu próprio. No entanto quando um chank que está replicado é removido tem que enviar para o MC a seguinte mensagem:
+REMOVED <Version> <FileId> <ChunkNo> <CRLF> <CRLF>
+
+Quando recebe esta mensagem, um peer que tenha uma cópia (perdigotos)local do chunk deverá actualizar a contagem local desse chunk. Se a contagem desse chunk desce abaixo do grau de replicação desejado deverá iniciar o subprotocolo de backup após um intervalo aleatório entre 0ms e 400ms. Se receber um putchunk não começará o subprotocolo.

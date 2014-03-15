@@ -1,22 +1,28 @@
 package main;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
+import backup.Backup;
 import communication.Communicator;
 
-public class Main {
 
+
+public class Main {
+	private static Backup backup;
+	private static HashMap<String, String> ipData;
+	@SuppressWarnings("unused")
 	public static void main(String[] args) throws IOException {
 		
-		Communicator comm =  new Communicator("230.0.0.5", 7700);
 		
-		System.out.println("Receiving");
+		backup = new Backup(args[2], Integer.parseInt(args[3]));
 		
-		String message = new String();
+	}
+	
+	private static void processMessage(String message) {
 		
-		message = comm.receiveMessage();
 		
-		System.out.println("Received: " + message);
 		
 	}
 
