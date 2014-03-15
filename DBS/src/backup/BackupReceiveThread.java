@@ -31,7 +31,7 @@ public class BackupReceiveThread extends Thread {
 
 	@Override
 	public void run() {
-		while (true) {
+		while (true) {	//mudar para variavel para fechar o servidor?
 
 			response = mcb.receiveMessage();
 			

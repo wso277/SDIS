@@ -5,7 +5,7 @@ import java.io.IOException;
 import communication.Communicator;
 
 public class Backup {
-	public static BackupReceiveThread brt;
+	private static BackupReceiveThread brt;
 	
 	public Backup(String ip, int port) {
 		
