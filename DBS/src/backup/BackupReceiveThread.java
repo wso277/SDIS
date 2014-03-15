@@ -8,9 +8,9 @@ import communication.Communicator;
 
 public class BackupReceiveThread extends Thread {
 
-	public static Communicator mcb;
+	public static Communicator mdb;
 	public static String ip;
-	public static String response;
+	public static String message;
 	public static DatagramPacket packet;
 	public static int PSIZE = 64000;
 	public static int port;
@@ -21,7 +21,7 @@ public class BackupReceiveThread extends Thread {
 		port = newport;
 		
 		try {
-			mcb = new Communicator(ip, port);
+			mdb = new Communicator(ip, port);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -33,9 +33,9 @@ public class BackupReceiveThread extends Thread {
 	public void run() {
 		while (true) {	//mudar para variavel para fechar o servidor?
 
-			response = mcb.receiveMessage();
+			message = mdb.receiveMessage();
 			
-			BackupProcessThread bpt =  new BackupProcessThread();
+			BackupProcessThread bpt =  new BackupProcessThread(message);
 
 		}
 	}
