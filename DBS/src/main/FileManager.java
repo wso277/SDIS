@@ -20,7 +20,7 @@ public class FileManager {
 	private static InputStream in;
 	private static OutputStream out;
 	private static byte[] chunkData;
-	private static byte[] hash;
+	private static byte[] hashFileName;
 	private static String fileName;
 	private static String rep;
 
@@ -36,19 +36,19 @@ public class FileManager {
 	public void join() {
 		int chunkNo = 0;
 
-		try {
-			in = new BufferedInputStream(new FileInputStream(file));
-		} catch (FileNotFoundException e) {
-			System.err.println("Error creating input stream");
-			e.printStackTrace();
-		}
-
 		while (true) {
 
 			File chunk = new File(fileName + "/" + chunkNo + ".part");
-
+			
 			if (chunk.exists()) {
 
+				try {
+					in = new BufferedInputStream(new FileInputStream(chunk));
+				} catch (FileNotFoundException e) {
+					System.err.println("Error creating input stream");
+					e.printStackTrace();
+				}
+				
 				chunkData = new byte[Main.getChunkSize()];
 
 				try {
@@ -84,7 +84,7 @@ public class FileManager {
 			e.printStackTrace();
 		}
 
-		while (totalBytesRead <= fileSize) {
+		while (totalBytesRead < fileSize) {	//verify filesize multiple of 64kb and and chunk
 
 			chunkData = new byte[Main.getChunkSize()];
 
@@ -98,21 +98,23 @@ public class FileManager {
 			if (bytesRead >= 0) {
 				totalBytesRead += bytesRead;
 				chunkNo++;
-				Chunk chunk = new Chunk(hash.toString(),
+				Chunk chunk = new Chunk(hashFileName.toString(),
 						Integer.toString(chunkNo), rep);
 
 				writeToFile(chunkNo, chunkData);
 
 				Main.getDatabase().addChunk(chunk);
+				System.err.println("read");
 			} else {
-				System.err.println("Error reading file");
+				System.err.println("Error reading file BytesRead: " + bytesRead);
+				break;
 			}
 
 		}
 	}
 
 	private void writeToFile(int chunkNo, byte[] data) {
-		File dir = new File(fileName);
+		File dir = new File(hashFileName.toString());
 
 		if (!dir.exists()) {
 			Boolean result = dir.mkdir();
@@ -125,7 +127,7 @@ public class FileManager {
 		File newFile = null;
 
 		if (chunkNo != 0) {
-			newFile = new File(new String(fileName + "/" + chunkNo + ".part"));
+			newFile = new File(new String(hashFileName.toString() + "/" + chunkNo + ".part"));
 		} else {
 			newFile = new File(new String(fileName));
 		}
@@ -169,7 +171,7 @@ public class FileManager {
 		}
 
 		try {
-			hash = digest.digest(strTmp.getBytes("UTF-8"));
+			hashFileName = digest.digest(strTmp.getBytes("UTF-8"));
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}

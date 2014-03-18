@@ -17,31 +17,38 @@ public class Main {
 	private static Restore restore;
 	private static Control control;
 	private static HashMap<String, Address> ipData;
-	private static Database database;
+	private static Database database = new Database();
 
 	public static void main(String[] args) throws IOException {
 
-		/*// Store address info
-		ipData.put("mc", new Address(args[0], Integer.parseInt(args[1])));
-		ipData.put("mcb", new Address(args[2], Integer.parseInt(args[3])));
-		ipData.put("mcr", new Address(args[4], Integer.parseInt(args[5])));
+		/*
+		 * // Store address info ipData.put("mc", new Address(args[0],
+		 * Integer.parseInt(args[1]))); ipData.put("mcb", new Address(args[2],
+		 * Integer.parseInt(args[3]))); ipData.put("mcr", new Address(args[4],
+		 * Integer.parseInt(args[5])));
+		 * 
+		 * // object backup which creates receive thread backup = new
+		 * Backup(ipData.get("mcb").getIp(), ipData.get("mcb") .getPort());
+		 * 
+		 * // object restore which creates restore thread restore = new
+		 * Restore(ipData.get("mcr").getIp(), ipData.get("mcr") .getPort());
+		 * 
+		 * // object control which creates control thread control = new
+		 * Control(ipData.get("mc").getIp(), ipData.get("mc") .getPort());
+		 */
 
-		// object backup which creates receive thread
-		backup = new Backup(ipData.get("mcb").getIp(), ipData.get("mcb")
-				.getPort());
+		/*
+		 * FileManager split = new
+		 * FileManager("/home/wso277/Desktop/dropbox.deb", "0");
+		 * 
+		 * split.split();
+		 */
 
-		// object restore which creates restore thread
-		restore = new Restore(ipData.get("mcr").getIp(), ipData.get("mcr")
-				.getPort());
+		FileManager join = new FileManager("[B@3146a9a",
+				"0");
 
-		// object control which creates control thread
-		control = new Control(ipData.get("mc").getIp(), ipData.get("mc")
-				.getPort());
-		*/
-		FileManager split = new FileManager("/home/wso277/Desktop/dropbox.deb", "0");
-		
-		split.split();
-		
+		join.join();
+
 	}
 
 	public static boolean checkVersion(String ver) {
