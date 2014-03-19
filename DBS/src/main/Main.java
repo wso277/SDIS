@@ -2,6 +2,8 @@ package main;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import cli.Cli;
 import restore.Restore;
@@ -17,26 +19,41 @@ public class Main {
 	private static Backup backup;
 	private static Restore restore;
 	private static Control control;
-	private static HashMap<String, Address> ipData;
 	private static Database database = new Database();
+	private static HashMap<String, Address> ipData;
+	private static ExecutorService service;
 
 	public static void main(String[] args) throws IOException {
 
+		// JAVA QUEUING EXAMPLE
+		/* service.submit(new Runnable() { 
+		 * 		public void run() {
+		 * 			do_some_work();
+		 *  	} 
+		 * }); // you can submit any number of jobs and the 8
+		 * threads will work on them // in order ... // when no more to submit,
+		 * call shutdown service.shutdown(); // now wait for the jobs to finish
+		 * service.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+		 */
+
+		// Initializing job queue
+		service = Executors.newFixedThreadPool(8);
+		
+		
 		// Store address info
 		// ipData.put("mc", new Address(args[0], Integer.parseInt(args[1])));
 		// ipData.put("mcb", new Address(args[2], Integer.parseInt(args[3])));
 		// ipData.put("mcr", new Address(args[4], Integer.parseInt(args[5])));
 
 		// Temporary IPs for testing
-		ipData = new HashMap<String,Address>();
+		ipData = new HashMap<String, Address>();
 		ipData.put("mc", new Address("224.0.100.1", 7890));
 		ipData.put("mcb", new Address("224.0.100.2", 7890));
 		ipData.put("mcr", new Address("224.0.100.3", 7890));
 
-
 		Cli cli = new Cli();
 		Cli.run();
-		
+
 		// object backup which creates receive thread
 		backup = new Backup(ipData.get("mcb").getIp(), ipData.get("mcb")
 				.getPort());
@@ -48,8 +65,7 @@ public class Main {
 		// object control which creates control thread
 		control = new Control(ipData.get("mc").getIp(), ipData.get("mc")
 				.getPort());
-		
-		
+
 		/*
 		 * FileManager split = new
 		 * FileManager("/home/wso277/Desktop/dropbox.deb", "0");
