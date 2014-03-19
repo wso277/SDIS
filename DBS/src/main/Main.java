@@ -26,20 +26,17 @@ public class Main {
 	public static void main(String[] args) throws IOException {
 
 		// JAVA QUEUING EXAMPLE
-		/* service.submit(new Runnable() { 
-		 * 		public void run() {
-		 * 			do_some_work();
-		 *  	} 
-		 * }); // you can submit any number of jobs and the 8
-		 * threads will work on them // in order ... // when no more to submit,
-		 * call shutdown service.shutdown(); // now wait for the jobs to finish
+		/*
+		 * service.submit(new Runnable() { public void run() { do_some_work(); }
+		 * }); // you can submit any number of jobs and the 8 threads will work
+		 * on them // in order ... // when no more to submit, call shutdown
+		 * service.shutdown(); // now wait for the jobs to finish
 		 * service.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
 		 */
 
 		// Initializing job queue
 		service = Executors.newFixedThreadPool(8);
-		
-		
+
 		// Store address info
 		// ipData.put("mc", new Address(args[0], Integer.parseInt(args[1])));
 		// ipData.put("mcb", new Address(args[2], Integer.parseInt(args[3])));
@@ -55,27 +52,40 @@ public class Main {
 		Cli.run();
 
 		// object backup which creates receive thread
-		backup = new Backup(ipData.get("mcb").getIp(), ipData.get("mcb")
-				.getPort());
+		service.submit(new Runnable() {
+
+			@Override
+			public void run() {
+				backup = new Backup(ipData.get("mcb").getIp(), ipData
+						.get("mcb").getPort());
+
+			}
+
+		});
 
 		// object restore which creates restore thread
-		restore = new Restore(ipData.get("mcr").getIp(), ipData.get("mcr")
-				.getPort());
+		service.submit(new Runnable() {
+
+			@Override
+			public void run() {
+				restore = new Restore(ipData.get("mcr").getIp(), ipData.get(
+						"mcr").getPort());
+
+			}
+
+		});
 
 		// object control which creates control thread
-		control = new Control(ipData.get("mc").getIp(), ipData.get("mc")
-				.getPort());
+		service.submit(new Runnable() {
 
-		/*
-		 * FileManager split = new
-		 * FileManager("/home/wso277/Desktop/dropbox.deb", "0");
-		 * 
-		 * split.split();
-		 */
+			@Override
+			public void run() {
+				control = new Control(ipData.get("mc").getIp(), ipData
+						.get("mc").getPort());
 
-		// FileManager join = new FileManager("[B@3146a9a", "0");
+			}
 
-		// join.join();
+		});
 
 	}
 
