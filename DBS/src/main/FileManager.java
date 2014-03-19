@@ -23,6 +23,7 @@ public class FileManager {
 	private static byte[] hashFileName;
 	private static String fileName;
 	private static String rep;
+	private static StringBuffer hashString;
 
 	public FileManager(String newfileName, String newrep) {
 
@@ -34,12 +35,12 @@ public class FileManager {
 	}
 
 	public void join() {
-		int chunkNo = 0;
+		int chunkNo = 1;
 
 		while (true) {
 
 			File chunk = new File(fileName + "/" + chunkNo + ".part");
-			
+
 			if (chunk.exists()) {
 
 				try {
@@ -48,7 +49,7 @@ public class FileManager {
 					System.err.println("Error creating input stream");
 					e.printStackTrace();
 				}
-				
+
 				chunkData = new byte[Main.getChunkSize()];
 
 				try {
@@ -57,9 +58,9 @@ public class FileManager {
 					e.printStackTrace();
 				}
 
-				chunkNo++;
-
 				writeToFile(0, chunkData);
+
+				chunkNo++;
 
 			} else {
 				break;
@@ -84,7 +85,8 @@ public class FileManager {
 			e.printStackTrace();
 		}
 
-		while (totalBytesRead < fileSize) {	//verify filesize multiple of 64kb and and chunk
+		while (totalBytesRead < fileSize) { // verify filesize multiple of 64kb
+											// and and chunk
 
 			chunkData = new byte[Main.getChunkSize()];
 
@@ -98,7 +100,7 @@ public class FileManager {
 			if (bytesRead >= 0) {
 				totalBytesRead += bytesRead;
 				chunkNo++;
-				Chunk chunk = new Chunk(hashFileName.toString(),
+				Chunk chunk = new Chunk(hashString.toString(),
 						Integer.toString(chunkNo), rep);
 
 				writeToFile(chunkNo, chunkData);
@@ -106,15 +108,18 @@ public class FileManager {
 				Main.getDatabase().addChunk(chunk);
 				System.err.println("read");
 			} else {
-				System.err.println("Error reading file BytesRead: " + bytesRead);
+				System.err
+						.println("Error reading file BytesRead: " + bytesRead);
 				break;
 			}
 
 		}
+		
+		Main.getDatabase().addFile(hashString, fileName);
 	}
 
 	private void writeToFile(int chunkNo, byte[] data) {
-		File dir = new File(hashFileName.toString());
+		File dir = new File(hashString.toString());
 
 		if (!dir.exists()) {
 			Boolean result = dir.mkdir();
@@ -127,9 +132,10 @@ public class FileManager {
 		File newFile = null;
 
 		if (chunkNo != 0) {
-			newFile = new File(new String(hashFileName.toString() + "/" + chunkNo + ".part"));
+			newFile = new File(new String(hashString.toString() + "/" + chunkNo
+					+ ".part"));
 		} else {
-			newFile = new File(new String(fileName));
+			newFile = new File(new String(Main.getDatabase().getFile(hashString)));
 		}
 
 		if (!newFile.exists()) {
@@ -142,7 +148,7 @@ public class FileManager {
 		}
 
 		try {
-			out = new BufferedOutputStream(new FileOutputStream(newFile));
+			out = new BufferedOutputStream(new FileOutputStream(newFile, true));
 		} catch (FileNotFoundException e) {
 			System.err.println("Error creating output stream");
 			e.printStackTrace();
@@ -159,10 +165,9 @@ public class FileManager {
 	private void encodeName() {
 
 		File tmp = new File(fileName);
-		
+
 		String strTmp = new String(fileName + tmp.lastModified());
-		
-		
+
 		MessageDigest digest = null;
 		try {
 			digest = MessageDigest.getInstance("SHA-256");
@@ -175,6 +180,13 @@ public class FileManager {
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
+
+		hashString = new StringBuffer();
+		for (int i = 0; i < hashFileName.length; i++) {
+			hashString.append(Integer.toString(
+					(hashFileName[i] & 0xff) + 0x100, 16).substring(1));
+		}
+
 	}
 
 }
