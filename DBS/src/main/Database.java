@@ -6,7 +6,7 @@ public class Database {
 	private static ArrayList<Chunk> chunks;
 
 	public Database() {
-
+		chunks = new ArrayList<Chunk>();
 	}
 
 	public boolean addChunk(Chunk chunk) {
