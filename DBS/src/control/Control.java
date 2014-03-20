@@ -30,18 +30,9 @@ public class Control {
 
 		while (true) {
 
-			final String mssg = ctrlComm.receiveMessage();
+			String mssg = ctrlComm.receiveMessage();
 
-			Main.getService().submit(new Runnable() {
-				
-				@Override
-				public void run() {
-					
-					ControlProcessThread cpt = new ControlProcessThread(mssg);
-					
-					cpt.process();
-				}
-			});
+			Main.getService().submit(new ControlProcessThread(mssg));
 
 		}
 	}

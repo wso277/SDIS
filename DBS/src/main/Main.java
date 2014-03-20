@@ -112,6 +112,10 @@ public class Main {
 
 		});
 		
+		/*
+		FileManager split = new FileManager("/home/wso277/Desktop/image1.jpg", "0", false);
+		split.split();*/
+		
 		//save database
 		save();
 

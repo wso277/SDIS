@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import main.FileManager;
 import restore.RestoreProcessThread;
 
-public class ControlProcessThread {
+public class ControlProcessThread implements Runnable {
 
 	public static String[] message;
 	public static ArrayList<String> header;
@@ -18,12 +18,13 @@ public class ControlProcessThread {
 
 		for (int i = 0; i < tmp.length; i++) {
 			header.add(tmp[i].trim());
-			System.out.println(header.get(i));
 		}
 		
+		run();
 	}
 
-	public void process() {
+	@Override
+	public void run() {
 
 		
 		
@@ -32,8 +33,7 @@ public class ControlProcessThread {
 					header.get(3));
 		} else if (header.get(0).equals("DELETE")) {
 
-			FileManager del = new FileManager(header.get(1), "0", true);
-			del.delete();
+			deleteProcess();
 
 		} else if (header.get(0).equals("REMOVED")) {
 
@@ -43,5 +43,10 @@ public class ControlProcessThread {
 			System.err.println("Operation Invalid!");
 		}
 
+	}
+
+	private void deleteProcess() {
+		FileManager del = new FileManager(header.get(1), "0", true);
+		del.delete();
 	}
 }
