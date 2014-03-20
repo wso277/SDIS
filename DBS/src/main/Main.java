@@ -1,6 +1,11 @@
 package main;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -19,12 +24,12 @@ public class Main {
 	private static Backup backup;
 	private static Restore restore;
 	private static Control control;
-	private static Database database = new Database();
+	private static Database database;
 	private static HashMap<String, Address> ipData;
 	private static ExecutorService service;
 
 	public static void main(String[] args) throws IOException {
-
+		
 		// JAVA QUEUING EXAMPLE
 		/*
 		 * service.submit(new Runnable() { public void run() { do_some_work(); }
@@ -34,6 +39,9 @@ public class Main {
 		 * service.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
 		 */
 
+		//Load database
+		load();
+		
 		// Initializing job queue
 		service = Executors.newFixedThreadPool(8);
 
@@ -86,6 +94,11 @@ public class Main {
 			}
 
 		});
+		
+
+		
+		//save database
+		save();
 
 	}
 
@@ -147,6 +160,58 @@ public class Main {
 
 	public static void setDatabase(Database database) {
 		Main.database = database;
+	}
+	
+	public static void save() {
+
+		ObjectOutputStream save = null;
+
+		try {
+			save = new ObjectOutputStream(new FileOutputStream("database.dbs"));
+		} catch (FileNotFoundException e) {
+			System.err.println("Database.dbs not found!");
+			e.printStackTrace();
+		} catch (IOException e) {
+			System.err.println("Error creating database.dbs");
+			e.printStackTrace();
+		}
+
+		try {
+			save.writeObject(database);
+		} catch (IOException e) {
+			System.err.println("Error saving database");
+			e.printStackTrace();
+		}
+	}
+
+	public static void load() {
+
+		ObjectInputStream load = null;
+		Boolean newdb = false;
+
+		try {
+			load = new ObjectInputStream(new FileInputStream("database.dbs"));
+		} catch (FileNotFoundException e) {
+			database = new Database();
+			newdb = true;
+		} catch (IOException e) {
+			System.err.println("Error creating database.dbs");
+			e.printStackTrace();
+		}
+
+		if (!newdb) {
+
+			try {
+				database = (Database) load.readObject();
+				System.out.println("Read database!");
+			} catch (ClassNotFoundException e) {
+				System.err.println("Database not found!");
+				e.printStackTrace();
+			} catch (IOException e) {
+				System.err.println("Error loading database!");
+				e.printStackTrace();
+			}
+		}
 	}
 
 }

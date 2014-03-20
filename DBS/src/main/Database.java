@@ -1,23 +1,34 @@
 package main;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
-public class Database {
-	private static ArrayList<Chunk> chunks;
-	private static HashMap<StringBuffer, String> fileList;
+public class Database implements Serializable {
+	
+	/**
+	 * Serialize id
+	 */
+	private final long serialVersionUID = 1L;
+	private ArrayList<Chunk> chunks;
+	private HashMap<String, String> fileList;
 
 	public Database() {
 		chunks = new ArrayList<Chunk>();
-		fileList = new HashMap<StringBuffer, String>();
+		fileList = new HashMap<String, String>();
 	}
 	
-	public void addFile(StringBuffer fileid, String filename) {
+	public void addFile(String fileid, String filename) {
 	
 		fileList.put(fileid, filename);
 	}
 	
-	public String getFile(StringBuffer fileid) {
+	public String getFile(String fileid) {
 		
 		return fileList.get(fileid);
 	}
@@ -38,7 +49,7 @@ public class Database {
 		return false;
 	}
 
-	public static float getFreeSpace() {
+	public float getFreeSpace() {
 		return Main.getDiskSize() - chunks.size() * Main.getChunkSize();
 	}
 }

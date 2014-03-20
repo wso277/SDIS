@@ -13,6 +13,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+
 public class FileManager {
 
 	private static File file;
@@ -25,12 +26,17 @@ public class FileManager {
 	private static String rep;
 	private static StringBuffer hashString;
 
-	public FileManager(String newfileName, String newrep) {
+	public FileManager(String newfileName, String newrep, Boolean load) {
 
-		fileName = newfileName;
+		if (load) {
+			hashString = new StringBuffer(newfileName);
+			fileName = newfileName;
+		} else {
+			fileName = newfileName;
+			encodeName();
+		}
 		rep = newrep;
 
-		encodeName();
 
 	}
 
@@ -39,7 +45,7 @@ public class FileManager {
 
 		while (true) {
 
-			File chunk = new File(fileName + "/" + chunkNo + ".part");
+			File chunk = new File(hashString.toString() + "/" + chunkNo + ".part");
 
 			if (chunk.exists()) {
 
@@ -115,7 +121,7 @@ public class FileManager {
 
 		}
 		
-		Main.getDatabase().addFile(hashString, fileName);
+		Main.getDatabase().addFile(hashString.toString(), fileName);
 	}
 
 	private void writeToFile(int chunkNo, byte[] data) {
@@ -135,7 +141,7 @@ public class FileManager {
 			newFile = new File(new String(hashString.toString() + "/" + chunkNo
 					+ ".part"));
 		} else {
-			newFile = new File(new String(Main.getDatabase().getFile(hashString)));
+			newFile = new File(new String(Main.getDatabase().getFile(hashString.toString())));
 		}
 
 		if (!newFile.exists()) {
