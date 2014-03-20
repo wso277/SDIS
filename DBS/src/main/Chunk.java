@@ -2,44 +2,50 @@ package main;
 
 import java.io.Serializable;
 
-public class Chunk implements Serializable{
+public class Chunk implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private static String fileId;
-	private static String chunkNo;
-	private static String repDegree;
-	private static int knowReps;
-	
+	private String fileId;
+	private String chunkNo;
+	private String repDegree;
+	private int knowReps;
+
 	public Chunk(String file, String chunk, String rep) {
 		fileId = file;
 		chunkNo = chunk;
-		repDegree = rep;		
+		repDegree = rep;
 	}
-	
-	public static String getFileId() {
+
+	public String getFileId() {
 		return fileId;
 	}
-	public static void setFileId(String fileId) {
-		Chunk.fileId = fileId;
+
+	public void setFileId(String newfileId) {
+		fileId = newfileId;
 	}
-	public static String getChunkNo() {
+
+	public String getChunkNo() {
 		return chunkNo;
 	}
-	public static void setChunkNo(String chunkNo) {
-		Chunk.chunkNo = chunkNo;
+
+	public void setChunkNo(String newchunkNo) {
+		chunkNo = newchunkNo;
 	}
-	public static String getRepDegree() {
+
+	public String getRepDegree() {
 		return repDegree;
 	}
-	public static void setRepDegree(String repDegree) {
-		Chunk.repDegree = repDegree;
+
+	public void setRepDegree(String newrepDegree) {
+		repDegree = newrepDegree;
 	}
-	public static int getKnowReps() {
+
+	public int getKnowReps() {
 		return knowReps;
 	}
-	public static void setKnowReps(int knowReps) {
-		Chunk.knowReps = knowReps;
+
+	public void setKnowReps(int newknowReps) {
+		knowReps = newknowReps;
 	}
-	
-	
+
 }

@@ -37,7 +37,32 @@ public class FileManager {
 		}
 		rep = newrep;
 
+	}
+	
+	public void delete() {
+		
+		int chunkNo = 1;
+		
+		while (true) {
 
+			File chunk = new File(hashString.toString() + "/" + chunkNo + ".part");
+
+			if (chunk.exists()) {
+
+				chunk.delete();
+				
+				chunkNo++;
+
+			} else {
+				break;
+			}
+		}
+		
+		File folder = new File(hashString.toString());
+		
+		folder.delete();
+		
+		Main.getDatabase().removeFile(hashString.toString());
 	}
 
 	public void join() {

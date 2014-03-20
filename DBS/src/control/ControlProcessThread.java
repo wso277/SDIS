@@ -1,36 +1,46 @@
 package control;
 
-import main.Main;
+import java.util.ArrayList;
+
+import main.FileManager;
 import restore.RestoreProcessThread;
 
-public class ControlProcessThread extends Thread {
+public class ControlProcessThread {
 
 	public static String[] message;
-	public static String[] header;
+	public static ArrayList<String> header;
 
 	public ControlProcessThread(String newmessage) {
-		header = newmessage.split(" ");
-		run();
+		
+		header = new ArrayList<String>();
+		
+		String[] tmp = newmessage.split("\\s+");
+
+		for (int i = 0; i < tmp.length; i++) {
+			header.add(tmp[i].trim());
+			System.out.println(header.get(i));
+		}
+		
 	}
 
-	@Override
-	public void run() {
+	public void process() {
 
-		if (Main.checkVersion(header[1])) {
-			if (header[0] == "GETCHUNK") {
-				RestoreProcessThread rpt = new RestoreProcessThread(header[2],
-						header[3]);
-			} else if (header[0] == "DELETE") {
+		
+		
+		if (header.get(0).equals("GETCHUNK")) {
+			RestoreProcessThread rpt = new RestoreProcessThread(header.get(2),
+					header.get(3));
+		} else if (header.get(0).equals("DELETE")) {
 
-			} else if (header[0] == "REMOVED") {
+			FileManager del = new FileManager(header.get(1), "0", true);
+			del.delete();
 
-			} else if (header[0] == "STORED") {
+		} else if (header.get(0).equals("REMOVED")) {
 
-			} else {
-				System.err.println("Operation Invalid!");
-			}
+		} else if (header.get(0).equals("STORED")) {
+
 		} else {
-			System.err.println("Invalid program version!");
+			System.err.println("Operation Invalid!");
 		}
 
 	}

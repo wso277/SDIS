@@ -56,11 +56,11 @@ public class Main {
 		ipData.put("mcb", new Address("224.0.100.2", 7890));
 		ipData.put("mcr", new Address("224.0.100.3", 7890));
 
-		Cli cli = new Cli();
-		Cli.run();
+		/*Cli cli = new Cli();
+		Cli.run();*/
 
 		// object backup which creates receive thread
-		service.submit(new Runnable() {
+		/*service.submit(new Runnable() {
 
 			@Override
 			public void run() {
@@ -69,10 +69,10 @@ public class Main {
 
 			}
 
-		});
+		});*/
 
 		// object restore which creates restore thread
-		service.submit(new Runnable() {
+		/*service.submit(new Runnable() {
 
 			@Override
 			public void run() {
@@ -81,21 +81,36 @@ public class Main {
 
 			}
 
-		});
+		});*/
 
 		// object control which creates control thread
+		//test receive
+		/*service.submit(new Runnable() {
+
+			@Override
+			public void run() {
+				control = new Control(ipData.get("mc").getIp(), ipData
+						.get("mc").getPort());
+				
+				System.out.println("Receiver!");
+				control.receive();
+			}
+
+		});*/
+	
+		//test send
 		service.submit(new Runnable() {
 
 			@Override
 			public void run() {
 				control = new Control(ipData.get("mc").getIp(), ipData
 						.get("mc").getPort());
-
+				
+				System.out.println("Sender!");
+				control.send("DELETE 1f46d0e5b77be0804f72f58d4a8101259fab1e303ffa29ebb9ea5f07f1347e77");
 			}
 
 		});
-		
-
 		
 		//save database
 		save();
@@ -160,6 +175,10 @@ public class Main {
 
 	public static void setDatabase(Database database) {
 		Main.database = database;
+	}
+	
+	public static ExecutorService getService() {
+		return service;
 	}
 	
 	public static void save() {

@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Database implements Serializable {
-	
+
 	/**
 	 * Serialize id
 	 */
@@ -22,15 +22,26 @@ public class Database implements Serializable {
 		chunks = new ArrayList<Chunk>();
 		fileList = new HashMap<String, String>();
 	}
-	
+
 	public void addFile(String fileid, String filename) {
-	
+
 		fileList.put(fileid, filename);
 	}
-	
+
 	public String getFile(String fileid) {
-		
+
 		return fileList.get(fileid);
+	}
+
+	public void removeFile(String fileid) {
+		fileList.remove(fileid);
+		
+		for (int i = 0; i < chunks.size(); i++) {
+			if (chunks.get(i).getFileId().equals(fileid)) {
+				chunks.remove(i);
+				i--;
+			}
+		}
 	}
 
 	public boolean addChunk(Chunk chunk) {
