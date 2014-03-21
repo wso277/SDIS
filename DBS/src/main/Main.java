@@ -48,8 +48,6 @@ public class Main {
 		ipData.put("mcb", new Address("224.0.100.2", 7890));
 		ipData.put("mcr", new Address("224.0.100.3", 7890));
 
-		Cli cli = new Cli();
-		Cli.run();
 
 		// object backup which creates receive thread
 		service.submit(new Runnable() {
@@ -86,6 +84,24 @@ public class Main {
 			}
 
 		});
+		
+		service.submit(new Runnable() {
+
+			@Override
+			public void run() {
+				Cli cli = new Cli();
+				try {
+					Cli.run();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+
+		});
+		
+
 
 	}
 
