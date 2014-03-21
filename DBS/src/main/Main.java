@@ -1,6 +1,11 @@
 package main;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -19,7 +24,7 @@ public class Main {
 	private static Backup backup;
 	private static Restore restore;
 	private static Control control;
-	private static Database database = new Database();
+	private static Database database;
 	private static HashMap<String, Address> ipData;
 	private static ExecutorService service;
 
@@ -27,27 +32,28 @@ public class Main {
 
 		// JAVA QUEUING EXAMPLE
 		/*
-		 * service.submit(new Runnable() { public void run() { do_some_work(); }
-		 * }); // you can submit any number of jobs and the 8 threads will work
-		 * on them // in order ... // when no more to submit, call shutdown
 		 * service.shutdown(); // now wait for the jobs to finish
 		 * service.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
 		 */
+
+		// Load database
+		load();
 
 		// Initializing job queue
 		service = Executors.newFixedThreadPool(8);
 
 		// Store address info
+		ipData = new HashMap<String, Address>();
+
+		// Temporary IPs for testing
+		ipData.put("mc", new Address("226.0.100.1", 7891));
+		ipData.put("mcb", new Address("226.0.100.2", 7892));
+		ipData.put("mcr", new Address("226.0.100.3", 7893));
+
+		// IPs received as arguments
 		// ipData.put("mc", new Address(args[0], Integer.parseInt(args[1])));
 		// ipData.put("mcb", new Address(args[2], Integer.parseInt(args[3])));
 		// ipData.put("mcr", new Address(args[4], Integer.parseInt(args[5])));
-
-		// Temporary IPs for testing
-		ipData = new HashMap<String, Address>();
-		ipData.put("mc", new Address("224.0.100.1", 7890));
-		ipData.put("mcb", new Address("224.0.100.2", 7890));
-		ipData.put("mcr", new Address("224.0.100.3", 7890));
-
 
 		// object backup which creates receive thread
 		service.submit(new Runnable() {
@@ -56,7 +62,6 @@ public class Main {
 			public void run() {
 				backup = new Backup(ipData.get("mcb").getIp(), ipData
 						.get("mcb").getPort());
-
 			}
 
 		});
@@ -81,10 +86,11 @@ public class Main {
 				control = new Control(ipData.get("mc").getIp(), ipData
 						.get("mc").getPort());
 
+				control.getCtrlComm().receiveMessage();
 			}
 
 		});
-		
+
 		service.submit(new Runnable() {
 
 			@Override
@@ -100,8 +106,9 @@ public class Main {
 			}
 
 		});
-		
 
+		// save database
+		save();
 
 	}
 
@@ -163,6 +170,62 @@ public class Main {
 
 	public static void setDatabase(Database database) {
 		Main.database = database;
+	}
+
+	public static ExecutorService getService() {
+		return service;
+	}
+
+	public static void save() {
+
+		ObjectOutputStream save = null;
+
+		try {
+			save = new ObjectOutputStream(new FileOutputStream("database.dbs"));
+		} catch (FileNotFoundException e) {
+			System.err.println("Database.dbs not found!");
+			e.printStackTrace();
+		} catch (IOException e) {
+			System.err.println("Error creating database.dbs");
+			e.printStackTrace();
+		}
+
+		try {
+			save.writeObject(database);
+		} catch (IOException e) {
+			System.err.println("Error saving database");
+			e.printStackTrace();
+		}
+	}
+
+	public static void load() {
+
+		ObjectInputStream load = null;
+		Boolean newdb = false;
+
+		try {
+			load = new ObjectInputStream(new FileInputStream("database.dbs"));
+		} catch (FileNotFoundException e) {
+			database = new Database();
+			newdb = true;
+		} catch (IOException e) {
+			System.err.println("Error creating database.dbs");
+			e.printStackTrace();
+		}
+
+		if (!newdb) {
+
+			try {
+				database = (Database) load.readObject();
+				System.out.println("Read database!");
+			} catch (ClassNotFoundException e) {
+				System.err.println("Database not found!");
+				e.printStackTrace();
+			} catch (IOException e) {
+				System.err.println("Error loading database!");
+				e.printStackTrace();
+			}
+		}
 	}
 
 }
