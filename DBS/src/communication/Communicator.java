@@ -5,7 +5,7 @@ import java.net.*;
 
 public class Communicator {
 	private static int PSIZE = 65536;
-	private static MulticastSocket socket;
+	private static MulticastSocket socket = null;
 	private static InetAddress address;
 	private static DatagramPacket packet = null;
 	private static DatagramPacket rpacket = null;
@@ -14,18 +14,41 @@ public class Communicator {
 	private static byte[] buf;
 
 	public Communicator(String newip, int newport) throws IOException {
+		
+		
 		ip = newip;
 		port = newport;
-
+		
 		System.out.println("Comm Port:" + port);
 		System.out.println("Comm Ip:" + ip);
+		
+
+		System.out.println("Comm1 Port:" + port);
+		System.out.println("Comm1 Ip:" + ip);
+
 		try {
-			socket = new MulticastSocket(port);
+			socket = new MulticastSocket(null);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		socket.setReuseAddress(true);
 
-		joinGroup();
+		SocketAddress socketA = new InetSocketAddress(port);
+		
+		socket.bind(socketA);
+		socket.setTimeToLive(2);
+		
+		try {
+			address = InetAddress.getByName(ip);
+		} catch (UnknownHostException e1) {
+			e1.printStackTrace();
+		}
+		
+
+		
+		socket.joinGroup(address);
+
 	}
 
 	public static String getIp() {
@@ -62,30 +85,20 @@ public class Communicator {
 
 	public void joinGroup() throws IOException {
 
-		try {
-			address = InetAddress.getByName(ip);
-		} catch (UnknownHostException e1) {
-			e1.printStackTrace();
-		}
-
-		try {
-			socket.joinGroup(address);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		socket.joinGroup(address);
 
 		socket.setTimeToLive(2);
 
 	}
 
 	public void leaveGroup() {
-		
+
 		socket.close();
-		
+
 	}
 
 	public void sendMessage(String message) {
-		
+
 		packet = new DatagramPacket(message.getBytes(),
 				message.getBytes().length, address, port);
 
@@ -94,22 +107,22 @@ public class Communicator {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	public String receiveMessage() {
 		buf = new byte[PSIZE];
 		rpacket = new DatagramPacket(buf, PSIZE);
-		
+
 		try {
 			socket.receive(rpacket);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		String response = new String(rpacket.getData());
 		return response;
-		
+
 	}
 
 }

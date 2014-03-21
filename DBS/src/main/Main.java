@@ -56,15 +56,7 @@ public class Main {
 		// ipData.put("mcr", new Address(args[4], Integer.parseInt(args[5])));
 
 		// object backup which creates receive thread
-		service.submit(new Runnable() {
-
-			@Override
-			public void run() {
-				backup = new Backup(ipData.get("mcb").getIp(), ipData
-						.get("mcb").getPort());
-			}
-
-		});
+		service.submit(backup = new Backup(ipData.get("mcb").getIp(), ipData.get("mcb").getPort()));
 
 		// object restore which creates restore thread
 		service.submit(new Runnable() {
@@ -79,17 +71,7 @@ public class Main {
 		});
 
 		// object control which creates control thread
-		service.submit(new Runnable() {
-
-			@Override
-			public void run() {
-				control = new Control(ipData.get("mc").getIp(), ipData
-						.get("mc").getPort());
-
-				control.getCtrlComm().receiveMessage();
-			}
-
-		});
+		service.submit(control = new Control(ipData.get("mc").getIp(), ipData.get("mc").getPort()));
 
 		service.submit(new Runnable() {
 

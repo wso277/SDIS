@@ -7,7 +7,7 @@ import java.util.concurrent.Executors;
 import main.Main;
 import communication.Communicator;
 
-public class Control {
+public class Control extends Thread {
 
 	private static String ip;
 	private static int port;
@@ -17,16 +17,13 @@ public class Control {
 		ip = newip;
 		port = newport;
 
-		System.out.println("Port:" + port);
-		System.out.println("Ip:" + ip);
-		
 		try {
 			ctrlComm = new Communicator(ip, port);
 		} catch (IOException e) {
-			System.out.println("Error creating communicator!");
+			System.err.println("Error creating communicator!");
 			e.printStackTrace();
 		}
-
+		
 	}
 
 	public void receive() {
@@ -68,6 +65,6 @@ public class Control {
 	public void setCtrlComm(Communicator ctrlComm) {
 		this.ctrlComm = ctrlComm;
 	}
-	
-	
+
+
 }

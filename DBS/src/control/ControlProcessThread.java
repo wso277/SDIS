@@ -32,7 +32,7 @@ public class ControlProcessThread implements Runnable {
 			RestoreProcessThread rpt = new RestoreProcessThread(header.get(2),
 					header.get(3));
 		} else if (header.get(0).equals("DELETE")) {
-
+			System.out.println("delete");
 			deleteProcess();
 
 		} else if (header.get(0).equals("REMOVED")) {
