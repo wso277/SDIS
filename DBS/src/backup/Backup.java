@@ -5,11 +5,24 @@ import java.io.IOException;
 import communication.Communicator;
 
 public class Backup {
-	private static BackupReceiveThread brt;
+
+	private static String ip;
+	private static int port;
+	private static Communicator mdb;
 	
-	public Backup(String ip, int port) {
+	public Backup(String newip, int newport) {
 		
-		brt = new BackupReceiveThread(ip, port);
+		ip = newip;
+		port = newport;
+		
+		System.out.println("Port:" + port);
+		System.out.println("Ip:" + ip);
+		
+		try {
+			mdb = new Communicator(ip, port);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 	}
 

@@ -17,13 +17,15 @@ public class Communicator {
 		ip = newip;
 		port = newport;
 
+		System.out.println("Comm Port:" + port);
+		System.out.println("Comm Ip:" + ip);
 		try {
-			socket = new MulticastSocket(newport);
+			socket = new MulticastSocket(port);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-		joinGroup(ip, port);
+		joinGroup();
 	}
 
 	public static String getIp() {
@@ -58,7 +60,7 @@ public class Communicator {
 		Communicator.port = port;
 	}
 
-	public void joinGroup(String ip, int port) throws IOException {
+	public void joinGroup() throws IOException {
 
 		try {
 			address = InetAddress.getByName(ip);

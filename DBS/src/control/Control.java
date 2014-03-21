@@ -17,6 +17,9 @@ public class Control {
 		ip = newip;
 		port = newport;
 
+		System.out.println("Port:" + port);
+		System.out.println("Ip:" + ip);
+		
 		try {
 			ctrlComm = new Communicator(ip, port);
 		} catch (IOException e) {
