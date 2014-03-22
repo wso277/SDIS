@@ -1,5 +1,6 @@
 package main;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -43,13 +44,30 @@ public class Main implements Serializable {
 		// Load database
 		load();
 
-		FileManager split = new FileManager("/home/wso277/Desktop/image1.jpg", 0, false);
+//		FileManager split = new FileManager("/home/wso277/Desktop/image1.jpg",
+//				0, false);
+//		split.split();
+//		FileManager split1 = new FileManager("/home/wso277/Desktop/image2.jpg",
+//				0, false);
+//		split1.split();
+//		FileManager split2 = new FileManager("/home/wso277/Desktop/image3.jpg",
+//				0, false);
+//		split2.split();
+		
+
+
+		FileManager split = new FileManager("C:/Users/Vinnie/Desktop/1.jpg",
+				0, false);
 		split.split();
-		FileManager split1 = new FileManager("/home/wso277/Desktop/image2.jpg", 0, false);
+		FileManager split1 = new FileManager("C:/Users/Vinnie/Desktop/2.jpg",
+				0, false);
 		split1.split();
-		FileManager split2 = new FileManager("/home/wso277/Desktop/image3.jpg", 0, false);
+		FileManager split2 = new FileManager("C:/Users/Vinnie/Desktop/3.jpg",
+				0, false);
 		split2.split();
 		
+		
+
 		// Initializing job queue
 		service = Executors.newFixedThreadPool(12);
 
@@ -57,9 +75,11 @@ public class Main implements Serializable {
 		ipData = new HashMap<String, Address>();
 
 		// Temporary IPs for testing
-		/*ipData.put("mc", new Address("mc", "226.0.100.1", 7891));
-		ipData.put("mcb", new Address("mcb", "226.0.100.2", 7892));
-		ipData.put("mcr", new Address("mcr", "226.0.100.3", 7893));*/
+		/*
+		 * ipData.put("mc", new Address("mc", "226.0.100.1", 7891));
+		 * ipData.put("mcb", new Address("mcb", "226.0.100.2", 7892));
+		 * ipData.put("mcr", new Address("mcr", "226.0.100.3", 7893));
+		 */
 
 		// Initializing components
 		cli = new Cli();
@@ -76,7 +96,7 @@ public class Main implements Serializable {
 		// save database
 		save();
 	}
-	
+
 	public synchronized static void save() {
 
 		ObjectOutputStream save = null;
@@ -184,6 +204,14 @@ public class Main implements Serializable {
 		}
 	}
 
+	public static boolean fileExists(String path) {
+		File file = new File(path);
+		if (file.exists()) {
+			return true;
+		}
+		return false;
+	}
+
 	public static boolean checkVersion(String ver) {
 		if (version.equals(ver)) {
 			return true;
@@ -288,5 +316,4 @@ public class Main implements Serializable {
 		Main.service = service;
 	}
 
-	
 }

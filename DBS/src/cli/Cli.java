@@ -134,6 +134,29 @@ public class Cli extends Thread {
 		case "backup":
 		case "Backup":
 		case "BACKUP":
+			System.out.print("Type path to file: ");
+			String filePath = new String();
+			try {
+				filePath = in.readLine();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			if (Main.fileExists(filePath)) {
+				System.out.println("File Exists! Enter replication degree: ");
+				String repDegree = new String();
+				try {
+					repDegree = in.readLine();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				if(Integer.parseInt(repDegree) > 1) {
+					
+				}
+			} else {
+				System.out
+						.println("Invalid file path. Please try again with a valid file path");
+			}
 			break;
 		case "2":
 		case "restore":
@@ -166,19 +189,23 @@ public class Cli extends Thread {
 		case "reclaim":
 		case "Reclaim":
 		case "RECLAIM":
-			System.out.println("Space currently occupied - " + Main.getDiskSize());
-			System.out.print("Choose space to release (1 byte to " + (Main.getDiskSize() - 64) + " bytes): ");
+			System.out.println("Space currently occupied - "
+					+ Main.getDiskSize());
+			System.out.print("Choose space to release (1 byte to "
+					+ (Main.getDiskSize() - 64) + " bytes): ");
 			try {
 				input = in.readLine();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			if(Integer.parseInt(input) > 0 && Integer.parseInt(input) <= (Main.getDiskSize()-64)) {
-				Main.getService().submit(new SpaceReclaim(Integer.parseInt(input)));
+			if (Integer.parseInt(input) > 0
+					&& Integer.parseInt(input) <= (Main.getDiskSize() - 64)) {
+				Main.getService().submit(
+						new SpaceReclaim(Integer.parseInt(input)));
 			} else {
 				System.out
-				.println("Invalid Size. Choose from the available range!");
+						.println("Invalid Size. Choose from the available range!");
 			}
 			break;
 		default:

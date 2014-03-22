@@ -107,7 +107,7 @@ public class FileManager {
 		}
 	}
 
-	public void split() {
+	public boolean split() {
 		int totalBytesRead = 0;
 		int bytesRead = 0;
 		int chunkNo = 0;
@@ -164,7 +164,10 @@ public class FileManager {
 
 		} else {
 			System.err.println("Not enough space to backup file");
+			return false;
 		}
+		
+		return true;
 	}
 
 	private void writeToFile(int chunkNo, byte[] data) {
@@ -239,4 +242,77 @@ public class FileManager {
 
 	}
 
+	public static File getFile() {
+		return file;
+	}
+
+	public static void setFile(File file) {
+		FileManager.file = file;
+	}
+
+	public static long getFileSize() {
+		return fileSize;
+	}
+
+	public static void setFileSize(long fileSize) {
+		FileManager.fileSize = fileSize;
+	}
+
+	public static InputStream getIn() {
+		return in;
+	}
+
+	public static void setIn(InputStream in) {
+		FileManager.in = in;
+	}
+
+	public static OutputStream getOut() {
+		return out;
+	}
+
+	public static void setOut(OutputStream out) {
+		FileManager.out = out;
+	}
+
+	public static byte[] getChunkData() {
+		return chunkData;
+	}
+
+	public static void setChunkData(byte[] chunkData) {
+		FileManager.chunkData = chunkData;
+	}
+
+	public static byte[] getHashFileName() {
+		return hashFileName;
+	}
+
+	public static void setHashFileName(byte[] hashFileName) {
+		FileManager.hashFileName = hashFileName;
+	}
+
+	public static String getFileName() {
+		return fileName;
+	}
+
+	public static void setFileName(String fileName) {
+		FileManager.fileName = fileName;
+	}
+
+	public static Integer getRep() {
+		return rep;
+	}
+
+	public static void setRep(Integer rep) {
+		FileManager.rep = rep;
+	}
+
+	public StringBuffer getHashString() {
+		return hashString;
+	}
+
+	public static void setHashString(StringBuffer hashString) {
+		FileManager.hashString = hashString;
+	}
+	
+	
 }
