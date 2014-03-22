@@ -21,17 +21,17 @@ public class Database implements Serializable {
 		fileList = new HashMap<String, String>();
 	}
 
-	public void addFile(String fileid, String filename) {
+	public synchronized void addFile(String fileid, String filename) {
 
 		fileList.put(fileid, filename);
 	}
 
-	public String getFile(String fileid) {
+	public synchronized String getFile(String fileid) {
 
 		return fileList.get(fileid);
 	}
 
-	public void removeFile(String fileid) {
+	public synchronized void removeFile(String fileid) {
 		fileList.remove(fileid);
 
 		for (int i = 0; i < chunks.size(); i++) {
@@ -42,7 +42,7 @@ public class Database implements Serializable {
 		}
 	}
 
-	public boolean addChunk(Chunk chunk) {
+	public synchronized boolean addChunk(Chunk chunk) {
 		if (enoughSpace()) {
 			chunks.add(chunk);
 			return true;
@@ -51,25 +51,25 @@ public class Database implements Serializable {
 		}
 	}
 
-	public boolean enoughSpace() {
+	public synchronized boolean enoughSpace() {
 		if (getFreeSpace() >= Main.getChunkSize()) {
 			return true;
 		}
 		return false;
 	}
 
-	public float getFreeSpace() {
+	public synchronized float getFreeSpace() {
 		return Main.getDiskSize() - chunks.size() * Main.getChunkSize();
 	}
 
-	public void showBackedUpFiles() {
+	public synchronized void showBackedUpFiles() {
 		int i = 1;
 		for (Entry<String, String> entry : fileList.entrySet()) {
 			System.out.println(i + ". " + "[FileId] - " + entry.getKey() + " [FileName] - " + entry.getValue());
 		}
 	}
 
-	public String getHash(Integer input) {
+	public synchronized String getHash(Integer input) {
 		int i = 1;
 		for (Entry<String, String> entry : fileList.entrySet()) {
 			if(i == input) {

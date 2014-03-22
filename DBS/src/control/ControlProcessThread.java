@@ -3,9 +3,10 @@ package control;
 import java.util.ArrayList;
 
 import main.FileManager;
+import main.Main;
 import restore.RestoreProcessThread;
 
-public class ControlProcessThread implements Runnable {
+public class ControlProcessThread extends Thread {
 
 	public static String[] message;
 	public static ArrayList<String> header;
@@ -20,10 +21,8 @@ public class ControlProcessThread implements Runnable {
 			header.add(tmp[i].trim());
 		}
 		
-		run();
 	}
 
-	@Override
 	public void run() {
 
 		
@@ -33,6 +32,7 @@ public class ControlProcessThread implements Runnable {
 					header.get(3));
 		} else if (header.get(0).equals("DELETE")) {
 			deleteProcess();
+			Main.save();
 
 		} else if (header.get(0).equals("REMOVED")) {
 

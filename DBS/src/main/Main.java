@@ -43,6 +43,8 @@ public class Main implements Serializable {
 		// Load database
 		load();
 
+		/*FileManager split = new FileManager("/home/wso277/Desktop/image1.jpg", "0", false);
+		split.split();*/
 		
 		// Initializing job queue
 		service = Executors.newFixedThreadPool(8);
@@ -51,9 +53,9 @@ public class Main implements Serializable {
 		ipData = new HashMap<String, Address>();
 
 		// Temporary IPs for testing
-		ipData.put("mc", new Address("mc", "226.0.100.1", 7891));
+		/*ipData.put("mc", new Address("mc", "226.0.100.1", 7891));
 		ipData.put("mcb", new Address("mcb", "226.0.100.2", 7892));
-		ipData.put("mcr", new Address("mcr", "226.0.100.3", 7893));
+		ipData.put("mcr", new Address("mcr", "226.0.100.3", 7893));*/
 
 		// Initializing components
 		cli = new Cli();
@@ -71,7 +73,7 @@ public class Main implements Serializable {
 		save();
 	}
 	
-	public static void save() {
+	public synchronized static void save() {
 
 		ObjectOutputStream save = null;
 
