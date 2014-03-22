@@ -13,7 +13,6 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-
 public class FileManager {
 
 	private static File file;
@@ -23,10 +22,10 @@ public class FileManager {
 	private static byte[] chunkData;
 	private static byte[] hashFileName;
 	private static String fileName;
-	private static String rep;
+	private static Integer rep;
 	private static StringBuffer hashString;
 
-	public FileManager(String newfileName, String newrep, Boolean load) {
+	public FileManager(String newfileName, Integer newrep, Boolean load) {
 
 		if (load) {
 			hashString = new StringBuffer(newfileName);
@@ -38,30 +37,38 @@ public class FileManager {
 		rep = newrep;
 
 	}
-	
+
+	public boolean deleteChunk(Integer chunkNo) {
+
+		File chunk = new File(hashString.toString() + "/" + chunkNo + ".part");
+
+		if (chunk.exists()) {
+
+			chunk.delete();
+			return true;
+		}
+
+		return false;
+	}
+
 	public void delete() {
-		
+
 		int chunkNo = 1;
-		
+
 		while (true) {
 
-			File chunk = new File(hashString.toString() + "/" + chunkNo + ".part");
-
-			if (chunk.exists()) {
-
-				chunk.delete();
-				
+			if (deleteChunk(chunkNo)) {
 				chunkNo++;
 
 			} else {
 				break;
 			}
 		}
-		
+
 		File folder = new File(hashString.toString());
-		
+
 		folder.delete();
-		
+
 		Main.getDatabase().removeFile(hashString.toString());
 	}
 
@@ -70,7 +77,8 @@ public class FileManager {
 
 		while (true) {
 
-			File chunk = new File(hashString.toString() + "/" + chunkNo + ".part");
+			File chunk = new File(hashString.toString() + "/" + chunkNo
+					+ ".part");
 
 			if (chunk.exists()) {
 
@@ -131,8 +139,7 @@ public class FileManager {
 			if (bytesRead >= 0) {
 				totalBytesRead += bytesRead;
 				chunkNo++;
-				Chunk chunk = new Chunk(hashString.toString(),
-						Integer.toString(chunkNo), rep);
+				Chunk chunk = new Chunk(hashString.toString(), chunkNo, rep);
 
 				writeToFile(chunkNo, chunkData);
 
@@ -145,7 +152,7 @@ public class FileManager {
 			}
 
 		}
-		
+
 		Main.getDatabase().addFile(hashString.toString(), fileName);
 	}
 
@@ -166,7 +173,8 @@ public class FileManager {
 			newFile = new File(new String(hashString.toString() + "/" + chunkNo
 					+ ".part"));
 		} else {
-			newFile = new File(new String(Main.getDatabase().getFile(hashString.toString())));
+			newFile = new File(new String(Main.getDatabase().getFile(
+					hashString.toString())));
 		}
 
 		if (!newFile.exists()) {

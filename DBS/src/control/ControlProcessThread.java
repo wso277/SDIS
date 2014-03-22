@@ -35,7 +35,8 @@ public class ControlProcessThread extends Thread {
 			Main.save();
 
 		} else if (header.get(0).equals("REMOVED")) {
-
+			
+			System.out.println("Received Removed");
 		} else if (header.get(0).equals("STORED")) {
 
 		} else {
@@ -45,7 +46,7 @@ public class ControlProcessThread extends Thread {
 	}
 
 	private void deleteProcess() {
-		FileManager del = new FileManager(header.get(1), "0", true);
+		FileManager del = new FileManager(header.get(1), 0, true);
 		del.delete();
 	}
 }

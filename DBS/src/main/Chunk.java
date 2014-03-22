@@ -2,15 +2,15 @@ package main;
 
 import java.io.Serializable;
 
-public class Chunk implements Serializable {
+public class Chunk implements Serializable, Comparable<Chunk> {
 
 	private static final long serialVersionUID = 1L;
 	private String fileId;
-	private String chunkNo;
-	private String repDegree;
+	private Integer chunkNo;
+	private Integer repDegree;
 	private int knowReps;
 
-	public Chunk(String file, String chunk, String rep) {
+	public Chunk(String file, Integer chunk, Integer rep) {
 		fileId = file;
 		chunkNo = chunk;
 		repDegree = rep;
@@ -24,19 +24,19 @@ public class Chunk implements Serializable {
 		fileId = newfileId;
 	}
 
-	public String getChunkNo() {
+	public Integer getChunkNo() {
 		return chunkNo;
 	}
 
-	public void setChunkNo(String newchunkNo) {
+	public void setChunkNo(Integer newchunkNo) {
 		chunkNo = newchunkNo;
 	}
 
-	public String getRepDegree() {
+	public Integer getRepDegree() {
 		return repDegree;
 	}
 
-	public void setRepDegree(String newrepDegree) {
+	public void setRepDegree(Integer newrepDegree) {
 		repDegree = newrepDegree;
 	}
 
@@ -45,7 +45,16 @@ public class Chunk implements Serializable {
 	}
 
 	public void setKnowReps(int newknowReps) {
-		knowReps = newknowReps;
+		knowReps += newknowReps;
 	}
 
+	public Integer getCurrentReps() {
+		return knowReps - repDegree;
+	}
+
+	@Override
+	public int compareTo(Chunk o) {
+		
+		return getCurrentReps();
+	}
 }

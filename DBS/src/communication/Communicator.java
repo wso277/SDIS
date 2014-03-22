@@ -90,7 +90,7 @@ public class Communicator {
 
 	}
 
-	public void sendMessage(String message) {
+	public synchronized void sendMessage(String message) {
 
 		packet = new DatagramPacket(message.getBytes(),
 				message.getBytes().length, address, port);

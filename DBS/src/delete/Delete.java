@@ -5,7 +5,7 @@ import main.Main;
 public class Delete extends Thread {
 	String message;
 	public Delete(String fileId) {
-		message = new String("DELETE " + fileId + " " + Main.getCRLF());
+		message = new String("DELETE " + fileId + " " + Main.getCRLF() + " " + Main.getCRLF());
 	}
 	
 	public void run() {

@@ -9,9 +9,6 @@ import javax.swing.text.html.HTMLDocument.Iterator;
 
 public class Database implements Serializable {
 
-	/**
-	 * Serialize id
-	 */
 	private final long serialVersionUID = 1L;
 	private ArrayList<Chunk> chunks;
 	private HashMap<String, String> fileList;
@@ -77,5 +74,17 @@ public class Database implements Serializable {
 			}
 		}
 		return "fail";		
+	}
+	
+	public synchronized Chunk getChunk(Integer num) {
+		return chunks.get(num);
+	}
+	
+	public synchronized Integer getChunksSize() {
+		return chunks.size();
+	}
+	
+	public synchronized ArrayList<Chunk> getChunks() {
+		return chunks;
 	}
 }
