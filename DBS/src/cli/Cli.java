@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import communication.Address;
-
+import delete.Delete;
 import main.Main;
 
 public class Cli extends Thread {
@@ -14,6 +14,8 @@ public class Cli extends Thread {
 	public static String input;
 
 	public Cli() {
+
+		in = new BufferedReader(new InputStreamReader(System.in));
 
 		chooseNetworkConfigType();
 
@@ -31,14 +33,12 @@ public class Cli extends Thread {
 		input = new String("");
 		while (!input.equals("1") && !input.equals("2")) {
 
-			BufferedReader in = new BufferedReader(new InputStreamReader(
-					System.in));
-
-			System.out.println("Choose a command:\n"
+			System.out.print("Choose a command:\n"
 					+ "1. Insert new network configurations\n"
 					+ "2. Load existing network configurations\n\n"
 					+ "Option: ");
 			System.out.flush();
+
 			try {
 				input = in.readLine();
 			} catch (IOException e) {
@@ -53,17 +53,15 @@ public class Cli extends Thread {
 		String ip = new String("");
 		String port = new String("");
 
-		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-
 		if (input.equals("1")) {
-			System.out.println("Insert Control IP: ");
+			System.out.print("Insert Control IP: ");
 			System.out.flush();
 			try {
 				ip = in.readLine();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			System.out.println("Insert Control port: ");
+			System.out.print("Insert Control port: ");
 			System.out.flush();
 			try {
 				port = in.readLine();
@@ -72,14 +70,14 @@ public class Cli extends Thread {
 			}
 			Address mc = new Address("mc", ip, Integer.parseInt(port));
 
-			System.out.println("Insert Restore IP: ");
+			System.out.print("Insert Restore IP: ");
 			System.out.flush();
 			try {
 				ip = in.readLine();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			System.out.println("Insert Restore port: ");
+			System.out.print("Insert Restore port: ");
 			System.out.flush();
 			try {
 				port = in.readLine();
@@ -88,14 +86,14 @@ public class Cli extends Thread {
 			}
 			Address mcr = new Address("mcr", ip, Integer.parseInt(port));
 
-			System.out.println("Insert Backup IP: ");
+			System.out.print("Insert Backup IP: ");
 			System.out.flush();
 			try {
 				ip = in.readLine();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			System.out.println("Insert Backup port: ");
+			System.out.print("Insert Backup port: ");
 			System.out.flush();
 			try {
 				port = in.readLine();
@@ -114,10 +112,8 @@ public class Cli extends Thread {
 	public void menu() {
 		input = new String("");
 		while (!input.equals("exit")) {
-			BufferedReader in = new BufferedReader(new InputStreamReader(
-					System.in));
 
-			System.out.println("Choose a command:\n" + "1. Backup a File\n"
+			System.out.print("\nChoose a command:\n" + "1. Backup a File\n"
 					+ "2. Restore a File\n" + "3. Delete a File\n"
 					+ "4. Reclaim disk space\n\n" + "Option: ");
 			System.out.flush();
@@ -133,13 +129,42 @@ public class Cli extends Thread {
 
 	private void processInput() {
 		switch (input) {
-		case "1": case "backup": case "Backup": case "BACKUP":
+		case "1":
+		case "backup":
+		case "Backup":
+		case "BACKUP":
 			break;
-		case "2": case "restore": case "Restore": case "RESTORE":
+		case "2":
+		case "restore":
+		case "Restore":
+		case "RESTORE":
 			break;
-		case "3": case "delete": case "Delete": case "DELETE":
+		case "3":
+		case "delete":
+		case "Delete":
+		case "DELETE":
+			Main.getDatabase().showBackedUpFiles();
+			System.out.print("Choose file to be deleted (number): ");
+			try {
+				input = in.readLine();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			String result = Main.getDatabase().getHash(Integer.parseInt(input));
+			if (!result.equals("fail")) {
+				System.out.println("Sending DELETE message!");
+				Main.getService().submit(new Delete(result));
+			} else {
+				System.out
+						.println("Invalid file. Choose one of the availvable numbers!");
+			}
+
 			break;
-		case "4": case "reclaim": case "Reclaim": case "RECLAIM":
+		case "4":
+		case "reclaim":
+		case "Reclaim":
+		case "RECLAIM":
 			break;
 		default:
 			System.out.println("Invalid Option!\n");

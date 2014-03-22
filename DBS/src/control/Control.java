@@ -1,10 +1,9 @@
 package control;
 
 import java.io.IOException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import main.Main;
+
 import communication.Communicator;
 
 public class Control extends Thread {
@@ -73,4 +72,5 @@ public class Control extends Thread {
 		this.ctrlComm = ctrlComm;
 	}
 
+	
 }

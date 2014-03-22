@@ -1,13 +1,11 @@
 package main;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.Map.Entry;
+
+import javax.swing.text.html.HTMLDocument.Iterator;
 
 public class Database implements Serializable {
 
@@ -35,7 +33,7 @@ public class Database implements Serializable {
 
 	public void removeFile(String fileid) {
 		fileList.remove(fileid);
-		
+
 		for (int i = 0; i < chunks.size(); i++) {
 			if (chunks.get(i).getFileId().equals(fileid)) {
 				chunks.remove(i);
@@ -62,5 +60,22 @@ public class Database implements Serializable {
 
 	public float getFreeSpace() {
 		return Main.getDiskSize() - chunks.size() * Main.getChunkSize();
+	}
+
+	public void showBackedUpFiles() {
+		int i = 1;
+		for (Entry<String, String> entry : fileList.entrySet()) {
+			System.out.println(i + ". " + "[FileId] - " + entry.getKey() + " [FileName] - " + entry.getValue());
+		}
+	}
+
+	public String getHash(Integer input) {
+		int i = 1;
+		for (Entry<String, String> entry : fileList.entrySet()) {
+			if(i == input) {
+				return entry.getKey();
+			}
+		}
+		return "fail";		
 	}
 }

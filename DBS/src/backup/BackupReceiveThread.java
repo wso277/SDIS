@@ -1,10 +1,6 @@
 package backup;
 
-import java.io.IOException;
 import java.net.DatagramPacket;
-import java.net.SocketTimeoutException;
-
-import communication.Communicator;
 
 public class BackupReceiveThread extends Thread {
 

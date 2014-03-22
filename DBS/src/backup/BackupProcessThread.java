@@ -1,7 +1,6 @@
 package backup;
 
 import main.Main;
-import communication.Communicator;
 
 public class BackupProcessThread extends Thread {
 

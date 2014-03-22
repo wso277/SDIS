@@ -43,6 +43,7 @@ public class Main implements Serializable {
 		// Load database
 		load();
 
+		
 		// Initializing job queue
 		service = Executors.newFixedThreadPool(8);
 
@@ -69,71 +70,7 @@ public class Main implements Serializable {
 		// save database
 		save();
 	}
-
-	public static boolean checkVersion(String ver) {
-		if (version.equals(ver)) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	public static Address getipData(String channel) {
-		return ipData.get(channel);
-	}
-
-	public static byte[] getCRLF() {
-		return CRLF;
-	}
-
-	public static void setCRLF(byte[] cRLF) {
-		CRLF = cRLF;
-	}
-
-	public static String getVersion() {
-		return version;
-	}
-
-	public static void setVersion(String version) {
-		Main.version = version;
-	}
-
-	public static int getDiskSize() {
-		return diskSize;
-	}
-
-	public static void setDiskSize(int diskSize) {
-		Main.diskSize = diskSize;
-	}
-
-	public static int getChunkSize() {
-		return chunkSize;
-	}
-
-	public static void setChunkSize(int chunkSize) {
-		Main.chunkSize = chunkSize;
-	}
-
-	public static HashMap<String, Address> getIpData() {
-		return ipData;
-	}
-
-	public static void setIpData(HashMap<String, Address> ipData) {
-		Main.ipData = ipData;
-	}
-
-	public static Database getDatabase() {
-		return database;
-	}
-
-	public static void setDatabase(Database database) {
-		Main.database = database;
-	}
-
-	public static ExecutorService getService() {
-		return service;
-	}
-
+	
 	public static void save() {
 
 		ObjectOutputStream save = null;
@@ -230,7 +167,7 @@ public class Main implements Serializable {
 				ipData.put("mc", (Address) load.readObject());
 				ipData.put("mcr", (Address) load.readObject());
 				ipData.put("mcb", (Address) load.readObject());
-				System.out.println("Read network configurations!");
+				System.out.println("\nRead network configurations!");
 			} catch (ClassNotFoundException e) {
 				System.err.println("network.dbs not found!");
 				e.printStackTrace();
@@ -240,4 +177,110 @@ public class Main implements Serializable {
 			}
 		}
 	}
+
+	public static boolean checkVersion(String ver) {
+		if (version.equals(ver)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public static Address getipData(String channel) {
+		return ipData.get(channel);
+	}
+
+	public static byte[] getCRLF() {
+		return CRLF;
+	}
+
+	public static void setCRLF(byte[] cRLF) {
+		CRLF = cRLF;
+	}
+
+	public static String getVersion() {
+		return version;
+	}
+
+	public static void setVersion(String version) {
+		Main.version = version;
+	}
+
+	public static int getDiskSize() {
+		return diskSize;
+	}
+
+	public static void setDiskSize(int diskSize) {
+		Main.diskSize = diskSize;
+	}
+
+	public static int getChunkSize() {
+		return chunkSize;
+	}
+
+	public static void setChunkSize(int chunkSize) {
+		Main.chunkSize = chunkSize;
+	}
+
+	public static HashMap<String, Address> getIpData() {
+		return ipData;
+	}
+
+	public static void setIpData(HashMap<String, Address> ipData) {
+		Main.ipData = ipData;
+	}
+
+	public static Database getDatabase() {
+		return database;
+	}
+
+	public static void setDatabase(Database database) {
+		Main.database = database;
+	}
+
+	public static ExecutorService getService() {
+		return service;
+	}
+
+	public static Backup getBackup() {
+		return backup;
+	}
+
+	public static void setBackup(Backup backup) {
+		Main.backup = backup;
+	}
+
+	public static Restore getRestore() {
+		return restore;
+	}
+
+	public static void setRestore(Restore restore) {
+		Main.restore = restore;
+	}
+
+	public static Control getControl() {
+		return control;
+	}
+
+	public static void setControl(Control control) {
+		Main.control = control;
+	}
+
+	public static Cli getCli() {
+		return cli;
+	}
+
+	public static void setCli(Cli cli) {
+		Main.cli = cli;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	public static void setService(ExecutorService service) {
+		Main.service = service;
+	}
+
+	
 }

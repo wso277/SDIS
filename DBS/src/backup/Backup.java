@@ -2,9 +2,7 @@ package backup;
 
 import java.io.IOException;
 
-import main.Main;
 import communication.Communicator;
-import control.ControlProcessThread;
 
 public class Backup extends Thread {
 
