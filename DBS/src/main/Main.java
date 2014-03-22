@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -16,7 +17,9 @@ import communication.Address;
 import control.Control;
 import backup.Backup;
 
-public class Main {
+public class Main implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 	public static byte[] CRLF = { 0xD, 0xA };
 	public static String version = "1.0";
 	public static int diskSize = 50000000;
@@ -46,25 +49,29 @@ public class Main {
 		ipData = new HashMap<String, Address>();
 
 		// Temporary IPs for testing
-		ipData.put("mc", new Address("226.0.100.1", 7891));
-		ipData.put("mcb", new Address("226.0.100.2", 7892));
-		ipData.put("mcr", new Address("226.0.100.3", 7893));
+		ipData.put("mc", new Address("mc", "226.0.100.1", 7891));
+		ipData.put("mcb", new Address("mcb", "226.0.100.2", 7892));
+		ipData.put("mcr", new Address("mcr", "226.0.100.3", 7893));
 
 		// IPs received as arguments
 		// ipData.put("mc", new Address(args[0], Integer.parseInt(args[1])));
 		// ipData.put("mcb", new Address(args[2], Integer.parseInt(args[3])));
 		// ipData.put("mcr", new Address(args[4], Integer.parseInt(args[5])));
 
+		//service.submit(new Cli());
+		
 		// object backup which creates receive thread
-		service.submit(backup = new Backup(ipData.get("mcb").getIp(), ipData.get("mcb").getPort()));
+		service.submit(backup = new Backup(ipData.get("mcb").getIp(), ipData
+				.get("mcb").getPort()));
 
 		// object restore which creates restore thread
-		service.submit(restore = new Restore(ipData.get("mcr").getIp(), ipData.get("mcr").getPort()));
+		service.submit(restore = new Restore(ipData.get("mcr").getIp(), ipData
+				.get("mcr").getPort()));
 
 		// object control which creates control thread
-		service.submit(control = new Control(ipData.get("mc").getIp(), ipData.get("mc").getPort()));
+		service.submit(control = new Control(ipData.get("mc").getIp(), ipData
+				.get("mc").getPort()));
 
-		service.submit(new Cli());
 
 		// save database
 		save();
@@ -187,4 +194,58 @@ public class Main {
 		}
 	}
 
+	public static void saveNetwork(Address mc, Address mcr, Address mcb) {
+
+		ObjectOutputStream save = null;
+
+		try {
+			save = new ObjectOutputStream(new FileOutputStream("network.dbs"));
+		} catch (FileNotFoundException e) {
+			System.err.println("Network.dbs not found!");
+			e.printStackTrace();
+		} catch (IOException e) {
+			System.err.println("Error creating network.dbs");
+			e.printStackTrace();
+		}
+
+		try {
+			save.writeObject(mc);
+			save.writeObject(mcr);
+			save.writeObject(mcb);
+		} catch (IOException e) {
+			System.err.println("Error saving network configurations");
+			e.printStackTrace();
+		}
+	}
+
+	public static void loadNetwork() {
+
+		ObjectInputStream load = null;
+		Boolean newdb = false;
+
+		try {
+			load = new ObjectInputStream(new FileInputStream("network.dbs"));
+		} catch (FileNotFoundException e) {
+			System.err.println("Network.dbs not found!");
+		} catch (IOException e) {
+			System.err.println("Error creating network.dbs");
+			e.printStackTrace();
+		}
+
+		if (!newdb) {
+
+			try {
+				ipData.put("mc", (Address) load.readObject());
+				ipData.put("mcr", (Address) load.readObject());
+				ipData.put("mcb", (Address) load.readObject());
+				System.out.println("Read network configurations!");
+			} catch (ClassNotFoundException e) {
+				System.err.println("network.dbs not found!");
+				e.printStackTrace();
+			} catch (IOException e) {
+				System.err.println("Error loading network configurations!");
+				e.printStackTrace();
+			}
+		}
+	}
 }

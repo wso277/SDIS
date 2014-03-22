@@ -23,6 +23,7 @@ public class Backup extends Thread {
 			e.printStackTrace();
 		}
 
+		receive();
 	}
 
 	public void receive() {
