@@ -22,7 +22,7 @@ public class Main implements Serializable {
 	private static final long serialVersionUID = 1L;
 	public static byte[] CRLF = { 0xD, 0xA };
 	public static String version = "1.0";
-	public static int diskSize = 50000000;
+	public static int diskSize = 200000;
 	public static int chunkSize = 64000;
 	private static Backup backup;
 	private static Restore restore;
@@ -43,11 +43,11 @@ public class Main implements Serializable {
 		// Load database
 		load();
 
-		FileManager split = new FileManager("/home/wso277/Desktop/image1.jpg", 0, false);
+		FileManager split = new FileManager("C:/Users/Vinnie/Desktop/1.jpg", 0, false);
 		split.split();
-		FileManager split1 = new FileManager("/home/wso277/Desktop/image2.jpg", 0, false);
+		FileManager split1 = new FileManager("C:/Users/Vinnie/Desktop/2.jpg", 0, false);
 		split1.split();
-		FileManager split2 = new FileManager("/home/wso277/Desktop/image3.jpg", 0, false);
+		FileManager split2 = new FileManager("C:/Users/Vinnie/Desktop/3.jpg", 0, false);
 		split2.split();
 		
 		// Initializing job queue

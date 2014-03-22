@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import space_reclaim.SpaceReclaim;
 import communication.Address;
 import delete.Delete;
 import main.Main;
@@ -165,6 +166,20 @@ public class Cli extends Thread {
 		case "reclaim":
 		case "Reclaim":
 		case "RECLAIM":
+			System.out.println("Space currently occupied - " + Main.getDiskSize());
+			System.out.print("Choose space to release (1 byte to " + (Main.getDiskSize() - 64) + " bytes): ");
+			try {
+				input = in.readLine();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if(Integer.parseInt(input) > 0 && Integer.parseInt(input) <= (Main.getDiskSize()-64)) {
+				Main.getService().submit(new SpaceReclaim(Integer.parseInt(input)));
+			} else {
+				System.out
+				.println("Invalid Size. Choose from the available range!");
+			}
 			break;
 		default:
 			System.out.println("Invalid Option!\n");
