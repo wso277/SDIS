@@ -71,31 +71,41 @@ public class FileManager {
 
 		Main.getDatabase().removeFile(hashString.toString());
 	}
+	
+	public boolean readChunk(Integer chunkNo) {
+		
+		File chunk = new File(hashString.toString() + "/" + chunkNo
+				+ ".part");
+
+		if (chunk.exists()) {
+
+			try {
+				in = new BufferedInputStream(new FileInputStream(chunk));
+			} catch (FileNotFoundException e) {
+				System.err.println("Error creating input stream");
+				e.printStackTrace();
+			}
+
+			chunkData = new byte[Main.getChunkSize()];
+
+			try {
+				in.read(chunkData);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			return true;
+		}
+		
+		return false;
+	}
 
 	public void join() {
 		int chunkNo = 1;
 
 		while (true) {
 
-			File chunk = new File(hashString.toString() + "/" + chunkNo
-					+ ".part");
-
-			if (chunk.exists()) {
-
-				try {
-					in = new BufferedInputStream(new FileInputStream(chunk));
-				} catch (FileNotFoundException e) {
-					System.err.println("Error creating input stream");
-					e.printStackTrace();
-				}
-
-				chunkData = new byte[Main.getChunkSize()];
-
-				try {
-					in.read(chunkData);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				if (readChunk(chunkNo)) {
 
 				writeToFile(0, chunkData);
 
