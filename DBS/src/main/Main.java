@@ -59,35 +59,12 @@ public class Main {
 		service.submit(backup = new Backup(ipData.get("mcb").getIp(), ipData.get("mcb").getPort()));
 
 		// object restore which creates restore thread
-		service.submit(new Runnable() {
-
-			@Override
-			public void run() {
-				restore = new Restore(ipData.get("mcr").getIp(), ipData.get(
-						"mcr").getPort());
-
-			}
-
-		});
+		service.submit(restore = new Restore(ipData.get("mcr").getIp(), ipData.get("mcr").getPort()));
 
 		// object control which creates control thread
 		service.submit(control = new Control(ipData.get("mc").getIp(), ipData.get("mc").getPort()));
 
-		service.submit(new Runnable() {
-
-			@Override
-			public void run() {
-				Cli cli = new Cli();
-				try {
-					Cli.run();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-			}
-
-		});
+		service.submit(new Cli());
 
 		// save database
 		save();

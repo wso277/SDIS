@@ -1,7 +1,7 @@
 package restore;
 
 
-public class Restore {
+public class Restore extends Thread {
 
 	public Restore(String ip, int port) {
 
