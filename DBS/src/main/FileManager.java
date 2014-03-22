@@ -71,11 +71,10 @@ public class FileManager {
 
 		Main.getDatabase().removeFile(hashString.toString());
 	}
-	
+
 	public boolean readChunk(Integer chunkNo) {
-		
-		File chunk = new File(hashString.toString() + "/" + chunkNo
-				+ ".part");
+
+		File chunk = new File(hashString.toString() + "/" + chunkNo + ".part");
 
 		if (chunk.exists()) {
 
@@ -93,27 +92,21 @@ public class FileManager {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			
+
 			return true;
 		}
-		
+
 		return false;
 	}
 
 	public void join() {
 		int chunkNo = 1;
 
-		while (true) {
+		while (readChunk(chunkNo)) {
 
-				if (readChunk(chunkNo)) {
+			writeToFile(0, chunkData);
 
-				writeToFile(0, chunkData);
-
-				chunkNo++;
-
-			} else {
-				break;
-			}
+			chunkNo++;
 		}
 	}
 
@@ -176,7 +169,7 @@ public class FileManager {
 			System.err.println("Not enough space to backup file");
 			return false;
 		}
-		
+
 		return true;
 	}
 
@@ -284,7 +277,7 @@ public class FileManager {
 		FileManager.out = out;
 	}
 
-	public static byte[] getChunkData() {
+	public byte[] getChunkData() {
 		return chunkData;
 	}
 
@@ -308,7 +301,7 @@ public class FileManager {
 		FileManager.fileName = fileName;
 	}
 
-	public static Integer getRep() {
+	public Integer getRep() {
 		return rep;
 	}
 
@@ -323,6 +316,5 @@ public class FileManager {
 	public static void setHashString(StringBuffer hashString) {
 		FileManager.hashString = hashString;
 	}
-	
-	
+
 }

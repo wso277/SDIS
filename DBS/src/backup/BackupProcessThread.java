@@ -4,7 +4,7 @@ import main.Main;
 
 public class BackupProcessThread extends Thread {
 
-	public static String[] message;
+	public String[] message;
 	public static String[] header;
 	public static String body;
 

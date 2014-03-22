@@ -38,5 +38,29 @@ public class Backup extends Thread {
 		}
 	}
 
+	public static String getIp() {
+		return ip;
+	}
+
+	public static void setIp(String ip) {
+		Backup.ip = ip;
+	}
+
+	public static int getPort() {
+		return port;
+	}
+
+	public static void setPort(int port) {
+		Backup.port = port;
+	}
+
+	public static Communicator getMdbComm() {
+		return mdbComm;
+	}
+
+	public static void setMdbComm(Communicator mdbComm) {
+		Backup.mdbComm = mdbComm;
+	}
+
 
 }

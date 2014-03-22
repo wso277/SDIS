@@ -69,7 +69,7 @@ public class Cli extends Thread {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			Address mc = new Address("mc", ip, Integer.parseInt(port));
+			Address mc = new Address(ip, Integer.parseInt(port));
 
 			System.out.print("Insert Restore IP: ");
 			System.out.flush();
@@ -85,7 +85,7 @@ public class Cli extends Thread {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			Address mcr = new Address("mcr", ip, Integer.parseInt(port));
+			Address mcr = new Address(ip, Integer.parseInt(port));
 
 			System.out.print("Insert Backup IP: ");
 			System.out.flush();
@@ -101,7 +101,7 @@ public class Cli extends Thread {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			Address mcb = new Address("mcb", ip, Integer.parseInt(port));
+			Address mcb = new Address(ip, Integer.parseInt(port));
 
 			Main.saveNetwork(mc, mcr, mcb);
 

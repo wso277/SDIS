@@ -5,12 +5,10 @@ import java.io.Serializable;
 public class Address implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private String name;
 	private String ip;
 	private int port;
 	
-	public Address(String newname, String newip, int newport) {
-		name = newname;
+	public Address(String newip, int newport) {
 		ip = newip;
 		port = newport;
 	}

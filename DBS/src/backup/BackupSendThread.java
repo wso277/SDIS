@@ -4,14 +4,15 @@ import main.FileManager;
 import main.Main;
 
 public class BackupSendThread extends Thread {
-	String message;
-	String fileHash;
+	private static String message;
+	private static String fileHash;
+	private static FileManager fm;
 	boolean enoughSpace;
 
 	public BackupSendThread(String filePath, Integer repDegree) {
-		FileManager fm = new FileManager(filePath, repDegree, false);
+		fm = new FileManager(filePath, repDegree, false);
 		fileHash = fm.getHashString().toString();
-		
+
 		if (fm.split()) {
 			enoughSpace = true;
 		} else {
@@ -21,9 +22,22 @@ public class BackupSendThread extends Thread {
 
 	public void run() {
 		if (enoughSpace) {
-			for (int i = 0; i < Main.getDatabase().getChunksSize(); i++) {
-				if ( Main.getDatabase().getChunks().get(i).getFileId() == fileHash) {
-					
+			Integer chunkNo = 1;
+			while (fm.readChunk(chunkNo)) {
+
+				message = "PUTCHUNK " + Main.getVersion() + " " + fileHash
+						+ " " + chunkNo + " " + fm.getRep() + Main.getCRLF()
+						+ " " + Main.getCRLF() + fm.getChunkData();
+
+				chunkNo++;
+				
+				Main.getBackup().getMdbComm().sendMessage(message);
+				
+				try {
+					sleep(500);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
 		}

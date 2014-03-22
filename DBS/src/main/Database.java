@@ -5,11 +5,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import javax.swing.text.html.HTMLDocument.Iterator;
-
 public class Database implements Serializable {
 
-	private final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 	private ArrayList<Chunk> chunks;
 	private HashMap<String, String> fileList;
 
