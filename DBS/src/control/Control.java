@@ -23,7 +23,14 @@ public class Control extends Thread {
 			System.err.println("Error creating communicator!");
 			e.printStackTrace();
 		}
-		
+
+	}
+
+	public void run() {
+		System.out.println("Control thread name: "
+				+ Thread.currentThread().getName());
+		receive();
+
 	}
 
 	public void receive() {
@@ -65,6 +72,5 @@ public class Control extends Thread {
 	public void setCtrlComm(Communicator ctrlComm) {
 		this.ctrlComm = ctrlComm;
 	}
-
 
 }

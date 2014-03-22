@@ -23,9 +23,14 @@ public class Backup extends Thread {
 			e.printStackTrace();
 		}
 
-		receive();
 	}
 
+	public void run() {
+		System.out.println("Backup thread name: "
+				+ Thread.currentThread().getName());
+		receive();
+	}
+	
 	public void receive() {
 
 		while (true) {

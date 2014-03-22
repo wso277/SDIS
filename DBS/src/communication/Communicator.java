@@ -18,13 +18,6 @@ public class Communicator {
 		
 		ip = newip;
 		port = newport;
-		
-		System.out.println("Comm Port:" + port);
-		System.out.println("Comm Ip:" + ip);
-		
-
-		System.out.println("Comm1 Port:" + port);
-		System.out.println("Comm1 Ip:" + ip);
 
 		try {
 			socket = new MulticastSocket(null);

@@ -27,6 +27,7 @@ public class Main implements Serializable {
 	private static Backup backup;
 	private static Restore restore;
 	private static Control control;
+	private static Cli cli;
 	private static Database database;
 	private static HashMap<String, Address> ipData;
 	private static ExecutorService service;
@@ -53,29 +54,20 @@ public class Main implements Serializable {
 		ipData.put("mcb", new Address("mcb", "226.0.100.2", 7892));
 		ipData.put("mcr", new Address("mcr", "226.0.100.3", 7893));
 
-		// IPs received as arguments
-		// ipData.put("mc", new Address(args[0], Integer.parseInt(args[1])));
-		// ipData.put("mcb", new Address(args[2], Integer.parseInt(args[3])));
-		// ipData.put("mcr", new Address(args[4], Integer.parseInt(args[5])));
+		// Initializing components
+		cli = new Cli();
+		backup = new Backup(ipData.get("mcb").getIp(), ipData.get("mcb")
+				.getPort());
+		control = new Control(ipData.get("mc").getIp(), ipData.get("mc")
+				.getPort());
 
-		//service.submit(new Cli());
-		
-		// object backup which creates receive thread
-		service.submit(backup = new Backup(ipData.get("mcb").getIp(), ipData
-				.get("mcb").getPort()));
-
-		// object restore which creates restore thread
-		service.submit(restore = new Restore(ipData.get("mcr").getIp(), ipData
-				.get("mcr").getPort()));
-
-		// object control which creates control thread
-		service.submit(control = new Control(ipData.get("mc").getIp(), ipData
-				.get("mc").getPort()));
-
+		// Pushing main components to job queue
+		service.submit(backup);
+		service.submit(control);
+		service.submit(cli);
 
 		// save database
 		save();
-
 	}
 
 	public static boolean checkVersion(String ver) {
