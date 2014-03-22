@@ -30,31 +30,29 @@ public class SpaceReclaim extends Thread {
 			chunksToDelete = (int) Math.ceil((spaceToReclaim - Main
 					.getDatabase().getFreeSpace()) / Main.getChunkSize());
 
-			System.out.println(chunksToDelete + "," + numberOfChunks);
-
 			chunks = new Chunk[chunksToDelete];
 
 			Collections.sort(Main.getDatabase().getChunks());
 
 			for (int j = 0; j < chunksToDelete; j++) {
-				System.out.println("Ciclo 1");
 				chunks[j] = Main.getDatabase().getChunk(
-						numberOfChunks - (j - 1));
-				System.out.println("Ciclo 1 - pós-codigo-manhoso-vilso");
+						numberOfChunks - (j + 1));
 			}
 
 			for (int j = 0; j < chunksToDelete; j++) {
-				System.out.println("Ciclo 2");
 				FileManager del = new FileManager(chunks[j].getFileId(), 0,
 						true);
 				del.deleteChunk(chunks[j].getChunkNo());
 				sendMessage(j);
+				try {
+					sleep(200);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 
 		Main.setDiskSize(Main.getDiskSize() - spaceToReclaim);
-
-		System.out.println("New disk size: " + Main.getDiskSize());
 
 		Main.save();
 	}

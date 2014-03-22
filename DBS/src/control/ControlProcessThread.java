@@ -36,7 +36,7 @@ public class ControlProcessThread extends Thread {
 
 		} else if (header.get(0).equals("REMOVED")) {
 			
-			System.out.println("Received Removed");
+			System.out.println("removed");
 		} else if (header.get(0).equals("STORED")) {
 
 		} else {

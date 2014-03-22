@@ -117,43 +117,54 @@ public class FileManager {
 
 		fileSize = file.length();
 
-		try {
-			in = new BufferedInputStream(new FileInputStream(file));
-		} catch (FileNotFoundException e) {
-			System.err.println("Error creating input stream");
-			e.printStackTrace();
-		}
+		Integer chunksToBeCreated = (int) Math.ceil(fileSize
+				/ Main.getChunkSize());
 
-		while (totalBytesRead < fileSize) { // verify filesize multiple of 64kb
-											// and and chunk
-
-			chunkData = new byte[Main.getChunkSize()];
+		if (Main.getDatabase().getFreeSpace() >= chunksToBeCreated
+				* Main.getChunkSize()) {
 
 			try {
-				bytesRead = in.read(chunkData, 0, Main.getChunkSize());
-			} catch (IOException e) {
-				System.err.println("Error reading stream");
+				in = new BufferedInputStream(new FileInputStream(file));
+			} catch (FileNotFoundException e) {
+				System.err.println("Error creating input stream");
 				e.printStackTrace();
 			}
 
-			if (bytesRead >= 0) {
-				totalBytesRead += bytesRead;
-				chunkNo++;
-				Chunk chunk = new Chunk(hashString.toString(), chunkNo, rep);
+			while (totalBytesRead < fileSize) { // verify filesize multiple of
+												// 64kb
+												// and and chunk
 
-				writeToFile(chunkNo, chunkData);
+				chunkData = new byte[Main.getChunkSize()];
 
-				Main.getDatabase().addChunk(chunk);
-				System.err.println("read");
-			} else {
-				System.err
-						.println("Error reading file BytesRead: " + bytesRead);
-				break;
+				try {
+					bytesRead = in.read(chunkData, 0, Main.getChunkSize());
+				} catch (IOException e) {
+					System.err.println("Error reading stream");
+					e.printStackTrace();
+				}
+
+				if (bytesRead >= 0) {
+					totalBytesRead += bytesRead;
+					chunkNo++;
+					Chunk chunk = new Chunk(hashString.toString(), chunkNo, rep);
+
+					writeToFile(chunkNo, chunkData);
+
+					Main.getDatabase().addChunk(chunk);
+					System.err.println("read");
+				} else {
+					System.err.println("Error reading file BytesRead: "
+							+ bytesRead);
+					break;
+				}
+
 			}
 
-		}
+			Main.getDatabase().addFile(hashString.toString(), fileName);
 
-		Main.getDatabase().addFile(hashString.toString(), fileName);
+		} else {
+			System.err.println("Not enough space to backup file");
+		}
 	}
 
 	private void writeToFile(int chunkNo, byte[] data) {
