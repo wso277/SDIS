@@ -61,6 +61,7 @@ public class Database implements Serializable {
 		int i = 1;
 		for (Entry<String, String> entry : fileList.entrySet()) {
 			System.out.println(i + ". " + "[FileId] - " + entry.getKey() + " [FileName] - " + entry.getValue());
+			i++;
 		}
 	}
 

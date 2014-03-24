@@ -8,24 +8,22 @@ import restore.RestoreProcessThread;
 
 public class ControlProcessThread extends Thread {
 
-	public static String[] message;
+	public static String message;
 	public static ArrayList<String> header;
 
 	public ControlProcessThread(String newmessage) {
-		
-		header = new ArrayList<String>();
-		
-		String[] tmp = newmessage.split("\\s+");
-
-		for (int i = 0; i < tmp.length; i++) {
-			header.add(tmp[i].trim());
-		}
-		
+		message = newmessage;
 	}
 
 	public void run() {
 
+		header = new ArrayList<String>();
 		
+		String[] tmp = message.split("\\s+");
+
+		for (int i = 0; i < tmp.length; i++) {
+			header.add(tmp[i].trim());
+		}
 		
 		if (header.get(0).equals("GETCHUNK")) {
 			RestoreProcessThread rpt = new RestoreProcessThread(header.get(2),
