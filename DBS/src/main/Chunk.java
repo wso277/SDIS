@@ -58,7 +58,7 @@ public class Chunk implements Serializable, Comparable<Chunk> {
         return sent;
     }
 
-    public void setSent(Boolean newsent) {
+    public synchronized void setSent(Boolean newsent) {
         sent = newsent;
     }
 

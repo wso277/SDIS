@@ -36,7 +36,7 @@ public class Control extends Thread {
 
 		while (true) {
 			String mssg = ctrlComm.receiveMessage();
-
+            System.out.println("Creating thread");
 			Main.getService().submit(new ControlProcessThread(mssg));
 
 		}

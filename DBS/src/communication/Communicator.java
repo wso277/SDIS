@@ -20,16 +20,16 @@ public class Communicator {
 		port = newport;
 
 		try {
-			socket = new MulticastSocket(null);
+			socket = new MulticastSocket(port);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
 		socket.setReuseAddress(true);
-
+/*
 		SocketAddress socketA = new InetSocketAddress(port);
 		
-		socket.bind(socketA);
+		socket.bind(socketA);*/
 		socket.setTimeToLive(2);
 		
 		try {
@@ -38,9 +38,9 @@ public class Communicator {
 			e1.printStackTrace();
 		}
 		
-
-		
 		socket.joinGroup(address);
+
+        System.out.println("IP: " + ip + " PORT: " + port + " ADDRESS: " + address);
 
 	}
 
@@ -114,6 +114,10 @@ public class Communicator {
 		}
 
 		String response = new String(rpacket.getData());
+        System.out.println("Received: " + response);
+
+        System.out.println("Control thread name: "
+                + Thread.currentThread().getName());
 		return response;
 
 	}

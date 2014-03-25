@@ -131,9 +131,7 @@ public class FileManager {
                 e.printStackTrace();
             }
 
-            while (totalBytesRead < fileSize) { // verify filesize multiple of
-                // 64kb
-                // and and chunk
+            while (totalBytesRead < fileSize) {
 
                 chunkData = new byte[Main.getChunkSize()];
 

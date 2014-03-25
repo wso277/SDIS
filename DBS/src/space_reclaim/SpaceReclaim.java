@@ -61,7 +61,6 @@ public class SpaceReclaim extends Thread {
 		String mssg = new String("REMOVED " + Main.getVersion() + " "
 				+ chunks[j].getFileId() + " " + chunks[j].getChunkNo() + " "
 				+ Main.getCRLF() + " " + Main.getCRLF());
-
 		Main.getControl().send(mssg);
 
 	}
