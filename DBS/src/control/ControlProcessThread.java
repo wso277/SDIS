@@ -86,9 +86,7 @@ public class ControlProcessThread extends Thread {
         for (int i = 0; i < Main.getDatabase().getChunksSize(); i++) {
             Chunk chunk = Main.getDatabase().getChunk(i);
             if (chunk.getFileId().equals(header.get(2)) && (chunk.getChunkNo() == Integer.parseInt(header.get(3)))) {
-                System.out.println("Previous:" + chunk.getKnowReps());
                 chunk.setKnowReps(1);
-                System.out.println("After:" + chunk.getKnowReps());
                 break;
             }
         }
@@ -98,9 +96,7 @@ public class ControlProcessThread extends Thread {
         for (int i = 0; i < Main.getDatabase().getChunksSize(); i++) {
             Chunk chunk = Main.getDatabase().getChunk(i);
             if (chunk.getFileId().equals(header.get(2)) && (chunk.getChunkNo() == Integer.parseInt(header.get(3)))) {
-                System.out.println("Previous:" + chunk.getKnowReps());
                 chunk.setKnowReps(-1);
-                System.out.println("After:" + chunk.getKnowReps());
                 break;
             }
         }

@@ -71,6 +71,7 @@ public class Database implements Serializable {
 			if(i == input) {
 				return entry.getKey();
 			}
+            i++;
 		}
 		return "fail";		
 	}
