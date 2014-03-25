@@ -1,5 +1,6 @@
 package space_reclaim;
 
+import java.net.DatagramSocket;
 import java.util.Collections;
 
 import main.Chunk;
@@ -61,6 +62,9 @@ public class SpaceReclaim extends Thread {
 		String mssg = new String("REMOVED " + Main.getVersion() + " "
 				+ chunks[j].getFileId() + " " + chunks[j].getChunkNo() + " "
 				+ Main.getCRLF() + " " + Main.getCRLF());
+
+        System.out.println("Sent");
+
 		Main.getControl().send(mssg);
 
 	}

@@ -31,7 +31,7 @@ public class BackupSendThread extends Thread {
 
 				chunkNo++;
 				
-				Main.getBackup().getMdbComm().sendMessage(message);
+				/*Main.getBackup().getMdbComm().sendMessage(message);*/
 				
 				try {
 					sleep(500);

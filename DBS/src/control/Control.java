@@ -1,75 +1,106 @@
 package control;
 
 import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.InetAddress;
+import java.net.MulticastSocket;
+import java.net.UnknownHostException;
 
 import main.Main;
 
-import communication.Communicator;
-
 public class Control extends Thread {
 
-	private static String ip;
-	private static int port;
-	private Communicator ctrlComm;
+    private static String ip;
+    private static int port;
+    private static int PSIZE = 65536;
+    private static MulticastSocket socket = null;
+    private InetAddress address;
 
-	public Control(String newip, int newport) {
-		ip = newip;
-		port = newport;
+    public Control(String newip, int newport) {
+        ip = newip;
+        port = newport;
 
-		try {
-			ctrlComm = new Communicator(ip, port);
-		} catch (IOException e) {
-			System.err.println("Error creating communicator!");
-			e.printStackTrace();
-		}
+        try {
+            socket = new MulticastSocket(port);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-	}
+        try {
+            socket.setTimeToLive(2);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-	public void run() {
-		System.out.println("Control thread name: "
-				+ Thread.currentThread().getName());
-		receive();
+        try {
+            address = InetAddress.getByName(ip);
+        } catch (UnknownHostException e1) {
+            e1.printStackTrace();
+        }
 
-	}
+        try {
+            socket.joinGroup(address);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-	public void receive() {
+        System.out.println("IP: " + ip + " PORT: " + port + " ADDRESS: " + address);
 
-		while (true) {
-			String mssg = ctrlComm.receiveMessage();
-            System.out.println("Creating thread");
-			Main.getService().submit(new ControlProcessThread(mssg));
+    }
 
-		}
-	}
+    public void run() {
+        System.out.println("Control thread name: " + Thread.currentThread().getName());
+        receive();
 
-	public void send(String message) {
+    }
 
-		ctrlComm.sendMessage(message);
-	}
+    public void receive() {
 
-	public static String getIp() {
-		return ip;
-	}
+        while (true) {
+            byte[] buf = new byte[PSIZE];
+            DatagramPacket rpacket = new DatagramPacket(buf, PSIZE);
 
-	public static void setIp(String ip) {
-		Control.ip = ip;
-	}
+            try {
+                socket.receive(rpacket);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
-	public static int getPort() {
-		return port;
-	}
+            String response = new String(rpacket.getData());
 
-	public static void setPort(int port) {
-		Control.port = port;
-	}
+            System.out.println("Received: " + response);
 
-	public Communicator getCtrlComm() {
-		return ctrlComm;
-	}
+            System.out.println("Control thread name: " + Thread.currentThread().getName());
 
-	public void setCtrlComm(Communicator ctrlComm) {
-		this.ctrlComm = ctrlComm;
-	}
+            Main.getService().submit(new ControlProcessThread(response));
+        }
+    }
 
-	
+    public void send(String message) {
+
+        DatagramPacket packet = new DatagramPacket(message.getBytes(), message.getBytes().length, address, port);
+
+        try {
+            socket.send(packet);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static String getIp() {
+        return ip;
+    }
+
+    public static void setIp(String ip) {
+        Control.ip = ip;
+    }
+
+    public static int getPort() {
+        return port;
+    }
+
+    public static void setPort(int port) {
+        Control.port = port;
+    }
+
 }

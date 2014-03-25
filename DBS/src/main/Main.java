@@ -89,10 +89,12 @@ public class Main implements Serializable {
 				.getPort());
 
 		// Pushing main components to job queue
-		service.submit(backup);
-		service.submit(control);
-		service.submit(cli);
-
+		//service.submit(backup);
+		//service.submit(control);
+		//service.submit(cli);
+        backup.start();
+        control.start();
+        cli.start();
 		// save database
 		save();
 	}
