@@ -7,3 +7,5 @@ DBS/.settings/*
 DBS/.project
 DBS/.classpath
 DBS/bin
+*.idea
+*.iml
