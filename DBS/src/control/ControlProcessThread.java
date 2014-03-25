@@ -34,9 +34,15 @@ public class ControlProcessThread extends Thread {
             Main.save();
 
         } else if (header.get(0).equals("REMOVED")) {
-
-            removedProcess();
+            if (Main.getVersion().equals(header.get(1))) {
+                removedProcess();
+                Main.save();
+            }
         } else if (header.get(0).equals("STORED")) {
+            if (Main.getVersion().equals(header.get(1))) {
+                storedProcess();
+                Main.save();
+            }
 
         } else {
             System.err.println("Operation Invalid!");
@@ -44,13 +50,26 @@ public class ControlProcessThread extends Thread {
 
     }
 
+    private void storedProcess() {
+        for (int i = 0; i < Main.getDatabase().getChunksSize(); i++) {
+            Chunk chunk = Main.getDatabase().getChunk(i);
+            if (chunk.getFileId().equals(header.get(2)) && (chunk.getChunkNo() == Integer.parseInt(header.get(3)))) {
+                System.out.println("Previous:" + chunk.getChunkNo());
+                chunk.setChunkNo(chunk.getChunkNo() + 1);
+                System.out.println("After:" + chunk.getChunkNo());
+                break;
+            }
+        }
+    }
+
     private void removedProcess() {
         for (int i = 0; i < Main.getDatabase().getChunksSize(); i++) {
             Chunk chunk = Main.getDatabase().getChunk(i);
-            if (chunk.getFileId().equals(header.get(1)) && (chunk.getChunkNo() == Integer.parseInt(header.get(2)))) {
+            if (chunk.getFileId().equals(header.get(2)) && (chunk.getChunkNo() == Integer.parseInt(header.get(3)))) {
                 System.out.println("Previous:" + chunk.getChunkNo());
                 chunk.setChunkNo(chunk.getChunkNo() - 1);
                 System.out.println("After:" + chunk.getChunkNo());
+                break;
             }
         }
     }

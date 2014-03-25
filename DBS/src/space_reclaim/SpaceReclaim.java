@@ -45,7 +45,7 @@ public class SpaceReclaim extends Thread {
 				del.deleteChunk(chunks[j].getChunkNo());
 				sendMessage(j);
 				try {
-					sleep(200);
+					sleep(300);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
