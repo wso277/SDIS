@@ -1,6 +1,7 @@
 package control;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import main.FileManager;
 import main.Main;
@@ -27,8 +28,9 @@ public class ControlProcessThread extends Thread {
         }
 
         if (header.get(0).equals("GETCHUNK")) {
-            RestoreProcessThread rpt = new RestoreProcessThread(header.get(2),
-                    header.get(3));
+            if (Main.getVersion().equals(header.get(1))) {
+                getchunkProcess();
+            }
         } else if (header.get(0).equals("DELETE")) {
             deleteProcess();
             Main.save();
@@ -48,6 +50,37 @@ public class ControlProcessThread extends Thread {
             System.err.println("Operation Invalid!");
         }
 
+    }
+
+    private void getchunkProcess() {
+        Chunk ch = null;
+
+        for (int i = 0; i < Main.getDatabase().getChunksSize(); i++) {
+            ch = Main.getDatabase().getChunk(i);
+            if (ch.getFileId().equals(header.get(2)) && (ch.getChunkNo() == Integer.parseInt(header.get(3)))) {
+                break;
+            }
+        }
+
+        FileManager chunk = new FileManager(header.get(2), 0, true);
+        chunk.readChunk(Integer.parseInt(header.get(3)));
+
+        String mssg = new String("CHUNK " + Main.getVersion() + " " + header.get(2) + " " + header.get(3) + " " +
+                Main.getCRLF() + " " + Main.getCRLF() + chunk.getChunkData());
+
+        Random r = new Random();
+        int time = r.nextInt(401);
+        try {
+            sleep(time);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        if (!ch.getSent()) {
+            Main.getRestore().send(mssg);
+        } else {
+            ch.setSent(false);
+        }
     }
 
     private void storedProcess() {
