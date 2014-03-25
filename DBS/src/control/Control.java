@@ -13,7 +13,6 @@ public class Control extends Thread {
     }
 
     public void run() {
-        System.out.println("Control thread name: " + Thread.currentThread().getName());
         receive();
 
     }
@@ -23,10 +22,6 @@ public class Control extends Thread {
         while (true) {
 
             String mssg = ctrlComm.receive();
-
-            System.out.println("Received: " + mssg);
-
-            System.out.println("Control thread name: " + Thread.currentThread().getName());
 
             Main.getService().submit(new ControlProcessThread(mssg));
         }

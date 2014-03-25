@@ -1,22 +1,15 @@
 package main;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import backup.Backup;
+import cli.Cli;
+import communication.Address;
+import control.Control;
+import restore.Restore;
+
+import java.io.*;
 import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import cli.Cli;
-import restore.Restore;
-import communication.Address;
-import control.Control;
-import backup.Backup;
 
 public class Main implements Serializable {
 
@@ -89,12 +82,13 @@ public class Main implements Serializable {
 				.getPort());
 
 		// Pushing main components to job queue
-		//service.submit(backup);
-		//service.submit(control);
-		//service.submit(cli);
-        backup.start();
+		service.submit(backup);
+		service.submit(control);
+		service.submit(cli);
+       /* backup.start();
         control.start();
-        cli.start();
+        cli.start();*/
+
 		// save database
 		save();
 	}

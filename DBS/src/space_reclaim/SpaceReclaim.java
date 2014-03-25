@@ -6,7 +6,7 @@ import main.Main;
 
 import java.util.Collections;
 
-public class SpaceReclaim extends Thread {
+public class SpaceReclaim {
     private Integer spaceToReclaim;
     private Integer chunksToDelete;
     private Chunk[] chunks;
@@ -23,7 +23,10 @@ public class SpaceReclaim extends Thread {
 
     }
 
-    public void run() {
+    public void process() {
+
+        System.out.println("Reclaiming disk space!");
+
         if (delete == true) {
             int numberOfChunks = Main.getDatabase().getChunksSize();
 
@@ -43,7 +46,7 @@ public class SpaceReclaim extends Thread {
                 del.deleteChunk(chunks[j].getChunkNo());
                 sendMessage(j);
                 try {
-                    sleep(300);
+                    Thread.sleep(200);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -52,11 +55,12 @@ public class SpaceReclaim extends Thread {
 
         Main.setDiskSize(Main.getDiskSize() - spaceToReclaim);
 
-        Main.save();
+        System.out.println("Space Reclaimed!");
     }
 
     private void sendMessage(int j) {
-        String mssg = new String("REMOVED " + Main.getVersion() + " " + chunks[j].getFileId() + " " + chunks[j].getChunkNo() + " " + Main.getCRLF() + " " + Main.getCRLF());
+        String mssg = new String("REMOVED " + Main.getVersion() + " " + chunks[j].getFileId() + " " + chunks[j]
+                .getChunkNo() + " " + Main.getCRLF() + " " + Main.getCRLF());
 
         System.out.println("Sent");
 

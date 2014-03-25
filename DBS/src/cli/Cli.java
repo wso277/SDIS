@@ -24,7 +24,6 @@ public class Cli extends Thread {
     }
 
     public void run() {
-        System.out.println("Cli thread name: " + Thread.currentThread().getName());
         menu();
 
     }
@@ -173,7 +172,7 @@ public class Cli extends Thread {
                 String result = Main.getDatabase().getHash(Integer.parseInt(input));
                 if (!result.equals("fail")) {
                     System.out.println("Sending DELETE message!");
-                    Main.getService().submit(new Delete(result));
+                    new Delete(result).process();
                 } else {
                     System.out.println("Invalid file. Choose one of the availvable numbers!");
                 }
@@ -188,11 +187,10 @@ public class Cli extends Thread {
                 try {
                     input = in.readLine();
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
                 if (Integer.parseInt(input) > 0 && Integer.parseInt(input) <= (Main.getDiskSize() - 64)) {
-                    Main.getService().submit(new SpaceReclaim(Integer.parseInt(input)));
+                    new SpaceReclaim(Integer.parseInt(input)).process();
                 } else {
                     System.out.println("Invalid Size. Choose from the available range!");
                 }

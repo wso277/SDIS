@@ -66,7 +66,7 @@ public class Database implements Serializable {
 	}
 
 	public synchronized String getHash(Integer input) {
-		int i = 1;
+		Integer i = 1;
 		for (Entry<String, String> entry : fileList.entrySet()) {
 			if(i == input) {
 				return entry.getKey();

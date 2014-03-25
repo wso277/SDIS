@@ -12,7 +12,6 @@ public class Backup extends Thread {
     }
 
     public void run() {
-        System.out.println("Backup thread name: " + Thread.currentThread().getName());
         receive();
 
     }
