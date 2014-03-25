@@ -2,19 +2,19 @@ package restore;
 
 public class RestoreProcessThread extends Thread {
 
-	private static String fileid;
-	private static String chunkNo;
+    private String fileid;
+    private String chunkNo;
 
-	public RestoreProcessThread(String newid, String newchunkNo) {
+    public RestoreProcessThread(String newid, String newchunkNo) {
 
-		fileid = newid;
-		chunkNo = newchunkNo;
+        fileid = newid;
+        chunkNo = newchunkNo;
 
-		run();
-	}
+        run();
+    }
 
-	@Override
-	public void run() {
+    @Override
+    public void run() {
 
-	}
+    }
 }

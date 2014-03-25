@@ -1,71 +1,66 @@
 package space_reclaim;
 
-import java.net.DatagramSocket;
-import java.util.Collections;
-
 import main.Chunk;
 import main.FileManager;
 import main.Main;
 
+import java.util.Collections;
+
 public class SpaceReclaim extends Thread {
-	private Integer spaceToReclaim;
-	private Integer chunksToDelete;
-	private Chunk[] chunks;
-	private boolean delete;
+    private Integer spaceToReclaim;
+    private Integer chunksToDelete;
+    private Chunk[] chunks;
+    private boolean delete;
 
-	public SpaceReclaim(Integer newspace) {
-		spaceToReclaim = newspace;
+    public SpaceReclaim(Integer newspace) {
+        spaceToReclaim = newspace;
 
-		if (Main.getDatabase().getFreeSpace() >= spaceToReclaim) {
-			delete = false;
-		} else {
-			delete = true;
-		}
+        if (Main.getDatabase().getFreeSpace() >= spaceToReclaim) {
+            delete = false;
+        } else {
+            delete = true;
+        }
 
-	}
+    }
 
-	public void run() {
-		if (delete == true) {
-			int numberOfChunks = Main.getDatabase().getChunksSize();
+    public void run() {
+        if (delete == true) {
+            int numberOfChunks = Main.getDatabase().getChunksSize();
 
-			chunksToDelete = (int) Math.ceil((spaceToReclaim - Main
-					.getDatabase().getFreeSpace()) / Main.getChunkSize());
+            chunksToDelete = (int) Math.ceil((spaceToReclaim - Main.getDatabase().getFreeSpace()) / Main.getChunkSize
+                    ());
 
-			chunks = new Chunk[chunksToDelete];
+            chunks = new Chunk[chunksToDelete];
 
-			Collections.sort(Main.getDatabase().getChunks());
+            Collections.sort(Main.getDatabase().getChunks());
 
-			for (int j = 0; j < chunksToDelete; j++) {
-				chunks[j] = Main.getDatabase().getChunk(
-						numberOfChunks - (j + 1));
-			}
+            for (int j = 0; j < chunksToDelete; j++) {
+                chunks[j] = Main.getDatabase().getChunk(numberOfChunks - (j + 1));
+            }
 
-			for (int j = 0; j < chunksToDelete; j++) {
-				FileManager del = new FileManager(chunks[j].getFileId(), 0,
-						true);
-				del.deleteChunk(chunks[j].getChunkNo());
-				sendMessage(j);
-				try {
-					sleep(300);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}
+            for (int j = 0; j < chunksToDelete; j++) {
+                FileManager del = new FileManager(chunks[j].getFileId(), 0, true);
+                del.deleteChunk(chunks[j].getChunkNo());
+                sendMessage(j);
+                try {
+                    sleep(300);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
 
-		Main.setDiskSize(Main.getDiskSize() - spaceToReclaim);
+        Main.setDiskSize(Main.getDiskSize() - spaceToReclaim);
 
-		Main.save();
-	}
+        Main.save();
+    }
 
-	private void sendMessage(int j) {
-		String mssg = new String("REMOVED " + Main.getVersion() + " "
-				+ chunks[j].getFileId() + " " + chunks[j].getChunkNo() + " "
-				+ Main.getCRLF() + " " + Main.getCRLF());
+    private void sendMessage(int j) {
+        String mssg = new String("REMOVED " + Main.getVersion() + " " + chunks[j].getFileId() + " " + chunks[j].getChunkNo() + " " + Main.getCRLF() + " " + Main.getCRLF());
 
         System.out.println("Sent");
 
-		Main.getControl().send(mssg);
+        Main.getControl().send(mssg);
 
-	}
+    }
 }

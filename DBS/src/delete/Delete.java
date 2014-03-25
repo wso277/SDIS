@@ -5,7 +5,7 @@ import main.Main;
 import java.util.Random;
 
 public class Delete extends Thread {
-    String message;
+    private String message;
 
     public Delete(String fileId) {
         message = new String("DELETE " + fileId + " " + Main.getCRLF() + " " + Main.getCRLF());

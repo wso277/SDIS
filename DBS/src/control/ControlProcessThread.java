@@ -1,17 +1,16 @@
 package control;
 
+import main.Chunk;
+import main.FileManager;
+import main.Main;
+
 import java.util.ArrayList;
 import java.util.Random;
 
-import main.FileManager;
-import main.Main;
-import restore.RestoreProcessThread;
-import main.Chunk;
-
 public class ControlProcessThread extends Thread {
 
-    public static String message;
-    public static ArrayList<String> header;
+    public String message;
+    public ArrayList<String> header;
 
     public ControlProcessThread(String newmessage) {
         message = newmessage;
@@ -87,9 +86,9 @@ public class ControlProcessThread extends Thread {
         for (int i = 0; i < Main.getDatabase().getChunksSize(); i++) {
             Chunk chunk = Main.getDatabase().getChunk(i);
             if (chunk.getFileId().equals(header.get(2)) && (chunk.getChunkNo() == Integer.parseInt(header.get(3)))) {
-                System.out.println("Previous:" + chunk.getChunkNo());
-                chunk.setChunkNo(chunk.getChunkNo() + 1);
-                System.out.println("After:" + chunk.getChunkNo());
+                System.out.println("Previous:" + chunk.getKnowReps());
+                chunk.setKnowReps(1);
+                System.out.println("After:" + chunk.getKnowReps());
                 break;
             }
         }
@@ -99,9 +98,9 @@ public class ControlProcessThread extends Thread {
         for (int i = 0; i < Main.getDatabase().getChunksSize(); i++) {
             Chunk chunk = Main.getDatabase().getChunk(i);
             if (chunk.getFileId().equals(header.get(2)) && (chunk.getChunkNo() == Integer.parseInt(header.get(3)))) {
-                System.out.println("Previous:" + chunk.getChunkNo());
-                chunk.setChunkNo(chunk.getChunkNo() - 1);
-                System.out.println("After:" + chunk.getChunkNo());
+                System.out.println("Previous:" + chunk.getKnowReps());
+                chunk.setKnowReps(-1);
+                System.out.println("After:" + chunk.getKnowReps());
                 break;
             }
         }

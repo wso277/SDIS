@@ -15,15 +15,15 @@ import java.security.NoSuchAlgorithmException;
 
 public class FileManager {
 
-    private static File file;
-    private static long fileSize;
-    private static InputStream in;
-    private static OutputStream out;
-    private static byte[] chunkData;
-    private static byte[] hashFileName;
-    private static String fileName;
-    private static Integer rep;
-    private static StringBuffer hashString;
+    private  File file;
+    private  long fileSize;
+    private  InputStream in;
+    private  OutputStream out;
+    private  byte[] chunkData;
+    private  byte[] hashFileName;
+    private  String fileName;
+    private  Integer rep;
+    private  StringBuffer hashString;
 
     public FileManager(String newfileName, Integer newrep, Boolean load) {
 
@@ -149,6 +149,7 @@ public class FileManager {
 
                     writeToFile(chunkNo, chunkData);
 
+                    chunk.setKnowReps(1);
                     Main.getDatabase().addChunk(chunk);
                     System.err.println("read");
                 } else {
@@ -172,6 +173,8 @@ public class FileManager {
 
 
                 Chunk chunk = new Chunk(hashString.toString(), chunkNo, rep);
+                chunk.setKnowReps(1);
+                Main.getDatabase().addChunk(chunk);
             }
 
             Main.getDatabase().addFile(hashString.toString(), fileName);
@@ -253,76 +256,75 @@ public class FileManager {
 
     }
 
-    public static File getFile() {
+    public File getFile() {
         return file;
     }
 
-    public static void setFile(File file) {
-        FileManager.file = file;
+    public void setFile(File file) {
+        this.file = file;
     }
 
-    public static long getFileSize() {
+    public long getFileSize() {
         return fileSize;
     }
 
-    public static void setFileSize(long fileSize) {
-        FileManager.fileSize = fileSize;
+    public void setFileSize(long fileSize) {
+        this.fileSize = fileSize;
     }
 
-    public static InputStream getIn() {
+    public InputStream getIn() {
         return in;
     }
 
-    public static void setIn(InputStream in) {
-        FileManager.in = in;
+    public void setIn(InputStream in) {
+        this.in = in;
     }
 
-    public static OutputStream getOut() {
+    public OutputStream getOut() {
         return out;
     }
 
-    public static void setOut(OutputStream out) {
-        FileManager.out = out;
+    public void setOut(OutputStream out) {
+        this.out = out;
     }
 
     public byte[] getChunkData() {
         return chunkData;
     }
 
-    public static void setChunkData(byte[] chunkData) {
-        FileManager.chunkData = chunkData;
+    public void setChunkData(byte[] chunkData) {
+        this.chunkData = chunkData;
     }
 
-    public static byte[] getHashFileName() {
+    public byte[] getHashFileName() {
         return hashFileName;
     }
 
-    public static void setHashFileName(byte[] hashFileName) {
-        FileManager.hashFileName = hashFileName;
+    public void setHashFileName(byte[] hashFileName) {
+        this.hashFileName = hashFileName;
     }
 
-    public static String getFileName() {
+    public String getFileName() {
         return fileName;
     }
 
-    public static void setFileName(String fileName) {
-        FileManager.fileName = fileName;
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
     public Integer getRep() {
         return rep;
     }
 
-    public static void setRep(Integer rep) {
-        FileManager.rep = rep;
+    public void setRep(Integer rep) {
+        this.rep = rep;
     }
 
     public StringBuffer getHashString() {
         return hashString;
     }
 
-    public static void setHashString(StringBuffer hashString) {
-        FileManager.hashString = hashString;
+    public void setHashString(StringBuffer hashString) {
+        this.hashString = hashString;
     }
-
 }

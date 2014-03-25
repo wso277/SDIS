@@ -5,8 +5,8 @@ import main.Main;
 public class BackupProcessThread extends Thread {
 
 	public String[] message;
-	public static String[] header;
-	public static String body;
+	public String[] header;
+	public String body;
 
 	public BackupProcessThread(String newmessage) {
 		this.message = newmessage.split(Main.getCRLF().toString()
