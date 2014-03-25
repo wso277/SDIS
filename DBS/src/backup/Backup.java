@@ -4,11 +4,11 @@ import communication.Communicator;
 
 public class Backup extends Thread {
 
-    private Communicator mdbComm;
+    private Communicator mcbComm;
 
     public Backup(String newip, int newport) {
 
-        mdbComm = new Communicator(newip, newport);
+        mcbComm = new Communicator(newip, newport);
     }
 
     public void run() {
@@ -20,7 +20,7 @@ public class Backup extends Thread {
 
         while (true) {
 
-            String mssg = mdbComm.receive();
+            String mssg = mcbComm.receive();
 
             System.out.println("Received: " + mssg);
 
@@ -32,7 +32,7 @@ public class Backup extends Thread {
 
     public void send(String message) {
 
-        mdbComm.send(message);
+        mcbComm.send(message);
     }
 
 }

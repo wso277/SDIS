@@ -15,15 +15,15 @@ import java.security.NoSuchAlgorithmException;
 
 public class FileManager {
 
-    private  File file;
-    private  long fileSize;
-    private  InputStream in;
-    private  OutputStream out;
-    private  byte[] chunkData;
-    private  byte[] hashFileName;
-    private  String fileName;
-    private  Integer rep;
-    private  StringBuffer hashString;
+    private File file;
+    private long fileSize;
+    private InputStream in;
+    private OutputStream out;
+    private byte[] chunkData;
+    private byte[] hashFileName;
+    private String fileName;
+    private Integer rep;
+    private StringBuffer hashString;
 
     public FileManager(String newfileName, Integer newrep, Boolean load) {
 
@@ -170,7 +170,6 @@ public class FileManager {
                         e.printStackTrace();
                     }
                 }
-
 
                 Chunk chunk = new Chunk(hashString.toString(), chunkNo, rep);
                 chunk.setKnowReps(1);

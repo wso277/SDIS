@@ -1,19 +1,34 @@
 package restore;
 
-import java.io.IOException;
+import communication.Communicator;
+import main.Main;
 
 public class Restore extends Thread {
 
-    private String ip;
-    private Integer port;
+    private Communicator mcrComm;
 
     public Restore(String newip, int newport) {
-        ip = newip;
-        port = newport;
 
+        mcrComm = new Communicator(newip, newport);
+    }
+
+    public void run() {
+        receive();
+
+    }
+
+    public void receive() {
+
+        while (true) {
+
+            String mssg = mcrComm.receive();
+
+            Main.getService().submit(new RestoreProcessThread(mssg));
+        }
     }
 
     public void send(String message) {
 
+        mcrComm.send(message);
     }
 }
