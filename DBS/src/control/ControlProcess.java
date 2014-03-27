@@ -83,6 +83,13 @@ public class ControlProcess extends Thread {
     }
 
     private void storedProcess() {
+        for (int j = 0; j < Main.getBackup().getSending().size(); j++) {
+            if (Main.getBackup().getSending().get(j).getFileHash().equals(header.get(2))) {
+                Main.getBackup().getSending().get(j).setStoreds(1);
+                break;
+            }
+        }
+
         for (int i = 0; i < Main.getDatabase().getChunksSize(); i++) {
             Chunk chunk = Main.getDatabase().getChunk(i);
             if (chunk.getFileId().equals(header.get(2)) && (chunk.getChunkNo() == Integer.parseInt(header.get(3)))) {

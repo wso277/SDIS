@@ -151,7 +151,6 @@ public class FileManager {
                     writeToFile(chunkNo, chunkData);
 
                     Main.getDatabase().addChunk(chunk);
-                    System.err.println("read");
                 } else {
                     System.err.println("Error reading file BytesRead: " + bytesRead);
                     break;

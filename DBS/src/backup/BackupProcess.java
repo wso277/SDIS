@@ -5,6 +5,7 @@ import main.FileManager;
 import main.Main;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class BackupProcess extends Thread {
 
@@ -57,7 +58,17 @@ public class BackupProcess extends Thread {
             Main.getDatabase().addChunk(chunk);
         }
 
-        String mssg = "STORED" + " " + Main.getVersion() + " " + header.get(1) + " " + header.get(3) + " " + Main
+        String mssg = "STORED" + " " + Main.getVersion() + " " + header.get(2) + " " + header.get(3) + " " + Main
                 .getCRLF() + " " + Main.getCRLF();
+
+        Random r = new Random();
+        int time = r.nextInt(401);
+        try {
+            sleep(time);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        Main.getControl().send(mssg);
     }
 }

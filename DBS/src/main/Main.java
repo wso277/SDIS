@@ -37,12 +37,12 @@ public class Main implements Serializable {
         // Load database
         load();
 
-        FileManager split = new FileManager("/home/wso277/Desktop/image1.jpg", 0, false);
+        /*FileManager split = new FileManager("/home/wso277/Desktop/image1.jpg", 0, false);
         split.split();
         FileManager split1 = new FileManager("/home/wso277/Desktop/image2.jpg", 0, false);
         split1.split();
         FileManager split2 = new FileManager("/home/wso277/Desktop/image3.jpg", 0, false);
-        split2.split();
+        split2.split();*/
 		
 
 

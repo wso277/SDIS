@@ -1,5 +1,6 @@
 package cli;
 
+import backup.BackupSend;
 import communication.Address;
 import delete.Delete;
 import main.Main;
@@ -145,8 +146,10 @@ public class Cli extends Thread {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    if (Integer.parseInt(repDegree) > 1) {
-
+                    if (Integer.parseInt(repDegree) >= 1) {
+                        BackupSend send = new BackupSend(filePath, Integer.parseInt(repDegree));
+                        Main.getBackup().addSending(send);
+                        Main.getService().submit(send);
                     }
                 } else {
                     System.out.println("Invalid file path. Please try again with a valid file path");
