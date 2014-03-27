@@ -150,7 +150,6 @@ public class FileManager {
 
                     writeToFile(chunkNo, chunkData);
 
-                    chunk.setKnowReps(1);
                     Main.getDatabase().addChunk(chunk);
                     System.err.println("read");
                 } else {
@@ -173,7 +172,6 @@ public class FileManager {
                 }
 
                 Chunk chunk = new Chunk(hashString.toString(), chunkNo, rep);
-                chunk.setKnowReps(1);
                 Main.getDatabase().addChunk(chunk);
             }
 

@@ -8,13 +8,14 @@ public class Chunk implements Serializable, Comparable<Chunk> {
     private String fileId;
     private Integer chunkNo;
     private Integer repDegree;
-    private int knowReps;
+    private Integer knownReps;
     private Boolean sent;
 
     public Chunk(String file, Integer chunk, Integer rep) {
         fileId = file;
         chunkNo = chunk;
         repDegree = rep;
+        knownReps = 1;
         sent = false;
     }
 
@@ -42,16 +43,16 @@ public class Chunk implements Serializable, Comparable<Chunk> {
         repDegree = newrepDegree;
     }
 
-    public int getKnowReps() {
-        return knowReps;
+    public int getKnownReps() {
+        return knownReps;
     }
 
-    public synchronized void setKnowReps(int newknowReps) {
-        knowReps += newknowReps;
+    public synchronized void setKnownReps(int newknowReps) {
+        knownReps += newknowReps;
     }
 
     public Integer getCurrentReps() {
-        return knowReps - repDegree;
+        return knownReps - repDegree;
     }
 
     public Boolean getSent() {
