@@ -31,7 +31,6 @@ public class Backup extends Thread {
         while (true) {
 
             String mssg = mcbComm.receive();
-            System.out.println("Mensagem no Backup: ");
             Main.getService().submit(new BackupProcess(mssg));
 
         }

@@ -4,12 +4,14 @@ import main.Chunk;
 import main.FileManager;
 import main.Main;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 public class RestoreProcess extends Thread {
 
-    public String message;
-    public ArrayList<String> header;
+    private String message;
+    private ArrayList<String> header;
+    private String body;
 
     public RestoreProcess(String newmessage) {
         message = newmessage;
@@ -18,10 +20,16 @@ public class RestoreProcess extends Thread {
     public void run() {
         header = new ArrayList<String>();
 
-        String[] tmp = message.split("\\s+");
+        String[] tmp = null;
 
-        for (int i = 0; i < tmp.length; i++) {
-            header.add(tmp[i].trim());
+        tmp = message.split(new String(Main.getCRLF(), StandardCharsets.US_ASCII) + new String(Main.getCRLF(),
+                StandardCharsets.US_ASCII));
+
+        String[] tmp1 = tmp[0].split("\\s+");
+        body = tmp[1].trim();
+
+        for (int i = 0; i < tmp1.length; i++) {
+            header.add(tmp1[i].trim());
         }
 
         if (header.get(0).equals("CHUNK")) {
@@ -59,11 +67,11 @@ public class RestoreProcess extends Thread {
             chunk.setSent(true);
         } else {
             FileManager fm = new FileManager(header.get(1), repDegree, true);
-            fm.writeToFile(Integer.parseInt(header.get(3)), header.get(6).getBytes());
+            fm.writeToFile(Integer.parseInt(header.get(3)), body.getBytes(StandardCharsets.US_ASCII));
             chunk = new Chunk(header.get(1), Integer.parseInt(header.get(3)), repDegree);
             Main.getDatabase().addChunk(chunk);
             synchronized (RestoreSend.getWaitingConfirmation()) {
-                RestoreSend.setWaitingConfirmation(header.get(6).getBytes().length);
+                RestoreSend.setWaitingConfirmation(header.get(6).getBytes(StandardCharsets.US_ASCII).length);
                 RestoreSend.getWaitingConfirmation().notify();
             }
         }

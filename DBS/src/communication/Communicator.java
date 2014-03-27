@@ -6,6 +6,7 @@ import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.net.UnknownHostException;
+import java.nio.charset.StandardCharsets;
 
 public class Communicator {
 
@@ -55,11 +56,13 @@ public class Communicator {
             e.printStackTrace();
         }
 
-        return new String(rpacket.getData(), "UTF-8");
+        return new String(rpacket.getData(), StandardCharsets.US_ASCII);
     }
 
     public void send(String mssg) {
-        DatagramPacket packet = new DatagramPacket(mssg.getBytes(), mssg.getBytes().length, address, port);
+        DatagramPacket packet = null;
+            packet = new DatagramPacket(mssg.getBytes(StandardCharsets.US_ASCII),
+                    mssg.getBytes(StandardCharsets.US_ASCII).length, address, port);
 
         try {
             socket.send(packet);

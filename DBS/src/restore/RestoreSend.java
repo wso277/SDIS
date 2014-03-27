@@ -3,6 +3,8 @@ package restore;
 import main.FileManager;
 import main.Main;
 
+import java.nio.charset.StandardCharsets;
+
 public class RestoreSend {
     private static Integer waitingConfirmation;
     private String fileId;
@@ -24,7 +26,8 @@ public class RestoreSend {
 
         do {
             String msg = "GETCHUNK " + Main.getVersion() + " " + fileId +
-                    " " + currentChunk + " " + Main.getCRLF() + " " + Main.getCRLF();
+                    " " + currentChunk + new String(Main.getCRLF(), StandardCharsets.US_ASCII) + new String(Main
+                    .getCRLF(), StandardCharsets.US_ASCII);
             waitingConfirmation = -1;
 
             Main.getControl().send(msg);

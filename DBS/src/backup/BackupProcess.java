@@ -4,14 +4,15 @@ import main.Chunk;
 import main.FileManager;
 import main.Main;
 
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Random;
 
 public class BackupProcess extends Thread {
 
-    public String message;
-    public ArrayList<String> header;
+    private String message;
+    private ArrayList<String> header;
+    private String body;
 
     public BackupProcess(String newmessage) {
         message = newmessage;
@@ -24,25 +25,20 @@ public class BackupProcess extends Thread {
 
         String[] tmp = null;
 
-        try {
-            tmp = message.split(new String(Main.getCRLF(), "UTF-8") + new String(Main.getCRLF(), "UTF-8"));
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+        tmp = message.split(new String(Main.getCRLF(), StandardCharsets.US_ASCII) + new String(Main.getCRLF(),
+                StandardCharsets.US_ASCII));
 
         String[] tmp1 = tmp[0].split("\\s+");
+        body = tmp[1].trim();
 
-        for (int i = 0; i < tmp.length; i++) {
-            header.add(tmp[i].trim());
-        }
-
-        for (String item : tmp) {
-            header.add(item.trim());
+        for (int i = 0; i < tmp1.length; i++) {
+            header.add(tmp1[i].trim());
         }
 
         if (header.get(0).equals("PUTCHUNK")) {
             if (Main.getVersion().equals(header.get(1))) {
                 putProcess();
+                Main.save();
             }
         } else {
             System.out.println("Invalid Message");
@@ -66,13 +62,13 @@ public class BackupProcess extends Thread {
 
         if (!found) {
             FileManager fm = new FileManager(header.get(1), Integer.parseInt(header.get(4)), true);
-            fm.writeToFile(Integer.parseInt(header.get(3)), header.get(7).getBytes());
+            fm.writeToFile(Integer.parseInt(header.get(3)), body.getBytes(StandardCharsets.US_ASCII));
             chunk = new Chunk(header.get(1), Integer.parseInt(header.get(3)), Integer.parseInt(header.get(4)));
             Main.getDatabase().addChunk(chunk);
         }
 
-        String mssg = "STORED" + " " + Main.getVersion() + " " + header.get(2) + " " + header.get(3) + " " + Main
-                .getCRLF() + " " + Main.getCRLF();
+        String mssg = "STORED" + " " + Main.getVersion() + " " + header.get(2) + " " + header.get(3) + new String
+                (Main.getCRLF(), StandardCharsets.US_ASCII) + new String(Main.getCRLF(), StandardCharsets.US_ASCII);
 
         Random r = new Random();
         int time = r.nextInt(401);

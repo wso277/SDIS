@@ -4,6 +4,7 @@ import main.Chunk;
 import main.FileManager;
 import main.Main;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -20,10 +21,15 @@ public class ControlProcess extends Thread {
 
         header = new ArrayList<String>();
 
-        String[] tmp = message.split("\\s+");
+        String[] tmp = null;
 
-        for (int i = 0; i < tmp.length; i++) {
-            header.add(tmp[i].trim());
+        tmp = message.split(new String(Main.getCRLF(), StandardCharsets.US_ASCII) + new String(Main.getCRLF(),
+                StandardCharsets.US_ASCII));
+
+        String[] tmp1 = tmp[0].split("\\s+");
+
+        for (int i = 0; i < tmp1.length; i++) {
+            header.add(tmp1[i].trim());
         }
 
         if (header.get(0).equals("GETCHUNK")) {
@@ -60,12 +66,13 @@ public class ControlProcess extends Thread {
                 break;
             }
         }
-        if(ch!=null) {
+        if (ch != null) {
             FileManager chunk = new FileManager(header.get(2), 0, true);
             chunk.readChunk(Integer.parseInt(header.get(3)));
 
-            String mssg = "CHUNK " + Main.getVersion() + " " + header.get(2) + " " + header.get(3) + " " +
-                    Main.getCRLF() + " " + Main.getCRLF() + chunk.getChunkData();
+            String mssg = "CHUNK " + Main.getVersion() + " " + header.get(2) + " " + header.get(3) +
+                    new String(Main.getCRLF(), StandardCharsets.US_ASCII) + new String(Main.getCRLF(),
+                    StandardCharsets.US_ASCII) + new String(chunk.getChunkData(), StandardCharsets.US_ASCII);
 
             Random r = new Random();
             int time = r.nextInt(401);

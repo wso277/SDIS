@@ -2,13 +2,15 @@ package delete;
 
 import main.Main;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
 public class Delete {
     private String message;
 
     public Delete(String fileId) {
-        message = new String("DELETE " + fileId + " " + Main.getCRLF() + " " + Main.getCRLF());
+        message = "DELETE " + fileId + new String(Main.getCRLF(), StandardCharsets.US_ASCII) + new String(Main
+                .getCRLF(), StandardCharsets.US_ASCII);
     }
 
     public void process() {

@@ -28,8 +28,6 @@ public class Control extends Thread {
         while (true) {
 
             String mssg = ctrlComm.receive();
-            System.out.println("Mensagem no Control: " + mssg);
-
             Main.getService().submit(new ControlProcess(mssg));
         }
     }

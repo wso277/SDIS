@@ -4,6 +4,7 @@ import main.Chunk;
 import main.FileManager;
 import main.Main;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 
 public class SpaceReclaim {
@@ -59,8 +60,9 @@ public class SpaceReclaim {
     }
 
     private void sendMessage(int j) {
-        String mssg = new String("REMOVED " + Main.getVersion() + " " + chunks[j].getFileId() + " " + chunks[j]
-                .getChunkNo() + " " + Main.getCRLF() + " " + Main.getCRLF());
+        String mssg = "REMOVED " + Main.getVersion() + " " + chunks[j].getFileId() + " " + chunks[j].getChunkNo() +
+                new String(Main.getCRLF(), StandardCharsets.US_ASCII) + new String(Main.getCRLF(),
+                StandardCharsets.US_ASCII);
 
         Main.getControl().send(mssg);
 

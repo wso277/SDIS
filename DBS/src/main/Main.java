@@ -45,7 +45,7 @@ public class Main implements Serializable {
         split2.split();*/
 		
 
-
+/*
 		FileManager split = new FileManager("C:/Users/Vinnie/Desktop/1.jpg",
 				0, false);
 		split.split();
@@ -55,7 +55,7 @@ public class Main implements Serializable {
 		FileManager split2 = new FileManager("C:/Users/Vinnie/Desktop/3.png",
 				0, false);
 		split2.split();
-
+*/
         // Initializing job queue
         service = Executors.newFixedThreadPool(12);
 

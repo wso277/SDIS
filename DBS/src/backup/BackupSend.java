@@ -3,7 +3,7 @@ package backup;
 import main.FileManager;
 import main.Main;
 
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 
 public class BackupSend extends Thread {
     private String message;
@@ -38,13 +38,9 @@ public class BackupSend extends Thread {
             while (fm.readChunk(chunkNo)) {
 
                 message = "";
-                try {
                     message = "PUTCHUNK " + Main.getVersion() + " " + fileHash + " " + chunkNo + " " + fm.getRep() +
-                            new String(Main.getCRLF(), "UTF-8") + new String(Main.getCRLF(),
-                            "UTF-8") + " " + new String(fm.getChunkData(), "UTF-8");
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
+                            new String(Main.getCRLF(), StandardCharsets.US_ASCII) + new String(Main.getCRLF(),
+                            StandardCharsets.US_ASCII) + new String(fm.getChunkData(), StandardCharsets.US_ASCII);
 
                 chunkNo++;
 
