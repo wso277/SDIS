@@ -3,6 +3,7 @@ package backup;
 import communication.Communicator;
 import main.Main;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 public class Backup extends Thread {
@@ -17,16 +18,20 @@ public class Backup extends Thread {
     }
 
     public void run() {
-        receive();
+        try {
+            receive();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
 
     }
 
-    public void receive() {
+    public void receive() throws UnsupportedEncodingException {
 
         while (true) {
 
             String mssg = mcbComm.receive();
-
+            System.out.println("Mensagem no Backup: ");
             Main.getService().submit(new BackupProcess(mssg));
 
         }

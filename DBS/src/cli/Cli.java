@@ -4,6 +4,7 @@ import backup.BackupSend;
 import communication.Address;
 import delete.Delete;
 import main.Main;
+import restore.RestoreSend;
 import space_reclaim.SpaceReclaim;
 
 import java.io.BufferedReader;
@@ -30,7 +31,7 @@ public class Cli extends Thread {
     }
 
     private void chooseNetworkConfigType() {
-        input = new String("");
+        input = "";
         while (!input.equals("1") && !input.equals("2")) {
 
             System.out.print("Choose a command:\n" + "1. Insert new network configurations\n" + "2. Load existing " +
@@ -48,12 +49,14 @@ public class Cli extends Thread {
 
     private void processFirstMenu() {
 
-        String ip = new String("");
-        String port = new String("");
+        String ip;
+        String port;
 
         if (input.equals("1")) {
             System.out.print("Insert Control IP: ");
             System.out.flush();
+            ip = "";
+            port = "";
             try {
                 ip = in.readLine();
             } catch (IOException e) {
@@ -108,7 +111,7 @@ public class Cli extends Thread {
     }
 
     public void menu() {
-        input = new String("");
+        input = "";
         while (!input.equals("exit")) {
 
             System.out.print("\nChoose a command:\n" + "1. Backup a File\n" + "2. Restore a File\n" + "3. Delete a " +
@@ -125,13 +128,16 @@ public class Cli extends Thread {
     }
 
     private void processInput() {
+
+        String result;
+
         switch (input) {
             case "1":
             case "backup":
             case "Backup":
             case "BACKUP":
                 System.out.print("Type path to file: ");
-                String filePath = new String();
+                String filePath = "";
                 try {
                     filePath = in.readLine();
                 } catch (IOException e) {
@@ -140,12 +146,13 @@ public class Cli extends Thread {
 
                 if (Main.fileExists(filePath)) {
                     System.out.println("File Exists! Enter replication degree: ");
-                    String repDegree = new String();
+                    String repDegree = "";
                     try {
                         repDegree = in.readLine();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                    //TODO Change this back to '>'
                     if (Integer.parseInt(repDegree) >= 1) {
                         BackupSend send = new BackupSend(filePath, Integer.parseInt(repDegree));
                         Main.getBackup().addSending(send);
@@ -159,6 +166,22 @@ public class Cli extends Thread {
             case "restore":
             case "Restore":
             case "RESTORE":
+                Main.getDatabase().showBackedUpFiles();
+                System.out.print("Choose file to be backed up (number): ");
+                try {
+                    input = in.readLine();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                result = Main.getDatabase().getHash(Integer.parseInt(input));
+                if (!result.equals("fail")) {
+                    System.out.println("Sending BACKUP message!");
+                    new RestoreSend(result).process();
+                } else {
+                    System.out.println("Invalid file. Choose one of the availvable numbers!");
+                }
+
                 break;
             case "3":
             case "delete":
@@ -172,7 +195,7 @@ public class Cli extends Thread {
                     e.printStackTrace();
                 }
 
-                String result = Main.getDatabase().getHash(Integer.parseInt(input));
+                result = Main.getDatabase().getHash(Integer.parseInt(input));
                 if (!result.equals("fail")) {
                     System.out.println("Sending DELETE message!");
                     new Delete(result).process();

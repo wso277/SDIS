@@ -46,15 +46,15 @@ public class Main implements Serializable {
 		
 
 
-/*		FileManager split = new FileManager("C:/Users/Vinnie/Desktop/1.jpg",
+		FileManager split = new FileManager("C:/Users/Vinnie/Desktop/1.jpg",
 				0, false);
 		split.split();
 		FileManager split1 = new FileManager("C:/Users/Vinnie/Desktop/2.jpg",
 				0, false);
 		split1.split();
-		FileManager split2 = new FileManager("C:/Users/Vinnie/Desktop/3.jpg",
+		FileManager split2 = new FileManager("C:/Users/Vinnie/Desktop/3.png",
 				0, false);
-		split2.split();*/
+		split2.split();
 
         // Initializing job queue
         service = Executors.newFixedThreadPool(12);

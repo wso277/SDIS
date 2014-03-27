@@ -3,6 +3,8 @@ package control;
 import communication.Communicator;
 import main.Main;
 
+import java.io.UnsupportedEncodingException;
+
 public class Control extends Thread {
 
     private Communicator ctrlComm;
@@ -13,15 +15,20 @@ public class Control extends Thread {
     }
 
     public void run() {
-        receive();
+        try {
+            receive();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
 
     }
 
-    public void receive() {
+    public void receive() throws UnsupportedEncodingException {
 
         while (true) {
 
             String mssg = ctrlComm.receive();
+            System.out.println("Mensagem no Control: " + mssg);
 
             Main.getService().submit(new ControlProcess(mssg));
         }

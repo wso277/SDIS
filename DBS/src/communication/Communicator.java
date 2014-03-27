@@ -1,6 +1,7 @@
 package communication;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
@@ -44,7 +45,7 @@ public class Communicator {
         }
     }
 
-    public String receive() {
+    public String receive() throws UnsupportedEncodingException {
         byte[] buf = new byte[PSIZE];
         DatagramPacket rpacket = new DatagramPacket(buf, PSIZE);
 
@@ -54,9 +55,7 @@ public class Communicator {
             e.printStackTrace();
         }
 
-        String response = new String(rpacket.getData());
-
-        return response;
+        return new String(rpacket.getData(), "UTF-8");
     }
 
     public void send(String mssg) {

@@ -4,6 +4,7 @@ import main.Chunk;
 import main.FileManager;
 import main.Main;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -19,12 +20,24 @@ public class BackupProcess extends Thread {
     @Override
     public void run() {
 
-        header = new ArrayList<String>();
+        header = new ArrayList<>();
 
-        String[] tmp = message.split("\\s+");
+        String[] tmp = null;
+
+        try {
+            tmp = message.split(new String(Main.getCRLF(), "UTF-8") + new String(Main.getCRLF(), "UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        String[] tmp1 = tmp[0].split("\\s+");
 
         for (int i = 0; i < tmp.length; i++) {
             header.add(tmp[i].trim());
+        }
+
+        for (String item : tmp) {
+            header.add(item.trim());
         }
 
         if (header.get(0).equals("PUTCHUNK")) {
@@ -38,7 +51,7 @@ public class BackupProcess extends Thread {
 
     private void putProcess() {
 
-        Chunk chunk = null;
+        Chunk chunk;
         Boolean found = false;
 
         for (int i = 0; i < Main.getDatabase().getChunksSize(); i++) {

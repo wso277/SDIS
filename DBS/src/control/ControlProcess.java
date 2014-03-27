@@ -60,25 +60,26 @@ public class ControlProcess extends Thread {
                 break;
             }
         }
+        if(ch!=null) {
+            FileManager chunk = new FileManager(header.get(2), 0, true);
+            chunk.readChunk(Integer.parseInt(header.get(3)));
 
-        FileManager chunk = new FileManager(header.get(2), 0, true);
-        chunk.readChunk(Integer.parseInt(header.get(3)));
+            String mssg = "CHUNK " + Main.getVersion() + " " + header.get(2) + " " + header.get(3) + " " +
+                    Main.getCRLF() + " " + Main.getCRLF() + chunk.getChunkData();
 
-        String mssg = new String("CHUNK " + Main.getVersion() + " " + header.get(2) + " " + header.get(3) + " " +
-                Main.getCRLF() + " " + Main.getCRLF() + chunk.getChunkData());
+            Random r = new Random();
+            int time = r.nextInt(401);
+            try {
+                sleep(time);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
-        Random r = new Random();
-        int time = r.nextInt(401);
-        try {
-            sleep(time);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        if (!ch.getSent()) {
-            Main.getRestore().send(mssg);
-        } else {
-            ch.setSent(false);
+            if (!ch.getSent()) {
+                Main.getRestore().send(mssg);
+            } else {
+                ch.setSent(false);
+            }
         }
     }
 

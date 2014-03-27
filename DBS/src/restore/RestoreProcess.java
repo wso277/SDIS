@@ -62,6 +62,10 @@ public class RestoreProcess extends Thread {
             fm.writeToFile(Integer.parseInt(header.get(3)), header.get(6).getBytes());
             chunk = new Chunk(header.get(1), Integer.parseInt(header.get(3)), repDegree);
             Main.getDatabase().addChunk(chunk);
+            synchronized (RestoreSend.getWaitingConfirmation()) {
+                RestoreSend.setWaitingConfirmation(header.get(6).getBytes().length);
+                RestoreSend.getWaitingConfirmation().notify();
+            }
         }
     }
 }
