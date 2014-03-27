@@ -7,11 +7,13 @@ import java.io.UnsupportedEncodingException;
 
 public class Restore extends Thread {
 
-    private Communicator mcrComm;
+    private final Communicator mcrComm;
+    private Boolean running;
 
     public Restore(String newip, int newport) {
 
         mcrComm = new Communicator(newip, newport);
+        running = true;
     }
 
     public void run() {
@@ -23,9 +25,9 @@ public class Restore extends Thread {
 
     }
 
-    public void receive() throws UnsupportedEncodingException {
+    void receive() throws UnsupportedEncodingException {
 
-        while (true) {
+        while (running) {
 
             String mssg = mcrComm.receive();
 
@@ -36,5 +38,13 @@ public class Restore extends Thread {
     public void send(String message) {
 
         mcrComm.send(message);
+    }
+
+    public Boolean getRunning() {
+        return running;
+    }
+
+    public void setRunning(Boolean running) {
+        this.running = running;
     }
 }

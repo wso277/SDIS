@@ -7,11 +7,13 @@ import java.io.UnsupportedEncodingException;
 
 public class Control extends Thread {
 
-    private Communicator ctrlComm;
+    private final Communicator ctrlComm;
+    private Boolean running;
 
     public Control(String newip, int newport) {
 
         ctrlComm = new Communicator(newip, newport);
+        running = true;
     }
 
     public void run() {
@@ -23,9 +25,9 @@ public class Control extends Thread {
 
     }
 
-    public void receive() throws UnsupportedEncodingException {
+    void receive() throws UnsupportedEncodingException {
 
-        while (true) {
+        while (running) {
 
             String mssg = ctrlComm.receive();
             Main.getService().submit(new ControlProcess(mssg));
@@ -37,4 +39,11 @@ public class Control extends Thread {
         ctrlComm.send(message);
     }
 
+    public Boolean getRunning() {
+        return running;
+    }
+
+    public void setRunning(Boolean running) {
+        this.running = running;
+    }
 }

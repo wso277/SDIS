@@ -8,19 +8,14 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 
 public class SpaceReclaim {
-    private Integer spaceToReclaim;
-    private Integer chunksToDelete;
+    private final Integer spaceToReclaim;
     private Chunk[] chunks;
-    private boolean delete;
+    private final boolean delete;
 
     public SpaceReclaim(Integer newspace) {
         spaceToReclaim = newspace;
 
-        if (Main.getDatabase().getFreeSpace() >= spaceToReclaim) {
-            delete = false;
-        } else {
-            delete = true;
-        }
+        delete = Main.getDatabase().getFreeSpace() < spaceToReclaim;
 
     }
 
@@ -28,11 +23,11 @@ public class SpaceReclaim {
 
         System.out.println("Reclaiming disk space!");
 
-        if (delete == true) {
+        if (delete) {
             int numberOfChunks = Main.getDatabase().getChunksSize();
 
-            chunksToDelete = (int) Math.ceil((spaceToReclaim - Main.getDatabase().getFreeSpace()) / Main.getChunkSize
-                    ());
+            Integer chunksToDelete = (int) Math.ceil((spaceToReclaim - Main.getDatabase().getFreeSpace()) / Main
+                    .getChunkSize());
 
             chunks = new Chunk[chunksToDelete];
 

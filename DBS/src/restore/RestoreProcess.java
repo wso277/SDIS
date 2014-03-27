@@ -7,9 +7,9 @@ import main.Main;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
-public class RestoreProcess extends Thread {
+class RestoreProcess extends Thread {
 
-    private String message;
+    private final String message;
     private ArrayList<String> header;
     private String body;
 
@@ -18,9 +18,9 @@ public class RestoreProcess extends Thread {
     }
 
     public void run() {
-        header = new ArrayList<String>();
+        header = new ArrayList<>();
 
-        String[] tmp = null;
+        String[] tmp;
 
         tmp = message.split(new String(Main.getCRLF(), StandardCharsets.US_ASCII) + new String(Main.getCRLF(),
                 StandardCharsets.US_ASCII));
@@ -28,8 +28,8 @@ public class RestoreProcess extends Thread {
         String[] tmp1 = tmp[0].split("\\s+");
         body = tmp[1].trim();
 
-        for (int i = 0; i < tmp1.length; i++) {
-            header.add(tmp1[i].trim());
+        for (String aTmp1 : tmp1) {
+            header.add(aTmp1.trim());
         }
 
         if (header.get(0).equals("CHUNK")) {

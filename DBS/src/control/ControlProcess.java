@@ -8,10 +8,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class ControlProcess extends Thread {
+class ControlProcess extends Thread {
 
-    public String message;
-    public ArrayList<String> header;
+    private final String message;
+    private ArrayList<String> header;
 
     public ControlProcess(String newmessage) {
         message = newmessage;
@@ -19,17 +19,17 @@ public class ControlProcess extends Thread {
 
     public void run() {
 
-        header = new ArrayList<String>();
+        header = new ArrayList<>();
 
-        String[] tmp = null;
+        String[] tmp;
 
         tmp = message.split(new String(Main.getCRLF(), StandardCharsets.US_ASCII) + new String(Main.getCRLF(),
                 StandardCharsets.US_ASCII));
 
         String[] tmp1 = tmp[0].split("\\s+");
 
-        for (int i = 0; i < tmp1.length; i++) {
-            header.add(tmp1[i].trim());
+        for (String aTmp1 : tmp1) {
+            header.add(aTmp1.trim());
         }
 
         if (header.get(0).equals("GETCHUNK")) {

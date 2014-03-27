@@ -8,13 +8,15 @@ import java.util.ArrayList;
 
 public class Backup extends Thread {
 
-    private Communicator mcbComm;
-    private ArrayList<BackupSend> sending;
+    private final Communicator mcbComm;
+    private final ArrayList<BackupSend> sending;
+    private Boolean running;
 
     public Backup(String newip, int newport) {
 
         sending = new ArrayList<>();
         mcbComm = new Communicator(newip, newport);
+        running = true;
     }
 
     public void run() {
@@ -26,9 +28,9 @@ public class Backup extends Thread {
 
     }
 
-    public void receive() throws UnsupportedEncodingException {
+    void receive() throws UnsupportedEncodingException {
 
-        while (true) {
+        while (running) {
 
             String mssg = mcbComm.receive();
             Main.getService().submit(new BackupProcess(mssg));
@@ -47,5 +49,13 @@ public class Backup extends Thread {
 
     public synchronized ArrayList<BackupSend> getSending() {
         return sending;
+    }
+
+    public Boolean getRunning() {
+        return running;
+    }
+
+    public void setRunning(Boolean running) {
+        this.running = running;
     }
 }

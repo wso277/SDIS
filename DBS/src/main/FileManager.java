@@ -160,7 +160,7 @@ public class FileManager {
 
             if (fileSize % 64000 == 0) {
                 chunkNo++;
-                File newFile = new File(new String(hashString.toString() + "/" + chunkNo + ".part"));
+                File newFile = new File(hashString.toString() + "/" + chunkNo + ".part");
 
                 if (!newFile.exists()) {
                     try {
@@ -195,12 +195,12 @@ public class FileManager {
             }
         }
 
-        File newFile = null;
+        File newFile;
 
         if (chunkNo != 0) {
-            newFile = new File(new String(hashString.toString() + "/" + chunkNo + ".part"));
+            newFile = new File(hashString.toString() + "/" + chunkNo + ".part");
         } else {
-            newFile = new File(new String(Main.getDatabase().getFile(hashString.toString())));
+            newFile = new File(Main.getDatabase().getFile(hashString.toString()));
         }
 
         if (!newFile.exists()) {
@@ -231,7 +231,7 @@ public class FileManager {
 
         File tmp = new File(fileName);
 
-        String strTmp = new String(fileName + tmp.lastModified());
+        String strTmp = fileName + tmp.lastModified();
 
         MessageDigest digest = null;
         try {
@@ -241,14 +241,15 @@ public class FileManager {
         }
 
         try {
+            assert digest != null;
             hashFileName = digest.digest(strTmp.getBytes("UTF-8"));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
 
         hashString = new StringBuffer();
-        for (int i = 0; i < hashFileName.length; i++) {
-            hashString.append(Integer.toString((hashFileName[i] & 0xff) + 0x100, 16).substring(1));
+        for (byte aHashFileName : hashFileName) {
+            hashString.append(Integer.toString((aHashFileName & 0xff) + 0x100, 16).substring(1));
         }
 
     }

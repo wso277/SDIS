@@ -1,7 +1,6 @@
 package communication;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
@@ -10,15 +9,12 @@ import java.nio.charset.StandardCharsets;
 
 public class Communicator {
 
-    private String ip;
-    private Integer port;
-    private static int PSIZE = 65536;
+    private final Integer port;
     private MulticastSocket socket;
     private InetAddress address;
 
     public Communicator(String newip, Integer newport) {
 
-        ip = newip;
         port = newport;
 
         try {
@@ -34,7 +30,7 @@ public class Communicator {
         }
 
         try {
-            address = InetAddress.getByName(ip);
+            address = InetAddress.getByName(newip);
         } catch (UnknownHostException e1) {
             e1.printStackTrace();
         }
@@ -46,7 +42,8 @@ public class Communicator {
         }
     }
 
-    public String receive() throws UnsupportedEncodingException {
+    public String receive() {
+        int PSIZE = 65536;
         byte[] buf = new byte[PSIZE];
         DatagramPacket rpacket = new DatagramPacket(buf, PSIZE);
 
@@ -60,7 +57,7 @@ public class Communicator {
     }
 
     public void send(String mssg) {
-        DatagramPacket packet = null;
+        DatagramPacket packet;
             packet = new DatagramPacket(mssg.getBytes(StandardCharsets.US_ASCII),
                     mssg.getBytes(StandardCharsets.US_ASCII).length, address, port);
 

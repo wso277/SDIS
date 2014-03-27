@@ -6,10 +6,8 @@ import main.Main;
 import java.nio.charset.StandardCharsets;
 
 public class BackupSend extends Thread {
-    private String message;
-    private String fileHash;
-    private FileManager fm;
-    private Boolean enoughSpace;
+    private final String fileHash;
+    private final FileManager fm;
     private Integer time;
     private Integer storeds;
     private Integer tries;
@@ -26,18 +24,15 @@ public class BackupSend extends Thread {
 
     public void run() {
 
-        if (fm.split()) {
-            enoughSpace = true;
-        } else {
-            enoughSpace = false;
-        }
+        Boolean enoughSpace;
+        enoughSpace = fm.split();
 
         if (enoughSpace) {
             Integer chunkNo = 1;
 
             while (fm.readChunk(chunkNo)) {
 
-                message = "";
+                String message = "";
                     message = "PUTCHUNK " + Main.getVersion() + " " + fileHash + " " + chunkNo + " " + fm.getRep() +
                             new String(Main.getCRLF(), StandardCharsets.US_ASCII) + new String(Main.getCRLF(),
                             StandardCharsets.US_ASCII) + new String(fm.getChunkData(), StandardCharsets.US_ASCII);

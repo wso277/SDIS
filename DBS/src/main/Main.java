@@ -14,10 +14,10 @@ import java.util.concurrent.Executors;
 public class Main implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    public static byte[] CRLF = {0xD, 0xA};
-    public static String version = "1.0";
-    public static int diskSize = 1200000;
-    public static int chunkSize = 64000;
+    private static byte[] CRLF = {0xD, 0xA};
+    private static String version = "1.0";
+    private static int diskSize = 1200000;
+    private static int chunkSize = 64000;
     private static Backup backup;
     private static Restore restore;
     private static Control control;
@@ -60,7 +60,7 @@ public class Main implements Serializable {
         service = Executors.newFixedThreadPool(12);
 
         // Store address info
-        ipData = new HashMap<String, Address>();
+        ipData = new HashMap<>();
 
         // Temporary IPs for testing
 		/*
@@ -100,6 +100,7 @@ public class Main implements Serializable {
         }
 
         try {
+            assert save != null;
             save.writeObject(database);
         } catch (IOException e) {
             System.err.println("Error saving database");
@@ -107,7 +108,7 @@ public class Main implements Serializable {
         }
     }
 
-    public static void load() {
+    private static void load() {
 
         ObjectInputStream load = null;
         Boolean newdb = false;
@@ -125,6 +126,7 @@ public class Main implements Serializable {
         if (!newdb) {
 
             try {
+                assert load != null;
                 database = (Database) load.readObject();
                 System.out.println("Read database!");
             } catch (ClassNotFoundException e) {
@@ -152,6 +154,7 @@ public class Main implements Serializable {
         }
 
         try {
+            assert save != null;
             save.writeObject(mc);
             save.writeObject(mcr);
             save.writeObject(mcb);
@@ -178,6 +181,7 @@ public class Main implements Serializable {
         if (!newdb) {
 
             try {
+                assert load != null;
                 ipData.put("mc", (Address) load.readObject());
                 ipData.put("mcr", (Address) load.readObject());
                 ipData.put("mcb", (Address) load.readObject());
@@ -194,18 +198,11 @@ public class Main implements Serializable {
 
     public static boolean fileExists(String path) {
         File file = new File(path);
-        if (file.exists()) {
-            return true;
-        }
-        return false;
+        return file.exists();
     }
 
     public static boolean checkVersion(String ver) {
-        if (version.equals(ver)) {
-            return true;
-        } else {
-            return false;
-        }
+        return version.equals(ver);
     }
 
     public static Address getipData(String channel) {

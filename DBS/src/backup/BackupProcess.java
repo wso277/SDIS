@@ -8,9 +8,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class BackupProcess extends Thread {
+class BackupProcess extends Thread {
 
-    private String message;
+    private final String message;
     private ArrayList<String> header;
     private String body;
 
@@ -23,7 +23,7 @@ public class BackupProcess extends Thread {
 
         header = new ArrayList<>();
 
-        String[] tmp = null;
+        String[] tmp;
 
         tmp = message.split(new String(Main.getCRLF(), StandardCharsets.US_ASCII) + new String(Main.getCRLF(),
                 StandardCharsets.US_ASCII));
@@ -31,8 +31,8 @@ public class BackupProcess extends Thread {
         String[] tmp1 = tmp[0].split("\\s+");
         body = tmp[1].trim();
 
-        for (int i = 0; i < tmp1.length; i++) {
-            header.add(tmp1[i].trim());
+        for (String aTmp1 : tmp1) {
+            header.add(aTmp1.trim());
         }
 
         if (header.get(0).equals("PUTCHUNK")) {

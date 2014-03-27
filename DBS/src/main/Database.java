@@ -8,12 +8,12 @@ import java.util.Map.Entry;
 public class Database implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private ArrayList<Chunk> chunks;
-	private HashMap<String, String> fileList;
+	private final ArrayList<Chunk> chunks;
+	private final HashMap<String, String> fileList;
 
 	public Database() {
-		chunks = new ArrayList<Chunk>();
-		fileList = new HashMap<String, String>();
+		chunks = new ArrayList<>();
+		fileList = new HashMap<>();
 	}
 
 	public synchronized void addFile(String fileid, String filename) {
@@ -48,12 +48,9 @@ public class Database implements Serializable {
 		}
 	}
 
-	public synchronized boolean enoughSpace() {
-		if (getFreeSpace() >= Main.getChunkSize()) {
-			return true;
-		}
-		return false;
-	}
+	synchronized boolean enoughSpace() {
+        return getFreeSpace() >= Main.getChunkSize();
+    }
 
 	public synchronized float getFreeSpace() {
 		return Main.getDiskSize() - chunks.size() * Main.getChunkSize();

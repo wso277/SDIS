@@ -51,7 +51,7 @@ public class Chunk implements Serializable, Comparable<Chunk> {
         knownReps += newknowReps;
     }
 
-    public Integer getCurrentReps() {
+    Integer getCurrentReps() {
         return knownReps - repDegree;
     }
 

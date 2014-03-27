@@ -13,8 +13,8 @@ import java.io.InputStreamReader;
 
 public class Cli extends Thread {
 
-    public BufferedReader in;
-    public String input;
+    private final BufferedReader in;
+    private String input;
 
     public Cli() {
 
@@ -110,7 +110,7 @@ public class Cli extends Thread {
         Main.loadNetwork();
     }
 
-    public void menu() {
+    void menu() {
         input = "";
         while (!input.equals("exit")) {
 

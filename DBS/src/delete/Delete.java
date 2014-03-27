@@ -6,7 +6,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
 public class Delete {
-    private String message;
+    private final String message;
 
     public Delete(String fileId) {
         message = "DELETE " + fileId + new String(Main.getCRLF(), StandardCharsets.US_ASCII) + new String(Main
