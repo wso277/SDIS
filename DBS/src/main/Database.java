@@ -28,14 +28,16 @@ public class Database implements Serializable {
 
 	public synchronized void removeFile(String fileid) {
 		fileList.remove(fileid);
-
-		for (int i = 0; i < chunks.size(); i++) {
-			if (chunks.get(i).getFileId().equals(fileid)) {
-				chunks.remove(i);
-				i--;
-			}
-		}
 	}
+
+    public synchronized void removeChunk(String fileid, Integer chunkNo) {
+        for (int i = 0; i < chunks.size(); i++) {
+            if (chunks.get(i).getFileId().equals(fileid) && chunks.get(i).getChunkNo() == chunkNo) {
+                chunks.remove(i);
+                break;
+            }
+        }
+    }
 
 	public synchronized boolean addChunk(Chunk chunk) {
 		if (enoughSpace()) {

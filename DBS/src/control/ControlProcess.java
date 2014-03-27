@@ -7,12 +7,12 @@ import main.Main;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class ControlProcessThread extends Thread {
+public class ControlProcess extends Thread {
 
     public String message;
     public ArrayList<String> header;
 
-    public ControlProcessThread(String newmessage) {
+    public ControlProcess(String newmessage) {
         message = newmessage;
     }
 

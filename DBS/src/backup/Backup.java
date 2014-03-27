@@ -1,6 +1,7 @@
 package backup;
 
 import communication.Communicator;
+import main.Main;
 
 public class Backup extends Thread {
 
@@ -22,11 +23,8 @@ public class Backup extends Thread {
 
             String mssg = mcbComm.receive();
 
-            System.out.println("Received: " + mssg);
+            Main.getService().submit(new BackupProcess(mssg));
 
-            System.out.println("Control thread name: " + Thread.currentThread().getName());
-
-            //Main.getService().submit(new ControlProcessThread(mssg));
         }
     }
 

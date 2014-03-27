@@ -23,7 +23,7 @@ public class Control extends Thread {
 
             String mssg = ctrlComm.receive();
 
-            Main.getService().submit(new ControlProcessThread(mssg));
+            Main.getService().submit(new ControlProcess(mssg));
         }
     }
 

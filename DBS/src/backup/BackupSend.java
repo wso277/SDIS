@@ -3,13 +3,13 @@ package backup;
 import main.FileManager;
 import main.Main;
 
-public class BackupSendThread extends Thread {
+public class BackupSend extends Thread {
     private String message;
     private String fileHash;
     private FileManager fm;
     boolean enoughSpace;
 
-    public BackupSendThread(String filePath, Integer repDegree) {
+    public BackupSend(String filePath, Integer repDegree) {
         fm = new FileManager(filePath, repDegree, false);
         fileHash = fm.getHashString().toString();
 

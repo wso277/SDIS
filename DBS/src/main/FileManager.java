@@ -45,6 +45,7 @@ public class FileManager {
         if (chunk.exists()) {
 
             chunk.delete();
+            Main.getDatabase().removeChunk(hashString.toString(), chunkNo);
             return true;
         }
 
@@ -186,7 +187,7 @@ public class FileManager {
         return true;
     }
 
-    private void writeToFile(int chunkNo, byte[] data) {
+    public void writeToFile(int chunkNo, byte[] data) {
         File dir = new File(hashString.toString());
 
         if (!dir.exists()) {

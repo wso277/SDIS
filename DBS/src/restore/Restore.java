@@ -23,7 +23,7 @@ public class Restore extends Thread {
 
             String mssg = mcrComm.receive();
 
-            Main.getService().submit(new RestoreProcessThread(mssg));
+            Main.getService().submit(new RestoreProcess(mssg));
         }
     }
 
