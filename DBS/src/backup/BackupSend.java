@@ -37,7 +37,6 @@ public class BackupSend extends Thread {
                             new String(Main.getCRLF(), StandardCharsets.ISO_8859_1) + new String(Main.getCRLF(),
                             StandardCharsets.ISO_8859_1) + new String(fm.getChunkData(), StandardCharsets.ISO_8859_1);
 
-                chunkNo++;
                 //System.out.println("SENT : " + new String(fm.getChunkData(), StandardCharsets.ISO_8859_1).length());
                 while (storeds < fm.getRep() && tries < 5) {
 
@@ -55,6 +54,9 @@ public class BackupSend extends Thread {
                     time += time;
                 }
 
+                fm.deleteChunk(chunkNo);
+
+                chunkNo++;
                 storeds = 0;
                 time = 500;
                 tries = 0;
