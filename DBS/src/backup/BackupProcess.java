@@ -62,7 +62,7 @@ class BackupProcess extends Thread {
         }
 
         if (!found) {
-            FileManager fm = new FileManager(header.get(1), Integer.parseInt(header.get(4)), true);
+            FileManager fm = new FileManager(header.get(2), Integer.parseInt(header.get(4)), true);
             fm.writeToFile(Integer.parseInt(header.get(3)), body.getBytes(StandardCharsets.ISO_8859_1));
             chunk = new Chunk(header.get(1), Integer.parseInt(header.get(3)), Integer.parseInt(header.get(4)));
             Main.getDatabase().addChunk(chunk);
