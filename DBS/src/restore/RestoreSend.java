@@ -26,8 +26,8 @@ public class RestoreSend {
 
         do {
             String msg = "GETCHUNK " + Main.getVersion() + " " + fileId +
-                    " " + currentChunk + new String(Main.getCRLF(), StandardCharsets.US_ASCII) + new String(Main
-                    .getCRLF(), StandardCharsets.US_ASCII);
+                    " " + currentChunk + new String(Main.getCRLF(), StandardCharsets.ISO_8859_1) + new String(Main
+                    .getCRLF(), StandardCharsets.ISO_8859_1);
             waitingConfirmation = -1;
 
             Main.getControl().send(msg);

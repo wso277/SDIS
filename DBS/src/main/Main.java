@@ -16,7 +16,7 @@ public class Main implements Serializable {
     private static final long serialVersionUID = 1L;
     private static byte[] CRLF = {0xD, 0xA};
     private static String version = "1.0";
-    private static int diskSize = 1200000;
+    private static int diskSize = 4000000;
     private static int chunkSize = 64000;
     private static Backup backup;
     private static Restore restore;
@@ -25,6 +25,7 @@ public class Main implements Serializable {
     private static Database database;
     private static HashMap<String, Address> ipData;
     private static ExecutorService service;
+
 
     public static void main(String[] args) throws IOException {
 
@@ -43,7 +44,7 @@ public class Main implements Serializable {
         split1.split();
         FileManager split2 = new FileManager("/home/wso277/Desktop/image3.jpg", 0, false);
         split2.split();*/
-		
+
 
 /*
 		FileManager split = new FileManager("C:/Users/Vinnie/Desktop/1.jpg",
@@ -81,6 +82,12 @@ public class Main implements Serializable {
         service.submit(restore);
         service.submit(cli);
 
+        //service.shutdown();
+        /*try {
+            service.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }*/
         // save database
         save();
     }

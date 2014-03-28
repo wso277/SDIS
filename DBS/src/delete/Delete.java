@@ -9,8 +9,8 @@ public class Delete {
     private final String message;
 
     public Delete(String fileId) {
-        message = "DELETE " + fileId + new String(Main.getCRLF(), StandardCharsets.US_ASCII) + new String(Main
-                .getCRLF(), StandardCharsets.US_ASCII);
+        message = "DELETE " + fileId + new String(Main.getCRLF(), StandardCharsets.ISO_8859_1) + new String(Main
+                .getCRLF(), StandardCharsets.ISO_8859_1);
     }
 
     public void process() {

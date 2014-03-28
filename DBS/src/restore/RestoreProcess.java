@@ -22,8 +22,8 @@ class RestoreProcess extends Thread {
 
         String[] tmp;
 
-        tmp = message.split(new String(Main.getCRLF(), StandardCharsets.US_ASCII) + new String(Main.getCRLF(),
-                StandardCharsets.US_ASCII));
+        tmp = message.split(new String(Main.getCRLF(), StandardCharsets.ISO_8859_1) + new String(Main.getCRLF(),
+                StandardCharsets.ISO_8859_1));
 
         String[] tmp1 = tmp[0].split("\\s+");
         body = tmp[1].trim();
@@ -67,11 +67,11 @@ class RestoreProcess extends Thread {
             chunk.setSent(true);
         } else {
             FileManager fm = new FileManager(header.get(1), repDegree, true);
-            fm.writeToFile(Integer.parseInt(header.get(3)), body.getBytes(StandardCharsets.US_ASCII));
+            fm.writeToFile(Integer.parseInt(header.get(3)), body.getBytes(StandardCharsets.ISO_8859_1));
             chunk = new Chunk(header.get(1), Integer.parseInt(header.get(3)), repDegree);
             Main.getDatabase().addChunk(chunk);
             synchronized (RestoreSend.getWaitingConfirmation()) {
-                RestoreSend.setWaitingConfirmation(header.get(6).getBytes(StandardCharsets.US_ASCII).length);
+                RestoreSend.setWaitingConfirmation(header.get(6).getBytes(StandardCharsets.ISO_8859_1).length);
                 RestoreSend.getWaitingConfirmation().notify();
             }
         }

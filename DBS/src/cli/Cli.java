@@ -112,10 +112,10 @@ public class Cli extends Thread {
 
     void menu() {
         input = "";
-        while (!input.equals("exit")) {
+        while (!input.equals("exit") && !input.equals("Exit") && !input.equals("5")) {
 
             System.out.print("\nChoose a command:\n" + "1. Backup a File\n" + "2. Restore a File\n" + "3. Delete a " +
-                    "File\n" + "4. Reclaim disk space\n\n" + "Option: ");
+                    "File\n" + "4. Reclaim disk space\n" + "5. Exit\n\n" + "Option: ");
             System.out.flush();
             try {
                 input = in.readLine();
@@ -156,6 +156,7 @@ public class Cli extends Thread {
                     if (Integer.parseInt(repDegree) >= 1) {
                         BackupSend send = new BackupSend(filePath, Integer.parseInt(repDegree));
                         Main.getBackup().addSending(send);
+                        System.out.println("Iniatilizing backup! Message will be outputted when finished.");
                         Main.getService().submit(send);
                     }
                 } else {
@@ -220,6 +221,19 @@ public class Cli extends Thread {
                 } else {
                     System.out.println("Invalid Size. Choose from the available range!");
                 }
+                break;
+            case "5":
+            case "exit":
+            case "Exit":
+            case "EXIT":
+                System.out.println("Exiting program!");
+                Main.getBackup().setRunning(false);
+                Main.getControl().setRunning(false);
+                Main.getRestore().setRunning(false);
+                Main.getBackup().close();
+                Main.getControl().close();
+                Main.getRestore().close();
+                Main.save();
                 break;
             default:
                 System.out.println("Invalid Option!\n");

@@ -23,8 +23,8 @@ class ControlProcess extends Thread {
 
         String[] tmp;
 
-        tmp = message.split(new String(Main.getCRLF(), StandardCharsets.US_ASCII) + new String(Main.getCRLF(),
-                StandardCharsets.US_ASCII));
+        tmp = message.split(new String(Main.getCRLF(), StandardCharsets.ISO_8859_1) + new String(Main.getCRLF(),
+                StandardCharsets.ISO_8859_1));
 
         String[] tmp1 = tmp[0].split("\\s+");
 
@@ -71,8 +71,8 @@ class ControlProcess extends Thread {
             chunk.readChunk(Integer.parseInt(header.get(3)));
 
             String mssg = "CHUNK " + Main.getVersion() + " " + header.get(2) + " " + header.get(3) +
-                    new String(Main.getCRLF(), StandardCharsets.US_ASCII) + new String(Main.getCRLF(),
-                    StandardCharsets.US_ASCII) + new String(chunk.getChunkData(), StandardCharsets.US_ASCII);
+                    new String(Main.getCRLF(), StandardCharsets.ISO_8859_1) + new String(Main.getCRLF(),
+                    StandardCharsets.ISO_8859_1) + new String(chunk.getChunkData(), StandardCharsets.ISO_8859_1);
 
             Random r = new Random();
             int time = r.nextInt(401);
@@ -105,6 +105,8 @@ class ControlProcess extends Thread {
                 break;
             }
         }
+
+        //TODO needs to start backup chunk protocol for small reps
     }
 
     private void removedProcess() {

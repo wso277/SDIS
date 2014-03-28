@@ -30,7 +30,10 @@ public class Control extends Thread {
         while (running) {
 
             String mssg = ctrlComm.receive();
-            Main.getService().submit(new ControlProcess(mssg));
+
+            if (!mssg.equals("fail")) {
+                Main.getService().submit(new ControlProcess(mssg));
+            }
         }
     }
 
@@ -45,5 +48,9 @@ public class Control extends Thread {
 
     public void setRunning(Boolean running) {
         this.running = running;
+    }
+
+    public void close() {
+        ctrlComm.close();
     }
 }

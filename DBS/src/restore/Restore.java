@@ -31,7 +31,9 @@ public class Restore extends Thread {
 
             String mssg = mcrComm.receive();
 
-            Main.getService().submit(new RestoreProcess(mssg));
+            if (!mssg.equals("fail")) {
+                Main.getService().submit(new RestoreProcess(mssg));
+            }
         }
     }
 
@@ -46,5 +48,9 @@ public class Restore extends Thread {
 
     public void setRunning(Boolean running) {
         this.running = running;
+    }
+
+    public void close() {
+        mcrComm.close();
     }
 }

@@ -25,8 +25,8 @@ class BackupProcess extends Thread {
 
         String[] tmp;
 
-        tmp = message.split(new String(Main.getCRLF(), StandardCharsets.US_ASCII) + new String(Main.getCRLF(),
-                StandardCharsets.US_ASCII));
+        tmp = message.split(new String(Main.getCRLF(), StandardCharsets.ISO_8859_1) + new String(Main.getCRLF(),
+                StandardCharsets.ISO_8859_1));
 
         String[] tmp1 = tmp[0].split("\\s+");
         body = tmp[1].trim();
@@ -37,6 +37,7 @@ class BackupProcess extends Thread {
 
         if (header.get(0).equals("PUTCHUNK")) {
             if (Main.getVersion().equals(header.get(1))) {
+                //System.out.println("SIZE " + body.length());
                 putProcess();
                 Main.save();
             }
@@ -62,13 +63,13 @@ class BackupProcess extends Thread {
 
         if (!found) {
             FileManager fm = new FileManager(header.get(1), Integer.parseInt(header.get(4)), true);
-            fm.writeToFile(Integer.parseInt(header.get(3)), body.getBytes(StandardCharsets.US_ASCII));
+            fm.writeToFile(Integer.parseInt(header.get(3)), body.getBytes(StandardCharsets.ISO_8859_1));
             chunk = new Chunk(header.get(1), Integer.parseInt(header.get(3)), Integer.parseInt(header.get(4)));
             Main.getDatabase().addChunk(chunk);
         }
 
         String mssg = "STORED" + " " + Main.getVersion() + " " + header.get(2) + " " + header.get(3) + new String
-                (Main.getCRLF(), StandardCharsets.US_ASCII) + new String(Main.getCRLF(), StandardCharsets.US_ASCII);
+                (Main.getCRLF(), StandardCharsets.ISO_8859_1) + new String(Main.getCRLF(), StandardCharsets.ISO_8859_1);
 
         Random r = new Random();
         int time = r.nextInt(401);

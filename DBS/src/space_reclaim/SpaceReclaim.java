@@ -56,8 +56,8 @@ public class SpaceReclaim {
 
     private void sendMessage(int j) {
         String mssg = "REMOVED " + Main.getVersion() + " " + chunks[j].getFileId() + " " + chunks[j].getChunkNo() +
-                new String(Main.getCRLF(), StandardCharsets.US_ASCII) + new String(Main.getCRLF(),
-                StandardCharsets.US_ASCII);
+                new String(Main.getCRLF(), StandardCharsets.ISO_8859_1) + new String(Main.getCRLF(),
+                StandardCharsets.ISO_8859_1);
 
         Main.getControl().send(mssg);
 

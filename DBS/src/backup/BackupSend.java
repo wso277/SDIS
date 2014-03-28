@@ -34,11 +34,11 @@ public class BackupSend extends Thread {
 
                 String message = "";
                     message = "PUTCHUNK " + Main.getVersion() + " " + fileHash + " " + chunkNo + " " + fm.getRep() +
-                            new String(Main.getCRLF(), StandardCharsets.US_ASCII) + new String(Main.getCRLF(),
-                            StandardCharsets.US_ASCII) + new String(fm.getChunkData(), StandardCharsets.US_ASCII);
+                            new String(Main.getCRLF(), StandardCharsets.ISO_8859_1) + new String(Main.getCRLF(),
+                            StandardCharsets.ISO_8859_1) + new String(fm.getChunkData(), StandardCharsets.ISO_8859_1);
 
                 chunkNo++;
-
+                //System.out.println("SENT : " + new String(fm.getChunkData(), StandardCharsets.ISO_8859_1).length());
                 while (storeds < fm.getRep() && tries < 5) {
 
                     storeds = 0;
@@ -62,6 +62,8 @@ public class BackupSend extends Thread {
         } else {
             System.out.println("Not enough space for backup!");
         }
+
+        System.out.println("Finished backup of fileid " + fileHash);
     }
 
     public synchronized void setStoreds(Integer newreps) {

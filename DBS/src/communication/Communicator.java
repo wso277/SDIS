@@ -1,10 +1,7 @@
 package communication;
 
 import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.InetAddress;
-import java.net.MulticastSocket;
-import java.net.UnknownHostException;
+import java.net.*;
 import java.nio.charset.StandardCharsets;
 
 public class Communicator {
@@ -50,21 +47,25 @@ public class Communicator {
         try {
             socket.receive(rpacket);
         } catch (IOException e) {
-            e.printStackTrace();
+            return "fail";
         }
 
-        return new String(rpacket.getData(), StandardCharsets.US_ASCII);
+        return new String(rpacket.getData(), StandardCharsets.ISO_8859_1);
     }
 
     public void send(String mssg) {
         DatagramPacket packet;
-            packet = new DatagramPacket(mssg.getBytes(StandardCharsets.US_ASCII),
-                    mssg.getBytes(StandardCharsets.US_ASCII).length, address, port);
+            packet = new DatagramPacket(mssg.getBytes(StandardCharsets.ISO_8859_1),
+                    mssg.getBytes(StandardCharsets.ISO_8859_1).length, address, port);
 
         try {
             socket.send(packet);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void close() {
+        socket.close();
     }
 }

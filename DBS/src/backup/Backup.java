@@ -33,7 +33,11 @@ public class Backup extends Thread {
         while (running) {
 
             String mssg = mcbComm.receive();
-            Main.getService().submit(new BackupProcess(mssg));
+
+            if (!mssg.equals("fail")) {
+
+                Main.getService().submit(new BackupProcess(mssg));
+            }
 
         }
     }
@@ -57,5 +61,9 @@ public class Backup extends Thread {
 
     public void setRunning(Boolean running) {
         this.running = running;
+    }
+
+    public void close() {
+        mcbComm.close();
     }
 }
