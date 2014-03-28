@@ -42,8 +42,12 @@ public class RestoreSend {
                 }
             }
 
+            System.out.println("Received 1");
+
             currentChunk++;
         } while (waitingConfirmation == Main.getChunkSize());
+
+        System.out.println("Exited receive");
 
         FileManager fm = new FileManager(fileId, 0, true);
         fm.join();
