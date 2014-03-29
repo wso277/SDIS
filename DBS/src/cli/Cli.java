@@ -178,7 +178,8 @@ public class Cli extends Thread {
                 result = Main.getDatabase().getHash(Integer.parseInt(input));
                 if (!result.equals("fail")) {
                     System.out.println("Sending RESTORE message!");
-                    new RestoreSend(result).process();
+                    Main.setRestoring(new RestoreSend(result));
+                    Main.getRestoring().process();
                 } else {
                     System.out.println("Invalid file. Choose one of the availvable numbers!");
                 }

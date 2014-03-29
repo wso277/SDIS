@@ -5,6 +5,7 @@ import cli.Cli;
 import communication.Address;
 import control.Control;
 import restore.Restore;
+import restore.RestoreSend;
 
 import java.io.*;
 import java.util.HashMap;
@@ -25,6 +26,7 @@ public class Main implements Serializable {
     private static Database database;
     private static HashMap<String, Address> ipData;
     private static ExecutorService service;
+    private static RestoreSend restoring;
 
 
     public static void main(String[] args) throws IOException {
@@ -284,5 +286,11 @@ public class Main implements Serializable {
         Main.service = service;
     }
 
+    public static RestoreSend getRestoring() {
+        return restoring;
+    }
 
+    public static void setRestoring(RestoreSend restoring) {
+        Main.restoring = restoring;
+    }
 }

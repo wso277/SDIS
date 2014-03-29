@@ -34,10 +34,8 @@ class RestoreProcess extends Thread {
 
         if (header.get(0).equals("CHUNK")) {
             if (Main.getVersion().equals(header.get(1))) {
-                System.out.println("Got a chunk mate!");
                 restoreChunkProcess();
                 Main.save();
-                System.out.println("Saved!");
             }
         }
     }
@@ -72,9 +70,7 @@ class RestoreProcess extends Thread {
             fm.writeToFile(Integer.parseInt(header.get(3)), body.getBytes(StandardCharsets.ISO_8859_1));
             chunk = new Chunk(header.get(2), Integer.parseInt(header.get(3)), repDegree);
             Main.getDatabase().addChunk(chunk);
-            System.out.println("Raios partam VILSO. Pior que estragado!");
-            RestoreSend.setWaitingConfirmation(header.get(6).getBytes(StandardCharsets.ISO_8859_1).length);
-            System.out.println("After synchronized");
+            Main.getRestoring().setWaitingConfirmation(body.getBytes(StandardCharsets.ISO_8859_1).length);
         }
     }
 }

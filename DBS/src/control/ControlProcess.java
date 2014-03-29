@@ -69,7 +69,6 @@ class ControlProcess extends Thread {
         }
 
         if (found) {
-            System.out.println("Tenho o chunk!");
             FileManager chunk = new FileManager(header.get(2), 0, true);
             chunk.readChunk(Integer.parseInt(header.get(3)));
 
@@ -85,10 +84,8 @@ class ControlProcess extends Thread {
                 e.printStackTrace();
             }
 
-            System.out.println("Sent? " + ch.getSent());
 
             if (!ch.getSent()) {
-                System.out.println("Enviei o chunk");
                 Main.getRestore().send(mssg);
             } else {
                 ch.setSent(false);

@@ -6,22 +6,19 @@ import main.Main;
 import java.nio.charset.StandardCharsets;
 
 public class RestoreSend {
-    private static Integer waitingConfirmation = -1;
+    private Integer waitingConfirmation = -1;
     private String fileId;
 
     public RestoreSend(String id) {
         fileId = id;
     }
 
-    public static Integer getWaitingConfirmation() {
+    public Integer getWaitingConfirmation() {
         return waitingConfirmation;
     }
 
-    public static void setWaitingConfirmation(Integer waitingConfirmation) {
-        System.out.println("CENAS");
-        RestoreSend.waitingConfirmation = waitingConfirmation;
-
-        System.out.println("CENAS1");
+    public void setWaitingConfirmation(Integer newwaitingConfirmation) {
+        waitingConfirmation = newwaitingConfirmation;
     }
 
     public void process() {
@@ -37,9 +34,13 @@ public class RestoreSend {
 
             System.out.println("Waiting for chunk No " + currentChunk);
 
-            while(waitingConfirmation == -1){
+            while (waitingConfirmation == -1) {
+                try {
+                    Thread.sleep(300);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
-
 
             System.out.println("Received " + currentChunk);
 
