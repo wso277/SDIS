@@ -17,7 +17,7 @@ public class Main implements Serializable {
     private static final long serialVersionUID = 1L;
     private static String CRLF = "\r\n";
     private static String version = "1.0";
-    private static int diskSize = 4000000;
+    private static int diskSize = 100000000;
     private static int chunkSize = 64000;
     private static Backup backup;
     private static Restore restore;

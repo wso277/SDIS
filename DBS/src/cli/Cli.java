@@ -152,7 +152,7 @@ public class Cli extends Thread {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    //TODO Change this back to '>'
+                    //TODO Change this back to '>' (We store our own putchunks!)
                     if (Integer.parseInt(repDegree) >= 1) {
                         BackupSend send = new BackupSend(filePath, Integer.parseInt(repDegree));
                         Main.getBackup().addSending(send);

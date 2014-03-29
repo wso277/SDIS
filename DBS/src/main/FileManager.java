@@ -105,7 +105,6 @@ public class FileManager {
         int chunkNo = 0;
 
         while (readChunk(chunkNo)) {
-            //TODO FOI MUDADO PARA -1 POR ORDEM DO MENINO WILSON
             writeToFile(-1, chunkData);
 
             chunkNo++;

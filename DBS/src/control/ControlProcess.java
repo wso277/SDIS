@@ -28,7 +28,7 @@ class ControlProcess extends Thread {
         String tmp;
         BufferedReader in = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(message)));
 
-        tmp ="";
+        tmp = "";
         try {
             tmp = in.readLine();
         } catch (IOException e) {
@@ -130,9 +130,45 @@ class ControlProcess extends Thread {
             Chunk chunk = Main.getDatabase().getChunk(i);
             if (chunk.getFileId().equals(header.get(2)) && (chunk.getChunkNo() == Integer.parseInt(header.get(3)))) {
                 chunk.setKnownReps(-1);
+                if (chunk.getKnownReps() < chunk.getRepDegree()) {
+                    while (fm.readChunk(chunkNo)) {
+
+                        String message = "";
+                        message = "PUTCHUNK " + Main.getVersion() + " " + fileHash + " " + chunkNo + " " + fm.getRep() +
+                                Main.getCRLF() + Main.getCRLF();
+
+                        byte[] mssg = message.getBytes(StandardCharsets.ISO_8859_1);
+                        byte[] mssg1 = Main.appendArray(mssg, fm.getChunkData());
+
+                        while (storeds < fm.getRep() && tries < 5) {
+
+                            storeds = 0;
+                            Main.getBackup().send(mssg1);
+
+
+                            try {
+                                sleep(time);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+
+                            tries++;
+                            time += time;
+                        }
+
+                        fm.deleteChunk(chunkNo);
+
+                        chunkNo++;
+                        storeds = 0;
+                        time = 500;
+                        tries = 0;
+                    }
+                }
                 break;
             }
+
         }
+
     }
 
     private void deleteProcess() {

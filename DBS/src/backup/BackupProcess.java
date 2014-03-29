@@ -49,22 +49,6 @@ class BackupProcess extends Thread {
             body[j] = message[i];
         }
 
-        System.out.println("Size: " + (tmp.length()+4));
-
-       /* tmp = new String(message, StandardCharsets.ISO_8859_1).split(Main.getCRLF().toString() + Main.getCRLF().toString());
-        body = new byte[message.length - tmp[0].length() + 4];
-
-        for (int i = tmp[0].length() + 4, j = 0; i < message.length; i++, j++) {
-            body[j] = message[i];
-        }
-
-        String[] tmp1 = tmp[0].split("\\s+");
-
-        //System.out.println("Received: " + body.length());
-        for (String aTmp1 : tmp1) {
-            header.add(aTmp1.trim());
-        }
-*/
         if (header.get(0).equals("PUTCHUNK")) {
             if (Main.getVersion().equals(header.get(1))) {
                 putProcess();
@@ -76,7 +60,10 @@ class BackupProcess extends Thread {
     }
 
     private void putProcess() {
-
+        if(Main.getDatabase().getFreeSpace() < body.length){
+            System.out.println("Not enough space for a new chunk.");
+            return;
+        }
         Boolean found = false;
 
         for (Chunk chunk : Main.getDatabase().getChunks()) {
@@ -96,6 +83,7 @@ class BackupProcess extends Thread {
             Main.getDatabase().addChunk(chunk);
 
         }
+
 
         String mssg = "STORED" + " " + Main.getVersion() + " " + header.get(2) + " " + header.get(3) + Main.getCRLF()
                 .toString() + Main.getCRLF().toString();
