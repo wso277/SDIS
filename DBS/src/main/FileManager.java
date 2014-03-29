@@ -32,10 +32,10 @@ public class FileManager {
     public boolean deleteChunk(Integer chunkNo) {
 
         File chunk = new File(hashString.toString() + "/" + chunkNo + ".part");
-
         if (chunk.exists()) {
-
-            chunk.delete();
+            if(!chunk.delete()) {
+                System.out.println("FAILED TO DELETE FILE!");
+            }
             Main.getDatabase().removeChunk(hashString.toString(), chunkNo);
             return true;
         }
@@ -86,8 +86,14 @@ public class FileManager {
                 e.printStackTrace();
             }
 
+            try {
+                in.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             return true;
         }
+
 
         return false;
     }
@@ -173,6 +179,11 @@ public class FileManager {
             return false;
         }
 
+        try {
+            in.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return true;
     }
 
@@ -215,6 +226,12 @@ public class FileManager {
             out.write(data);
         } catch (IOException e) {
             System.err.println("Error writing chunk to file");
+            e.printStackTrace();
+        }
+
+        try {
+            out.close();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

@@ -38,12 +38,6 @@ public class Communicator {
             e.printStackTrace();
         }
 
-        try {
-            socket.setLoopbackMode(true);
-        } catch (SocketException e) {
-            e.printStackTrace();
-        }
-
     }
 
     public String receive() {
