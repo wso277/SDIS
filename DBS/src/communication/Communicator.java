@@ -37,6 +37,13 @@ public class Communicator {
         } catch (IOException e) {
             e.printStackTrace();
         }
+/*
+        try {
+            socket.setLoopbackMode(true);
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
+        */
     }
 
     public String receive() {

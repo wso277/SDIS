@@ -68,7 +68,7 @@ class RestoreProcess extends Thread {
         } else {
             FileManager fm = new FileManager(header.get(2), repDegree, true);
             fm.writeToFile(Integer.parseInt(header.get(3)), body.getBytes(StandardCharsets.ISO_8859_1));
-            chunk = new Chunk(header.get(1), Integer.parseInt(header.get(3)), repDegree);
+            chunk = new Chunk(header.get(2), Integer.parseInt(header.get(3)), repDegree);
             Main.getDatabase().addChunk(chunk);
             System.out.println("Write chunk");
             synchronized (RestoreSend.getWaitingConfirmation()) {
