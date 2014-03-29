@@ -4,6 +4,10 @@ import main.Chunk;
 import main.FileManager;
 import main.Main;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Random;
@@ -21,13 +25,19 @@ class ControlProcess extends Thread {
 
         header = new ArrayList<>();
 
-        String[] tmp;
+        String tmp;
+        BufferedReader in = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(message)));
 
-        tmp = new String(message, StandardCharsets.ISO_8859_1).split(Main.getCRLF().toString() + Main.getCRLF().toString());
+        tmp ="";
+        try {
+            tmp = in.readLine();
 
+            System.out.println(tmp);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        String[] tmp1 = tmp[0].split("\\s+");
-
+        String[] tmp1 = tmp.split("\\s+");
 
         for (String aTmp1 : tmp1) {
             header.add(aTmp1.trim());
@@ -74,10 +84,10 @@ class ControlProcess extends Thread {
             chunk.readChunk(Integer.parseInt(header.get(3)));
 
             String message = "CHUNK " + Main.getVersion() + " " + header.get(2) + " " + header.get(3) +
-                    Main.getCRLF().toString() + Main.getCRLF().toString();
+                    Main.getCRLF() + Main.getCRLF();
 
             byte[] mssg = message.getBytes(StandardCharsets.ISO_8859_1);
-            Main.appendArray(mssg, chunk.getChunkData());
+            byte[] mssg1 = Main.appendArray(mssg, chunk.getChunkData());
 
             System.out.println("Message Size: " + mssg.length);
 
@@ -91,7 +101,7 @@ class ControlProcess extends Thread {
 
 
             if (!ch.getSent()) {
-                Main.getRestore().send(mssg);
+                Main.getRestore().send(mssg1);
             } else {
                 ch.setSent(false);
             }

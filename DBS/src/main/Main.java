@@ -15,7 +15,7 @@ import java.util.concurrent.Executors;
 public class Main implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    private static byte[] CRLF = {0xD, 0xA};
+    private static String CRLF = "\r\n";
     private static String version = "1.0";
     private static int diskSize = 4000000;
     private static int chunkSize = 64000;
@@ -203,12 +203,8 @@ public class Main implements Serializable {
         return ipData.get(channel);
     }
 
-    public static byte[] getCRLF() {
+    public static String getCRLF() {
         return CRLF;
-    }
-
-    public static void setCRLF(byte[] cRLF) {
-        CRLF = cRLF;
     }
 
     public static String getVersion() {

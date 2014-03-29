@@ -9,7 +9,7 @@ public class Delete {
     private final String message;
 
     public Delete(String fileId) {
-        message = "DELETE " + fileId + Main.getCRLF().toString() + Main.getCRLF().toString();
+        message = "DELETE " + fileId + Main.getCRLF() + Main.getCRLF();
     }
 
     public void process() {
