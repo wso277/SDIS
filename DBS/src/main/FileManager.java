@@ -16,17 +16,22 @@ public class FileManager {
     private Integer rep;
     private StringBuffer hashString;
 
-    public FileManager(String newfileName, Integer newrep, Boolean load) {
+    public FileManager(String newFileName, Integer newRep, Boolean load) {
 
         if (load) {
-            hashString = new StringBuffer(newfileName);
-            fileName = newfileName;
+            hashString = new StringBuffer(newFileName);
+            fileName = newFileName;
         } else {
-            fileName = newfileName;
+            fileName = newFileName;
             encodeName();
         }
-        rep = newrep;
+        rep = newRep;
 
+    }
+
+    public int getChunkSize(int chunkNo) {
+        file = new File(hashString.toString() + "/" + chunkNo + ".part");
+        return (int)file.length();
     }
 
     public boolean deleteChunk(Integer chunkNo) {

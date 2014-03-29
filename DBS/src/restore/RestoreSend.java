@@ -23,6 +23,7 @@ public class RestoreSend {
 
     public void process() {
         int currentChunk = 0;
+        FileManager fm;
 
         do {
             String msg = "GETCHUNK " + Main.getVersion() + " " + fileId +
@@ -42,24 +43,23 @@ public class RestoreSend {
                 }
             }
 
-            System.out.println("Received " + currentChunk);
+            fm = new FileManager(fileId, 0, true);
+
+            System.out.println("Received " + currentChunk + " with size " + fm.getChunkSize(currentChunk));
+
+            if(fm.getChunkSize(currentChunk) < 64000){
+                break;
+            }
 
             currentChunk++;
-        } while (waitingConfirmation == Main.getChunkSize());
+        } while (true);
 
         System.out.println("Exited receive");
 
-        FileManager fm = new FileManager(fileId, 0, true);
+        fm = new FileManager(fileId, 0, true);
         fm.join();
 
         System.out.println("Restore Complete!");
     }
 
-    public String getFileId() {
-        return fileId;
-    }
-
-    public void setFileId(String fileId) {
-        this.fileId = fileId;
-    }
 }
