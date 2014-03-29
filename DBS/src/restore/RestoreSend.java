@@ -18,7 +18,10 @@ public class RestoreSend {
     }
 
     public static void setWaitingConfirmation(Integer waitingConfirmation) {
+        System.out.println("CENAS");
         RestoreSend.waitingConfirmation = waitingConfirmation;
+
+        System.out.println("CENAS1");
     }
 
     public void process() {
@@ -34,7 +37,7 @@ public class RestoreSend {
 
             System.out.println("Waiting for chunk No " + currentChunk);
 
-            synchronized (waitingConfirmation) {
+            synchronized (this) {
                 try {
                     waitingConfirmation.wait();
                 } catch (InterruptedException e) {
