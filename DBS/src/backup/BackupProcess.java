@@ -68,7 +68,7 @@ class BackupProcess extends Thread {
 
         }
 
-        String mssg = "STORE" + " " + Main.getVersion() + " " + header.get(2) + " " + header.get(3) + new String
+        String mssg = "STORED" + " " + Main.getVersion() + " " + header.get(2) + " " + header.get(3) + new String
                 (Main.getCRLF(), StandardCharsets.ISO_8859_1) + new String(Main.getCRLF(), StandardCharsets.ISO_8859_1);
 
         Random r = new Random();

@@ -137,12 +137,13 @@ public class FileManager {
 
                 if (bytesRead >= 0) {
                     totalBytesRead += bytesRead;
-                    chunkNo++;
                     Chunk chunk = new Chunk(hashString.toString(), chunkNo, rep);
 
                     writeToFile(chunkNo, chunkData);
 
                     Main.getDatabase().addChunk(chunk);
+
+                    chunkNo++;
                 } else {
                     System.err.println("Error reading file BytesRead: " + bytesRead);
                     break;
@@ -151,7 +152,6 @@ public class FileManager {
             }
 
             if (fileSize % 64000 == 0) {
-                chunkNo++;
                 File newFile = new File(hashString.toString() + "/" + chunkNo + ".part");
 
                 if (!newFile.exists()) {
