@@ -181,6 +181,15 @@ public class Main implements Serializable {
         }
     }
 
+    public static byte[] appendArray( byte[] arr, byte[] arr1 ) {
+        int aLen = arr.length;
+        int bLen = arr1.length;
+        byte[] C = new byte[aLen + bLen];
+        System.arraycopy(arr, 0, C, 0, aLen);
+        System.arraycopy(arr1, 0, C, aLen, bLen);
+        return C;
+    }
+
     public static boolean fileExists(String path) {
         File file = new File(path);
         return file.exists();

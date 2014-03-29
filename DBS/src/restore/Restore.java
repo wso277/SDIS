@@ -29,15 +29,15 @@ public class Restore extends Thread {
 
         while (running) {
 
-            String mssg = mcrComm.receive();
+            byte[] mssg = mcrComm.receive();
 
-            if (!mssg.equals("fail")) {
+            //if (!mssg.equals("fail")) {
                 Main.getService().submit(new RestoreProcess(mssg));
-            }
+            //}
         }
     }
 
-    public void send(String message) {
+    public void send(byte[] message) {
 
         mcrComm.send(message);
     }

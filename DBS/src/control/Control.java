@@ -29,14 +29,14 @@ public class Control extends Thread {
 
         while (running) {
 
-            String mssg = ctrlComm.receive();
-            if (!mssg.equals("fail")) {
+            byte[] mssg = ctrlComm.receive();
+            //if (!mssg.equals("fail")) {
                 Main.getService().submit(new ControlProcess(mssg));
-            }
+            //}
         }
     }
 
-    public void send(String message) {
+    public void send(byte[] message) {
 
         ctrlComm.send(message);
     }

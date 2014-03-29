@@ -34,14 +34,16 @@ public class BackupSend extends Thread {
 
                 String message = "";
                     message = "PUTCHUNK " + Main.getVersion() + " " + fileHash + " " + chunkNo + " " + fm.getRep() +
-                            new String(Main.getCRLF(), StandardCharsets.ISO_8859_1) + new String(Main.getCRLF(),
-                            StandardCharsets.ISO_8859_1) + new String(fm.getChunkData(), StandardCharsets.ISO_8859_1);
+                            Main.getCRLF().toString() + Main.getCRLF().toString();
+
+                byte[] mssg = message.getBytes(StandardCharsets.ISO_8859_1);
+                Main.appendArray(mssg, fm.getChunkData());
 
                 //System.out.println("SENT : " + new String(fm.getChunkData(), StandardCharsets.ISO_8859_1).length());
                 while (storeds < fm.getRep() && tries < 5) {
 
                     storeds = 0;
-                    Main.getBackup().send(message);
+                    Main.getBackup().send(mssg);
 
 
                     try {

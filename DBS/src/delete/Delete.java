@@ -2,15 +2,13 @@ package delete;
 
 import main.Main;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
 public class Delete {
     private final String message;
 
     public Delete(String fileId) {
-        message = "DELETE " + fileId + new String(Main.getCRLF(), StandardCharsets.ISO_8859_1) + new String(Main
-                .getCRLF(), StandardCharsets.ISO_8859_1);
+        message = "DELETE " + fileId + Main.getCRLF().toString() + Main.getCRLF().toString();
     }
 
     public void process() {
@@ -18,7 +16,7 @@ public class Delete {
         Random r = new Random();
         int time;
         for (int i = 0; i < 5; i++) {
-            Main.getControl().send(message);
+            Main.getControl().send(message.getBytes());
             time = r.nextInt(301) + 200;
             try {
                 Thread.sleep(time);

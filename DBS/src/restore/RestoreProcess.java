@@ -4,16 +4,15 @@ import main.Chunk;
 import main.FileManager;
 import main.Main;
 
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 class RestoreProcess extends Thread {
 
-    private final String message;
+    private final byte[] message;
     private ArrayList<String> header;
-    private String body;
+    private byte[] body;
 
-    public RestoreProcess(String newmessage) {
+    public RestoreProcess(byte[] newmessage) {
         message = newmessage;
     }
 
@@ -22,12 +21,16 @@ class RestoreProcess extends Thread {
 
         String[] tmp;
 
-        tmp = message.split(new String(Main.getCRLF(), StandardCharsets.ISO_8859_1) + new String(Main.getCRLF(),
-                StandardCharsets.ISO_8859_1));
+        tmp = message.toString().split(Main.getCRLF().toString() + Main.getCRLF().toString());
+        body = new byte[message.length - tmp[0].length() + 4];
+
+        for (int i = tmp[0].length() + 4, j = 0; i < message.length; i++, j++) {
+            body[j] = message[i];
+        }
 
         String[] tmp1 = tmp[0].split("\\s+");
-        body = tmp[1].trim();
 
+        //System.out.println("Received: " + body.length());
         for (String aTmp1 : tmp1) {
             header.add(aTmp1.trim());
         }
@@ -67,10 +70,10 @@ class RestoreProcess extends Thread {
             chunk.setSent(true);
         } else {
             FileManager fm = new FileManager(header.get(2), repDegree, true);
-            fm.writeToFile(Integer.parseInt(header.get(3)), body.getBytes(StandardCharsets.ISO_8859_1));
+            fm.writeToFile(Integer.parseInt(header.get(3)), body);
             chunk = new Chunk(header.get(2), Integer.parseInt(header.get(3)), repDegree);
             Main.getDatabase().addChunk(chunk);
-            Main.getRestoring().setWaitingConfirmation(body.getBytes(StandardCharsets.ISO_8859_1).length);
+            Main.getRestoring().setWaitingConfirmation(body.length);
         }
     }
 }

@@ -4,16 +4,15 @@ import main.Chunk;
 import main.FileManager;
 import main.Main;
 
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Random;
 
 class ControlProcess extends Thread {
 
-    private final String message;
+    private final byte[] message;
     private ArrayList<String> header;
 
-    public ControlProcess(String newmessage) {
+    public ControlProcess(byte[] newmessage) {
         message = newmessage;
     }
 
@@ -23,10 +22,11 @@ class ControlProcess extends Thread {
 
         String[] tmp;
 
-        tmp = message.split(new String(Main.getCRLF(), StandardCharsets.ISO_8859_1) + new String(Main.getCRLF(),
-                StandardCharsets.ISO_8859_1));
+        tmp = message.toString().split(Main.getCRLF().toString() + Main.getCRLF().toString());
+
 
         String[] tmp1 = tmp[0].split("\\s+");
+
 
         for (String aTmp1 : tmp1) {
             header.add(aTmp1.trim());
@@ -72,11 +72,13 @@ class ControlProcess extends Thread {
             FileManager chunk = new FileManager(header.get(2), 0, true);
             chunk.readChunk(Integer.parseInt(header.get(3)));
 
-            String mssg = "CHUNK " + Main.getVersion() + " " + header.get(2) + " " + header.get(3) +
-                    new String(Main.getCRLF(), StandardCharsets.ISO_8859_1) + new String(Main.getCRLF(),
-                    StandardCharsets.ISO_8859_1) + new String(chunk.getChunkData(), StandardCharsets.ISO_8859_1);
+            String message = "CHUNK " + Main.getVersion() + " " + header.get(2) + " " + header.get(3) +
+                    Main.getCRLF().toString() + Main.getCRLF().toString();
 
-            System.out.println("Message Size: " + mssg.length());
+            byte[] mssg = message.getBytes();
+            Main.appendArray(mssg, chunk.getChunkData());
+
+            System.out.println("Message Size: " + mssg.length);
 
             Random r = new Random();
             int time = r.nextInt(401);
