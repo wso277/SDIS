@@ -31,20 +31,19 @@ public class FileManager {
 
     public int getChunkSize(int chunkNo) {
         file = new File(hashString.toString() + "/" + chunkNo + ".part");
-        return (int)file.length();
+        return (int) file.length();
     }
 
     public boolean deleteChunk(Integer chunkNo) {
 
         File chunk = new File(hashString.toString() + "/" + chunkNo + ".part");
         if (chunk.exists()) {
-            if(!chunk.delete()) {
+            if (!chunk.delete()) {
                 System.out.println("FAILED TO DELETE FILE!");
             }
             Main.getDatabase().removeChunk(hashString.toString(), chunkNo);
             return true;
         }
-
 
         return false;
     }
@@ -83,7 +82,7 @@ public class FileManager {
                 e.printStackTrace();
             }
 
-            chunkData = new byte[(int)chunk.length()];
+            chunkData = new byte[(int) chunk.length()];
 
             try {
                 in.read(chunkData);
@@ -98,7 +97,6 @@ public class FileManager {
             }
             return true;
         }
-
 
         return false;
     }
@@ -137,10 +135,15 @@ public class FileManager {
 
             while (totalBytesRead < fileSize) {
 
-                chunkData = new byte[Main.getChunkSize()];
+                if (fileSize - totalBytesRead < 64000) {
+                    chunkData = new byte[(int) fileSize - totalBytesRead];
+                } else {
+                    chunkData = new byte[Main.getChunkSize()];
+                }
 
                 try {
-                    bytesRead = in.read(chunkData, 0, Main.getChunkSize());
+
+                    bytesRead = in.read(chunkData, 0, chunkData.length);
                 } catch (IOException e) {
                     System.err.println("Error reading stream");
                     e.printStackTrace();
