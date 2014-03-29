@@ -32,8 +32,10 @@ public class Database implements Serializable {
 
     public synchronized void removeChunk(String fileid, Integer chunkNo) {
         for (int i = 0; i < chunks.size(); i++) {
+            System.out.println("Number of chunks in database: " + chunks.size());
             if (chunks.get(i).getFileId().equals(fileid) && chunks.get(i).getChunkNo() == chunkNo) {
                 chunks.remove(i);
+                System.out.println("Removed chunk from database. Number of chunks in database: " + chunks.size());
                 break;
             }
         }

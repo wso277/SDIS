@@ -6,7 +6,7 @@ import main.Main;
 import java.nio.charset.StandardCharsets;
 
 public class RestoreSend {
-    private static Integer waitingConfirmation;
+    private static Integer waitingConfirmation = -1;
     private String fileId;
 
     public RestoreSend(String id) {
@@ -25,7 +25,7 @@ public class RestoreSend {
     }
 
     public void process() {
-        int currentChunk = 1;
+        int currentChunk = 0;
 
         do {
             String msg = "GETCHUNK " + Main.getVersion() + " " + fileId +
@@ -37,15 +37,11 @@ public class RestoreSend {
 
             System.out.println("Waiting for chunk No " + currentChunk);
 
-            synchronized (this) {
-                try {
-                    waitingConfirmation.wait();
-                } catch (InterruptedException e) {
-                    // Happens if someone interrupts your thread.
-                }
+            while(waitingConfirmation == -1){
             }
 
-            System.out.println("Received 1");
+
+            System.out.println("Received " + currentChunk);
 
             currentChunk++;
         } while (waitingConfirmation == Main.getChunkSize());

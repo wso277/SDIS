@@ -34,7 +34,7 @@ class ControlProcess extends Thread {
 
         if (header.get(0).equals("GETCHUNK")) {
             if (Main.getVersion().equals(header.get(1))) {
-                getchunkProcess();
+                getChunkProcess();
             }
         } else if (header.get(0).equals("DELETE")) {
             deleteProcess();
@@ -57,16 +57,19 @@ class ControlProcess extends Thread {
 
     }
 
-    private void getchunkProcess() {
+    private void getChunkProcess() {
         Chunk ch = null;
-
+        Boolean found = false;
         for (int i = 0; i < Main.getDatabase().getChunksSize(); i++) {
             ch = Main.getDatabase().getChunk(i);
             if (ch.getFileId().equals(header.get(2)) && (ch.getChunkNo() == Integer.parseInt(header.get(3)))) {
+                found = true;
                 break;
             }
         }
-        if (ch != null) {
+
+        if (found) {
+            System.out.println("Tenho o chunk!");
             FileManager chunk = new FileManager(header.get(2), 0, true);
             chunk.readChunk(Integer.parseInt(header.get(3)));
 
@@ -82,7 +85,10 @@ class ControlProcess extends Thread {
                 e.printStackTrace();
             }
 
+            System.out.println("Sent? " + ch.getSent());
+
             if (!ch.getSent()) {
+                System.out.println("Enviei o chunk");
                 Main.getRestore().send(mssg);
             } else {
                 ch.setSent(false);
@@ -94,7 +100,6 @@ class ControlProcess extends Thread {
         for (int j = 0; j < Main.getBackup().getSending().size(); j++) {
             if (Main.getBackup().getSending().get(j).getFileHash().equals(header.get(2))) {
                 Main.getBackup().getSending().get(j).incStoreds(1);
-                System.out.println("INCREMENTED TO " + Main.getBackup().getSending().get(j).getStoreds());
                 break;
             }
         }
