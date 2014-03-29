@@ -76,6 +76,8 @@ class ControlProcess extends Thread {
                     new String(Main.getCRLF(), StandardCharsets.ISO_8859_1) + new String(Main.getCRLF(),
                     StandardCharsets.ISO_8859_1) + new String(chunk.getChunkData(), StandardCharsets.ISO_8859_1);
 
+            System.out.println("Message Size: " + mssg.length());
+
             Random r = new Random();
             int time = r.nextInt(401);
             try {

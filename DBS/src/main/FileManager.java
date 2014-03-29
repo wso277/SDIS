@@ -78,7 +78,7 @@ public class FileManager {
                 e.printStackTrace();
             }
 
-            chunkData = new byte[Main.getChunkSize()];
+            chunkData = new byte[(int)chunk.length()];
 
             try {
                 in.read(chunkData);

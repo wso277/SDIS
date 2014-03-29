@@ -60,7 +60,7 @@ public class Backup extends Thread {
     }
 
     public void setRunning(Boolean running) {
-        this.running = running;
+        this.running = false;
     }
 
     public void close() {
