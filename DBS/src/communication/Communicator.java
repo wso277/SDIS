@@ -53,7 +53,10 @@ public class Communicator {
             //return "fail";
         }
 
-        return rpacket.getData();
+        byte[] trimmed_mes = new byte[rpacket.getLength()];
+        System.arraycopy(rpacket.getData(), rpacket.getOffset(), trimmed_mes, 0, rpacket.getLength());
+
+        return trimmed_mes;
     }
 
     public void send(byte[] mssg) {

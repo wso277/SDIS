@@ -56,7 +56,8 @@ public class BackupSend extends Thread {
                     time += time;
                 }
 
-                fm.deleteChunk(chunkNo);
+                //TODO REMOVE COMMENT
+                //fm.deleteChunk(chunkNo);
 
                 chunkNo++;
                 storeds = 0;
