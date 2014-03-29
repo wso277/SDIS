@@ -93,7 +93,8 @@ class ControlProcess extends Thread {
     private void storedProcess() {
         for (int j = 0; j < Main.getBackup().getSending().size(); j++) {
             if (Main.getBackup().getSending().get(j).getFileHash().equals(header.get(2))) {
-                Main.getBackup().getSending().get(j).setStoreds(1);
+                Main.getBackup().getSending().get(j).incStoreds(1);
+                System.out.println("INCREMENTED TO " + Main.getBackup().getSending().get(j).getStoreds());
                 break;
             }
         }

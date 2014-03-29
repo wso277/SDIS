@@ -66,4 +66,9 @@ public class Backup extends Thread {
     public void close() {
         mcbComm.close();
     }
+
+    public Communicator getMcbComm() {
+        return mcbComm;
+    }
+
 }

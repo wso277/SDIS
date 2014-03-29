@@ -68,11 +68,39 @@ public class BackupSend extends Thread {
         System.out.println("Finished backup of fileid " + fileHash);
     }
 
-    public synchronized void setStoreds(Integer newreps) {
+    public synchronized void incStoreds(Integer newreps) {
         storeds += newreps;
     }
 
     public String getFileHash() {
         return fileHash;
+    }
+
+    public FileManager getFm() {
+        return fm;
+    }
+
+    public Integer getTime() {
+        return time;
+    }
+
+    public void setTime(Integer time) {
+        this.time = time;
+    }
+
+    public Integer getStoreds() {
+        return storeds;
+    }
+
+    public void setStoreds(Integer storeds) {
+        this.storeds = storeds;
+    }
+
+    public Integer getTries() {
+        return tries;
+    }
+
+    public void setTries(Integer tries) {
+        this.tries = tries;
     }
 }

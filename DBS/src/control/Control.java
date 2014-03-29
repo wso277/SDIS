@@ -30,7 +30,6 @@ public class Control extends Thread {
         while (running) {
 
             String mssg = ctrlComm.receive();
-
             if (!mssg.equals("fail")) {
                 Main.getService().submit(new ControlProcess(mssg));
             }
