@@ -59,7 +59,7 @@ public class SpaceReclaim {
                 new String(Main.getCRLF(), StandardCharsets.ISO_8859_1) + new String(Main.getCRLF(),
                 StandardCharsets.ISO_8859_1);
 
-        Main.getControl().send(mssg.getBytes());
+        Main.getControl().send(mssg.getBytes(StandardCharsets.ISO_8859_1));
 
     }
 }

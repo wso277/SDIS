@@ -4,6 +4,8 @@ import main.Chunk;
 import main.FileManager;
 import main.Main;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -24,7 +26,7 @@ class BackupProcess extends Thread {
 
         String[] tmp;
 
-        tmp = message.toString().split(Main.getCRLF().toString() + Main.getCRLF().toString());
+        tmp = new String(message, StandardCharsets.ISO_8859_1).split(Main.getCRLF().toString() + Main.getCRLF().toString());
         body = new byte[message.length - tmp[0].length() + 4];
 
         for (int i = tmp[0].length() + 4, j = 0; i < message.length; i++, j++) {
@@ -81,6 +83,6 @@ class BackupProcess extends Thread {
             e.printStackTrace();
         }
 
-        Main.getControl().send(mssg.getBytes());
+        Main.getControl().send(mssg.getBytes(StandardCharsets.ISO_8859_1));
     }
 }

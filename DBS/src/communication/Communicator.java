@@ -5,6 +5,7 @@ import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.net.UnknownHostException;
+import java.nio.charset.StandardCharsets;
 
 public class Communicator {
 
@@ -53,10 +54,15 @@ public class Communicator {
             //return "fail";
         }
 
+        System.out.println(new String(rpacket.getData(), StandardCharsets.ISO_8859_1));
+        System.out.println("String size: " + rpacket.getData().length);
+
         return rpacket.getData();
     }
 
     public void send(byte[] mssg) {
+        System.out.println(new String(mssg, StandardCharsets.ISO_8859_1));
+        System.out.println("String size: " + mssg.length);
         DatagramPacket packet;
         packet = new DatagramPacket(mssg, mssg.length, address, port);
 

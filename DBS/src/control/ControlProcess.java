@@ -4,6 +4,7 @@ import main.Chunk;
 import main.FileManager;
 import main.Main;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -22,7 +23,7 @@ class ControlProcess extends Thread {
 
         String[] tmp;
 
-        tmp = message.toString().split(Main.getCRLF().toString() + Main.getCRLF().toString());
+        tmp = new String(message, StandardCharsets.ISO_8859_1).split(Main.getCRLF().toString() + Main.getCRLF().toString());
 
 
         String[] tmp1 = tmp[0].split("\\s+");
@@ -75,7 +76,7 @@ class ControlProcess extends Thread {
             String message = "CHUNK " + Main.getVersion() + " " + header.get(2) + " " + header.get(3) +
                     Main.getCRLF().toString() + Main.getCRLF().toString();
 
-            byte[] mssg = message.getBytes();
+            byte[] mssg = message.getBytes(StandardCharsets.ISO_8859_1);
             Main.appendArray(mssg, chunk.getChunkData());
 
             System.out.println("Message Size: " + mssg.length);
