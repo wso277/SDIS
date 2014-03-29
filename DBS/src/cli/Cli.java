@@ -154,7 +154,7 @@ public class Cli extends Thread {
                     }
                     //TODO Change this back to '>' (We store our own putchunks!)
                     if (Integer.parseInt(repDegree) >= 1) {
-                        BackupSend send = new BackupSend(filePath, Integer.parseInt(repDegree));
+                        BackupSend send = new BackupSend(filePath, Integer.parseInt(repDegree), true, 0);
                         Main.getBackup().addSending(send);
                         System.out.println("Iniatilizing backup! Message will be outputted when finished.");
                         Main.getService().submit(send);
