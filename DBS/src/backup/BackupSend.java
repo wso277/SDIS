@@ -39,7 +39,6 @@ public class BackupSend extends Thread {
                 byte[] mssg = message.getBytes(StandardCharsets.ISO_8859_1);
                 byte[] mssg1 = Main.appendArray(mssg, fm.getChunkData());
 
-                //System.out.println("SENT : " + new String(fm.getChunkData(), StandardCharsets.ISO_8859_1).length());
                 while (storeds < fm.getRep() && tries < 5) {
 
                     storeds = 0;
@@ -56,8 +55,7 @@ public class BackupSend extends Thread {
                     time += time;
                 }
 
-                //TODO REMOVE COMMENT
-                //fm.deleteChunk(chunkNo);
+                fm.deleteChunk(chunkNo);
 
                 chunkNo++;
                 storeds = 0;

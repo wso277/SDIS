@@ -33,7 +33,6 @@ class BackupProcess extends Thread {
         tmp ="";
         try {
            tmp = in.readLine();
-            System.out.println(tmp);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -44,13 +43,13 @@ class BackupProcess extends Thread {
             header.add(aTmp1.trim());
         }
 
-        body = new byte[message.length - tmp.length() + 4];
+        body = new byte[message.length - 8 - tmp.length() + 4];
 
-        for (int i = tmp.length() + 4, j = 0; i < message.length; i++, j++) {
+        for (int i = tmp.length() + 4, j = 0; i < message.length - 8; i++, j++) {
             body[j] = message[i];
         }
 
-        System.out.println("Size: " + body.length);
+        System.out.println("Size: " + (tmp.length()+4));
 
        /* tmp = new String(message, StandardCharsets.ISO_8859_1).split(Main.getCRLF().toString() + Main.getCRLF().toString());
         body = new byte[message.length - tmp[0].length() + 4];

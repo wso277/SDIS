@@ -29,8 +29,6 @@ class RestoreProcess extends Thread {
         tmp ="";
         try {
             tmp = in.readLine();
-
-            System.out.println(tmp);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -41,8 +39,8 @@ class RestoreProcess extends Thread {
             header.add(aTmp1.trim());
         }
 
-        body = new byte[tmp.length() - tmp.length() + 4];
-        for (int i = tmp.length() + 4, j = 0; i < message.length; i++, j++) {
+        body = new byte[message.length - 8 - tmp.length() + 4];
+        for (int i = tmp.length() + 4, j = 0; i < message.length - 8; i++, j++) {
             body[j] = message[i];
         }
 

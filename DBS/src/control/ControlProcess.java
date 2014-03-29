@@ -31,8 +31,6 @@ class ControlProcess extends Thread {
         tmp ="";
         try {
             tmp = in.readLine();
-
-            System.out.println(tmp);
         } catch (IOException e) {
             e.printStackTrace();
         }
