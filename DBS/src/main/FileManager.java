@@ -40,12 +40,13 @@ public class FileManager {
             return true;
         }
 
+
         return false;
     }
 
     public void delete() {
 
-        int chunkNo = 1;
+        int chunkNo = 0;
 
         while (true) {
 
@@ -92,11 +93,11 @@ public class FileManager {
     }
 
     public void join() {
-        int chunkNo = 1;
+        int chunkNo = 0;
 
         while (readChunk(chunkNo)) {
-
-            writeToFile(0, chunkData);
+            //TODO FOI MUDADO PARA -1 POR ORDEM DO MENINO WILSON
+            writeToFile(-1, chunkData);
 
             chunkNo++;
         }
@@ -188,7 +189,7 @@ public class FileManager {
 
         File newFile;
 
-        if (chunkNo != 0) {
+        if (chunkNo >= 0) {
             newFile = new File(hashString.toString() + "/" + chunkNo + ".part");
         } else {
             newFile = new File(Main.getDatabase().getFile(hashString.toString()));

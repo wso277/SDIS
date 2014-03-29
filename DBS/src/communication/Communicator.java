@@ -68,4 +68,24 @@ public class Communicator {
     public void close() {
         socket.close();
     }
+
+    public Integer getPort() {
+        return port;
+    }
+
+    public MulticastSocket getSocket() {
+        return socket;
+    }
+
+    public void setSocket(MulticastSocket socket) {
+        this.socket = socket;
+    }
+
+    public InetAddress getAddress() {
+        return address;
+    }
+
+    public void setAddress(InetAddress address) {
+        this.address = address;
+    }
 }

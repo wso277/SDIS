@@ -14,8 +14,8 @@ class BackupProcess extends Thread {
     private ArrayList<String> header;
     private String body;
 
-    public BackupProcess(String newmessage) {
-        message = newmessage;
+    public BackupProcess(String newMessage) {
+        message = newMessage;
     }
 
     @Override
@@ -37,7 +37,6 @@ class BackupProcess extends Thread {
 
         if (header.get(0).equals("PUTCHUNK")) {
             if (Main.getVersion().equals(header.get(1))) {
-                //System.out.println("SIZE " + body.length());
                 putProcess();
                 Main.save();
             }
@@ -48,11 +47,9 @@ class BackupProcess extends Thread {
 
     private void putProcess() {
 
-        Chunk chunk;
         Boolean found = false;
 
-        for (int i = 0; i < Main.getDatabase().getChunksSize(); i++) {
-            chunk = Main.getDatabase().getChunk(i);
+        for (Chunk chunk : Main.getDatabase().getChunks()) {
             if (chunk.getFileId().equals(header.get(2))) {
                 if (chunk.getChunkNo() == Integer.parseInt(header.get(3))) {
                     found = true;
@@ -61,14 +58,17 @@ class BackupProcess extends Thread {
             }
         }
 
+
         if (!found) {
+            Chunk chunk;
             FileManager fm = new FileManager(header.get(2), Integer.parseInt(header.get(4)), true);
             fm.writeToFile(Integer.parseInt(header.get(3)), body.getBytes(StandardCharsets.ISO_8859_1));
             chunk = new Chunk(header.get(1), Integer.parseInt(header.get(3)), Integer.parseInt(header.get(4)));
             Main.getDatabase().addChunk(chunk);
+
         }
 
-        String mssg = "STORED" + " " + Main.getVersion() + " " + header.get(2) + " " + header.get(3) + new String
+        String mssg = "STORE" + " " + Main.getVersion() + " " + header.get(2) + " " + header.get(3) + new String
                 (Main.getCRLF(), StandardCharsets.ISO_8859_1) + new String(Main.getCRLF(), StandardCharsets.ISO_8859_1);
 
         Random r = new Random();

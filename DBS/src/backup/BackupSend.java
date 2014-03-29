@@ -28,7 +28,7 @@ public class BackupSend extends Thread {
         enoughSpace = fm.split();
 
         if (enoughSpace) {
-            Integer chunkNo = 1;
+            Integer chunkNo = 0;
 
             while (fm.readChunk(chunkNo)) {
 

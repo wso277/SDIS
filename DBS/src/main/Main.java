@@ -29,12 +29,6 @@ public class Main implements Serializable {
 
     public static void main(String[] args) throws IOException {
 
-        // JAVA QUEUING EXAMPLE
-        /*
-		 * service.shutdown(); // now wait for the jobs to finish
-		 * service.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
-		 */
-
         // Load database
         load();
 
@@ -45,30 +39,11 @@ public class Main implements Serializable {
         FileManager split2 = new FileManager("/home/wso277/Desktop/image3.jpg", 0, false);
         split2.split();*/
 
-
-/*
-		FileManager split = new FileManager("C:/Users/Vinnie/Desktop/1.jpg",
-				0, false);
-		split.split();
-		FileManager split1 = new FileManager("C:/Users/Vinnie/Desktop/2.jpg",
-				0, false);
-		split1.split();
-		FileManager split2 = new FileManager("C:/Users/Vinnie/Desktop/3.png",
-				0, false);
-		split2.split();
-*/
         // Initializing job queue
         service = Executors.newFixedThreadPool(12);
 
         // Store address info
         ipData = new HashMap<>();
-
-        // Temporary IPs for testing
-		/*
-		 * ipData.put("mc", new Address("mc", "226.0.100.1", 7891));
-		 * ipData.put("mcb", new Address("mcb", "226.0.100.2", 7892));
-		 * ipData.put("mcr", new Address("mcr", "226.0.100.3", 7893));
-		 */
 
         // Initializing components
         cli = new Cli();
