@@ -53,9 +53,14 @@ public class Communicator {
             return null;
         }
 
-        /*if (rpacket.getAddress() == socket.getLocalAddress()) {
-            return null;
-        }*/
+
+        try {
+            if (rpacket.getAddress().toString().equals("/" + InetAddress.getLocalHost().getHostAddress())) {
+                return null;
+            }
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
 
         byte[] trimmed_mes = new byte[rpacket.getLength()];
         System.arraycopy(rpacket.getData(), rpacket.getOffset(), trimmed_mes, 0, rpacket.getLength());

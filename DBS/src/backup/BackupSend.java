@@ -119,6 +119,9 @@ public class BackupSend extends Thread {
             }
         }
 
+        if(storeds < fm.getRep()){
+            System.out.println("Backup timed out for chunk no " + chunkNo + ". Achieved reps: " + fm.getRep());
+        }
     }
 
     public synchronized void incStoreds(Integer newreps) {

@@ -88,8 +88,6 @@ class ControlProcess extends Thread {
             byte[] mssg = message.getBytes(StandardCharsets.ISO_8859_1);
             byte[] mssg1 = Main.appendArray(mssg, chunk.getChunkData());
 
-            System.out.println("Message Size: " + mssg.length);
-
             Random r = new Random();
             int time = r.nextInt(401);
             try {

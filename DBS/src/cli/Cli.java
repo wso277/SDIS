@@ -147,7 +147,7 @@ public class Cli {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    //TODO Change this back to '>' (We store our own putchunks!)
+
                     if (Integer.parseInt(repDegree) >= 1) {
                         BackupSend send = new BackupSend(filePath, Integer.parseInt(repDegree), true, -1);
                         Main.getBackup().addSending(send);

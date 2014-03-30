@@ -41,7 +41,7 @@ public class Main implements Serializable {
         split1.split();
         FileManager split2 = new FileManager("/home/wso277/Desktop/image3.jpg", 0, false);
         split2.split();
-        C:/Users/Vinnie/Desktop/3.png
+        C:/Users/Vinnie/Desktop/son.pdf
         */
 
         // Initializing job queue
@@ -62,15 +62,17 @@ public class Main implements Serializable {
         service.submit(restore);
         cli.menu();
 
+        // When cli ends
         service.shutdown();
+
         try {
             service.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        save();
 
         // save database
+        save();
 
     }
 
