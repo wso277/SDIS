@@ -4,6 +4,7 @@ import main.FileManager;
 import main.Main;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Random;
 
 public class BackupSend extends Thread {
     private final String fileHash;
@@ -13,6 +14,7 @@ public class BackupSend extends Thread {
     private Integer tries;
     private Integer chunkN;
     private Boolean isFile;
+    private Boolean sent;
 
     public BackupSend(String filePath, Integer repDegree, Boolean file, Integer newChunkNo) {
 
@@ -24,6 +26,7 @@ public class BackupSend extends Thread {
         tries = 0;
         isFile = file;
         chunkN = newChunkNo;
+        sent = false;
     }
 
     public void run() {
@@ -85,28 +88,32 @@ public class BackupSend extends Thread {
         byte[] mssg = message.getBytes(StandardCharsets.ISO_8859_1);
         byte[] mssg1 = Main.appendArray(mssg, fm.getChunkData());
 
-        while (storeds < fm.getRep() && tries < 5) {
-
-            storeds = 0;
-            Main.getBackup().send(mssg1);
-
-
-            try {
-                sleep(time);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            tries++;
-            time += time;
+        Random r = new Random();
+        int time = r.nextInt(401);
+        try {
+            sleep(time);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
-        fm.deleteChunk(chunkNo);
+        if (!sent) {
 
-        chunkNo++;
-        storeds = 0;
-        time = 500;
-        tries = 0;
+            while (storeds < fm.getRep() && tries < 5) {
+
+                storeds = 0;
+                Main.getBackup().send(mssg1);
+
+                try {
+                    sleep(time);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                tries++;
+                time += time;
+            }
+        }
+
     }
 
     public synchronized void incStoreds(Integer newreps) {
@@ -143,5 +150,21 @@ public class BackupSend extends Thread {
 
     public void setTries(Integer tries) {
         this.tries = tries;
+    }
+
+    public Boolean getSent() {
+        return sent;
+    }
+
+    public void setSent(Boolean sent) {
+        this.sent = sent;
+    }
+
+    public Integer getChunkN() {
+        return chunkN;
+    }
+
+    public void setChunkN(Integer chunkN) {
+        this.chunkN = chunkN;
     }
 }

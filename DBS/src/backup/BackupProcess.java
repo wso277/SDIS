@@ -30,9 +30,9 @@ class BackupProcess extends Thread {
         String tmp;
         BufferedReader in = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(message)));
 
-        tmp ="";
+        tmp = "";
         try {
-           tmp = in.readLine();
+            tmp = in.readLine();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -60,7 +60,16 @@ class BackupProcess extends Thread {
     }
 
     private void putProcess() {
-        if(Main.getDatabase().getFreeSpace() < body.length){
+
+        for (int i = 0; i < Main.getBackup().getSending().size(); i++) {
+            if (Main.getBackup().getSending().get(i).getFileHash().equals(header.get(2)) && Main.getBackup()
+                    .getSending().get(i).getChunkN() == Integer.parseInt(header.get(3))) {
+                Main.getBackup().getSending().get(i).setSent(true);
+                break;
+            }
+        }
+
+        if (Main.getDatabase().getFreeSpace() < body.length) {
             System.out.println("Not enough space for a new chunk.");
             return;
         }
@@ -83,7 +92,6 @@ class BackupProcess extends Thread {
             Main.getDatabase().addChunk(chunk);
 
         }
-
 
         String mssg = "STORED" + " " + Main.getVersion() + " " + header.get(2) + " " + header.get(3) + Main.getCRLF()
                 .toString() + Main.getCRLF().toString();
