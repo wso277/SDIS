@@ -14,11 +14,14 @@ public class BackupSend extends Thread {
     private Integer tries;
     private Integer chunkN;
     private Boolean isFile;
-    private Boolean sent;
+    private Boolean sent = false;
 
     public BackupSend(String filePath, Integer repDegree, Boolean file, Integer newChunkNo) {
-
-        fm = new FileManager(filePath, repDegree, false);
+        if(file) {
+            fm = new FileManager(filePath, repDegree, false);
+        } else {
+            fm = new FileManager(filePath, repDegree, true);
+        }
         fileHash = fm.getHashString().toString();
 
         time = 500;
@@ -26,7 +29,6 @@ public class BackupSend extends Thread {
         tries = 0;
         isFile = file;
         chunkN = newChunkNo;
-        sent = false;
     }
 
     public void run() {
@@ -80,9 +82,10 @@ public class BackupSend extends Thread {
     }
 
     public void backupChunk(Integer chunkNo) {
-        System.out.println("Detectei que é só um chunk e vou agora tratar disso.");
+
         fm.readChunk(chunkNo);
-        String message = "";
+
+        String message;
         message = "PUTCHUNK " + Main.getVersion() + " " + fileHash + " " + chunkNo + " " + fm.getRep() +
                 Main.getCRLF() + Main.getCRLF();
 
@@ -91,6 +94,7 @@ public class BackupSend extends Thread {
 
         Random r = new Random();
         int time = r.nextInt(401);
+
         try {
             sleep(time);
         } catch (InterruptedException e) {

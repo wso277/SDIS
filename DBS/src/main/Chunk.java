@@ -15,7 +15,7 @@ public class Chunk implements Serializable, Comparable<Chunk> {
         fileId = file;
         chunkNo = chunk;
         repDegree = rep;
-        knownReps = 1;
+        knownReps = 0;
         sent = false;
     }
 
