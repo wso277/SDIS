@@ -61,7 +61,6 @@ public class Communicator {
 
     public void send(byte[] mssg) {
         DatagramPacket packet;
-        System.out.println("Packet size: " + mssg.length);
         packet = new DatagramPacket(mssg, mssg.length, address, port);
 
         try {

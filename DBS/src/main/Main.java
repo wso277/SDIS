@@ -40,7 +40,8 @@ public class Main implements Serializable {
         split1.split();
         FileManager split2 = new FileManager("/home/wso277/Desktop/image3.jpg", 0, false);
         split2.split();
-        C:/Users/Vinnie/Desktop/2.jpg*/
+        C:/Users/Vinnie/Desktop/3.png
+        */
 
         // Initializing job queue
         service = Executors.newFixedThreadPool(12);

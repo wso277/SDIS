@@ -80,6 +80,7 @@ public class BackupSend extends Thread {
     }
 
     public void backupChunk(Integer chunkNo) {
+        System.out.println("Detectei que é só um chunk e vou agora tratar disso.");
         fm.readChunk(chunkNo);
         String message = "";
         message = "PUTCHUNK " + Main.getVersion() + " " + fileHash + " " + chunkNo + " " + fm.getRep() +
