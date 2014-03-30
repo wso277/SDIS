@@ -115,7 +115,7 @@ public class Cli extends Thread {
         while (!input.equals("exit") && !input.equals("Exit") && !input.equals("5")) {
 
             System.out.print("\nChoose a command:\n" + "1. Backup a File\n" + "2. Restore a File\n" + "3. Delete a " +
-                    "File\n" + "4. Reclaim disk space\n" + "5. Exit\n\n" + "Option: ");
+                    "File\n" + "4. Reclaim disk space\n" + "5.Increase disk size\n" + "6. Exit\n\n" + "Option: ");
             System.out.flush();
             try {
                 input = in.readLine();
@@ -224,6 +224,20 @@ public class Cli extends Thread {
                 }
                 break;
             case "5":
+                System.out.println("Space currently occupied - " + Main.getDiskSize());
+                System.out.print("Choose space to add (byte): ");
+                try {
+                    input = in.readLine();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                if (Integer.parseInt(input) > 0) {
+                    Main.setDiskSize(Main.getDiskSize() + Integer.parseInt(input));
+                } else {
+                    System.out.println("Invalid Size. Choose from the available range!");
+                }
+                break;
+            case "6":
             case "exit":
             case "Exit":
             case "EXIT":
