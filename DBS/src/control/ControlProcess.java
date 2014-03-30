@@ -42,8 +42,6 @@ class ControlProcess extends Thread {
             header.add(aTmp1.trim());
         }
 
-        System.out.println(tmp);
-
         if (header.get(0).equals("GETCHUNK")) {
             if (Main.getVersion().equals(header.get(1))) {
                 getChunkProcess();
@@ -103,9 +101,9 @@ class ControlProcess extends Thread {
 
             if (!ch.getSent()) {
                 Main.getRestore().send(mssg1);
-            } else {
-                ch.setSent(false);
             }
+
+            ch.setSent(false);
         }
     }
 

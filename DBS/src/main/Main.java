@@ -11,6 +11,7 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class Main implements Serializable {
 
@@ -59,16 +60,29 @@ public class Main implements Serializable {
         service.submit(backup);
         service.submit(control);
         service.submit(restore);
-        service.submit(cli);
+        cli.menu();
 
-        //service.shutdown();
-        /*try {
+        service.shutdown();
+        try {
             service.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }*/
-        // save database
+        }
         save();
+
+        // save database
+
+    }
+
+    public static void shutdown() {
+        service.shutdown();
+        try {
+            service.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        save();
+        return;
     }
 
     public synchronized static void save() {

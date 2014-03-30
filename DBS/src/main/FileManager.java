@@ -106,7 +106,7 @@ public class FileManager {
 
         while (readChunk(chunkNo)) {
             writeToFile(-1, chunkData);
-
+            deleteChunk(chunkNo);
             chunkNo++;
         }
     }
