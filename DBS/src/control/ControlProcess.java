@@ -42,8 +42,6 @@ class ControlProcess extends Thread {
             header.add(aTmp1.trim());
         }
 
-        System.out.println(tmp);
-
         if (header.get(0).equals("GETCHUNK")) {
             if (Main.getVersion().equals(header.get(1))) {
                 getChunkProcess();
@@ -90,8 +88,6 @@ class ControlProcess extends Thread {
             byte[] mssg = message.getBytes(StandardCharsets.ISO_8859_1);
             byte[] mssg1 = Main.appendArray(mssg, chunk.getChunkData());
 
-            System.out.println("Message Size: " + mssg.length);
-
             Random r = new Random();
             int time = r.nextInt(401);
             try {
@@ -103,9 +99,15 @@ class ControlProcess extends Thread {
 
             if (!ch.getSent()) {
                 Main.getRestore().send(mssg1);
-            } else {
-                ch.setSent(false);
             }
+
+            try {
+                sleep(200);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            ch.setSent(false);
         }
     }
 
@@ -130,17 +132,11 @@ class ControlProcess extends Thread {
         for (int i = 0; i < Main.getDatabase().getChunksSize(); i++) {
             Chunk chunk = Main.getDatabase().getChunk(i);
             if (chunk.getFileId().equals(header.get(2)) && (chunk.getChunkNo() == Integer.parseInt(header.get(3)))) {
-                System.out.println("Foi removido um chunk que eu tenho.");
-                System.out.println("Antes: " + chunk.getKnownReps());
                 chunk.setKnownReps(-1);
-                System.out.println("Depois: " + chunk.getKnownReps());
-                System.out.println("Know: " + chunk.getKnownReps() + "; Needed " + chunk.getRepDegree());
                 if (chunk.getKnownReps() < chunk.getRepDegree()) {
-                    System.out.println("Foi removido um chunk que eu tenho e o rep degree deu cócó.");
                     BackupSend send = new BackupSend(chunk.getFileId(), chunk.getRepDegree(), false, chunk.getChunkNo());
                     Main.getBackup().addSending(send);
                     Main.getService().submit(send);
-                    System.out.println("Foi submetido o trabalho para tratar disso.");
                 }
                 break;
             }

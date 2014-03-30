@@ -11,7 +11,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class Cli extends Thread {
+public class Cli {
 
     private final BufferedReader in;
     private String input;
@@ -23,11 +23,6 @@ public class Cli extends Thread {
         chooseNetworkConfigType();
 
         processFirstMenu();
-    }
-
-    public void run() {
-        menu();
-
     }
 
     private void chooseNetworkConfigType() {
@@ -110,7 +105,7 @@ public class Cli extends Thread {
         Main.loadNetwork();
     }
 
-    void menu() {
+    public void menu() {
         input = "";
         while (!input.equals("exit") && !input.equals("Exit") && !input.equals("5")) {
 
@@ -152,7 +147,7 @@ public class Cli extends Thread {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    //TODO Change this back to '>' (We store our own putchunks!)
+
                     if (Integer.parseInt(repDegree) >= 1) {
                         BackupSend send = new BackupSend(filePath, Integer.parseInt(repDegree), true, -1);
                         Main.getBackup().addSending(send);
@@ -248,7 +243,6 @@ public class Cli extends Thread {
                 Main.getBackup().close();
                 Main.getControl().close();
                 Main.getRestore().close();
-                Main.save();
                 break;
             default:
                 System.out.println("Invalid Option!\n");

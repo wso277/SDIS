@@ -11,6 +11,7 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class Main implements Serializable {
 
@@ -40,7 +41,7 @@ public class Main implements Serializable {
         split1.split();
         FileManager split2 = new FileManager("/home/wso277/Desktop/image3.jpg", 0, false);
         split2.split();
-        C:/Users/Vinnie/Desktop/3.png
+        C:/Users/Vinnie/Desktop/son.pdf
         */
 
         // Initializing job queue
@@ -59,16 +60,31 @@ public class Main implements Serializable {
         service.submit(backup);
         service.submit(control);
         service.submit(restore);
-        service.submit(cli);
+        cli.menu();
 
-        //service.shutdown();
-        /*try {
+        // When cli ends
+        service.shutdown();
+
+        try {
             service.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }*/
+        }
+
         // save database
         save();
+
+    }
+
+    public static void shutdown() {
+        service.shutdown();
+        try {
+            service.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        save();
+        return;
     }
 
     public synchronized static void save() {
