@@ -66,7 +66,6 @@ public class Communicator {
     public void send(byte[] mssg) {
         DatagramPacket packet;
         packet = new DatagramPacket(mssg, mssg.length, address, port);
-
         try {
             socket.send(packet);
         } catch (IOException e) {

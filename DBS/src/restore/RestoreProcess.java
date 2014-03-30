@@ -39,8 +39,9 @@ class RestoreProcess extends Thread {
             header.add(aTmp1.trim());
         }
 
-        body = new byte[message.length - 8 - tmp.length() + 4];
-        for (int i = tmp.length() + 4, j = 0; i < message.length - 8; i++, j++) {
+        body = new byte[message.length - (tmp.length() + 4)];
+
+        for (int i = tmp.length() + 4, j = 0; i < message.length; i++, j++) {
             body[j] = message[i];
         }
 
