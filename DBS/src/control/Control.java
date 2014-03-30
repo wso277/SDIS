@@ -30,9 +30,9 @@ public class Control extends Thread {
         while (running) {
 
             byte[] mssg = ctrlComm.receive();
-            //if (!mssg.equals("fail")) {
+            if (mssg != null) {
                 Main.getService().submit(new ControlProcess(mssg));
-            //}
+            }
         }
     }
 

@@ -50,8 +50,12 @@ public class Communicator {
         try {
             socket.receive(rpacket);
         } catch (IOException e) {
-            //return "fail";
+            return null;
         }
+
+        /*if (rpacket.getAddress() == socket.getLocalAddress()) {
+            return null;
+        }*/
 
         byte[] trimmed_mes = new byte[rpacket.getLength()];
         System.arraycopy(rpacket.getData(), rpacket.getOffset(), trimmed_mes, 0, rpacket.getLength());

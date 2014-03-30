@@ -31,9 +31,9 @@ public class Restore extends Thread {
 
             byte[] mssg = mcrComm.receive();
 
-            //if (!mssg.equals("fail")) {
+            if (mssg != null) {
                 Main.getService().submit(new RestoreProcess(mssg));
-            //}
+            }
         }
     }
 

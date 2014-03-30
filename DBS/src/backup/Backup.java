@@ -34,10 +34,10 @@ public class Backup extends Thread {
         while (running) {
 
             byte[] mssg = mcbComm.receive();
-           // if (!mssg.equals("fail")) {
+            if (mssg != null) {
 
                 Main.getService().submit(new BackupProcess(mssg));
-            //}
+            }
 
         }
     }
