@@ -62,6 +62,10 @@ public class Communicator {
             e.printStackTrace();
         }
 
+
+    /*
+    Method to trim de data on a receiving packet found on StackOverflow
+     */
         byte[] trimmed_mes = new byte[rpacket.getLength()];
         System.arraycopy(rpacket.getData(), rpacket.getOffset(), trimmed_mes, 0, rpacket.getLength());
 

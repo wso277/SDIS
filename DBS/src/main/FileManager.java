@@ -263,6 +263,10 @@ public class FileManager {
             e.printStackTrace();
         }
 
+
+    /*
+    Method to convert a byte array to hexadecimal form found on StackOverflow
+     */
         hashString = new StringBuffer();
         for (byte aHashFileName : hashFileName) {
             hashString.append(Integer.toString((aHashFileName & 0xff) + 0x100, 16).substring(1));
