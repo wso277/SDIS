@@ -1,0 +1,108 @@
+\documentclass[a4paper]{article}
+
+\usepackage[portuguese]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{indentfirst}
+\usepackage{graphicx}
+\usepackage{verbatim}  
+\usepackage{amsmath}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{underscore}
+
+\usepackage[T1]{fontenc}
+\usepackage{listingsutf8}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+
+\usepackage{inconsolata}
+\lstset{
+    language=C, 
+    basicstyle=\ttfamily\small,
+    numberstyle=\footnotesize,
+    numbers=left,
+    backgroundcolor=\color{gray!10},
+    frame=single,
+    tabsize=2,
+    rulecolor=\color{black!30},
+    escapeinside={\%*}{*)},
+    breaklines=true,
+    breakatwhitespace=true,
+    framextopmargin=2pt,
+    framexbottommargin=2pt,
+    extendedchars=false,
+    inputencoding=utf8
+}
+
+\begin{document}
+
+\setlength{\textwidth}{16cm}
+\setlength{\textheight}{22cm}
+
+\title{\Huge\textbf{Assignment \#2 - CrumbleUp}\linebreak\linebreak\linebreak
+\Large\textbf{}\linebreak\linebreak
+\includegraphics[height=6cm, width=7cm]{feup.pdf}\linebreak \linebreak
+\Large{Mestrado Integrado em Engenharia Informática e Computação} \linebreak \linebreak
+\Large{Sistemas Distribuídos}\linebreak
+}
+
+\author{ Fábio Filipe Jesus da Silva, ei11107@fe.up.pt \\  João Carlos Macedo Flores dos Santos, ei11126@fe.up.pt \\ João Manuel Mesquita Cardoso, ei11100@fe.up.pt \\
+Wilson da Silva Oliveira, ei11085@fe.up.pt \\\linebreak\linebreak \\
+ \\ Faculdade de Engenharia da Universidade do Porto \\ Rua Roberto Frias, s\/n, 4200-465 Porto, Portugal \linebreak\linebreak\linebreak
+\linebreak\linebreak\vspace{1cm}}
+\maketitle
+\thispagestyle{empty}
+
+%************************************************************************************************
+%************************************************************************************************
+
+\newpage
+
+\section{Purpose of the Application}
+The purpose of this application is to improve upon the previous implementation, making it suitable for a business environment.
+In order to achieve this objective several features will be implemented, strengthening the application security, failure tolerancy and using a more suitable communication protocol, making use of the TCP protocol in a local network.
+
+
+\section{Main Features}
+
+\begin{itemize}
+\item Security
+\begin{itemize}
+\item Peer autentication using encrypted passwords
+\item Guaranteed chunk confidentiality using encryption whith data from the sender computer
+\end{itemize}
+\item Fault tolerancy
+\begin{itemize}
+\item Use of a write-ahead logging, so the aplication is able to recover from crash and execute integrity checks
+\item Avoidance of corrupted data through cached backups of the active file
+\end{itemize}
+\item Communication
+\begin{itemize}
+\item Implementation of the TCP protocol in some cases where not all the peers need to receive the packet(s)
+\item Possibility to name the communication channels making use of a dns
+\end{itemize}
+\item In addition to this we will implement all the previous requested enhancements
+\begin{itemize}
+\item Backup: After waiting a random time, only saves the chunk in the hardrive if the current replication degree is lower than the desired degree
+\item Restore: Implementation of the TCP protocol to ensure that only the necessary client receives the data requested whithout fail, putting less strain on the network
+\item Delete: Implement a response message to the delete request. This message will allow the delete request to be send to a recently connected client until the replication degree of this chunk reaches zero.
+\item Space Reclaim: Similar to the delete protocol a list of chunks with low degree will be kept, and a request to backup a chunk will be sent to a newly connected client until the replication degree is satisfied.
+\end{itemize}
+\item Functionalities
+\begin{itemize}
+\item Backup a file in the network with a desired replication degree
+\item Restore of a file previously backed up
+\item Complete removal of a file previously stored in the network
+\item Manage of disk space used by the application to restore chunks
+\end{itemize}
+\end{itemize}
+
+\section{Target Platforms}
+
+\begin{itemize}
+\item Java standalone application for Windows/Linux/Mac
+\end{itemize}
+
+\section{Additional Services and Improvements}
+If time permits us, we will develop an Android application for this project, while also allowing interoperability between all the target platforms.
+
+\end{document}
