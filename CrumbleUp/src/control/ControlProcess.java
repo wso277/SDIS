@@ -112,6 +112,7 @@ class ControlProcess extends Thread {
     }
 
     private void storedProcess() {
+        //TODO fix this filter and the array list
         for (int j = 0; j < Main.getBackup().getSending().size(); j++) {
             if (Main.getBackup().getSending().get(j).getFileHash().equals(header.get(2))) {
                 Main.getBackup().getSending().get(j).incStoreds(1);
