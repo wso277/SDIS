@@ -48,7 +48,7 @@ public class FileManager {
         return false;
     }
 
-    public void delete() {
+    public void deleteFile() {
 
         int chunkNo = 0;
 

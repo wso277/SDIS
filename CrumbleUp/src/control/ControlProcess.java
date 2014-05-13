@@ -148,6 +148,6 @@ class ControlProcess extends Thread {
 
     private void deleteProcess() {
         FileManager del = new FileManager(header.get(1), 0, true);
-        del.delete();
+        del.deleteFile();
     }
 }
