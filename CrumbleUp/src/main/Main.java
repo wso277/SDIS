@@ -16,7 +16,6 @@ import java.util.concurrent.TimeUnit;
 public class Main implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    private static String CRLF = "\r\n";
     private static String version = "1.0";
     private static int diskSize = 100000000;
     private static int chunkSize = 64000;
@@ -34,15 +33,6 @@ public class Main implements Serializable {
 
         // Load database
         load();
-
-        /*FileManager split = new FileManager("/home/wso277/Desktop/image1.jpg", 0, false);
-        split.split();
-        FileManager split1 = new FileManager("/home/wso277/Desktop/image2.jpg", 0, false);
-        split1.split();
-        FileManager split2 = new FileManager("/home/wso277/Desktop/image3.jpg", 0, false);
-        split2.split();
-        C:/Users/Vinnie/Desktop/son.pdf
-        */
 
         // Initializing job queue
         service = Executors.newFixedThreadPool(12);
@@ -84,7 +74,6 @@ public class Main implements Serializable {
             e.printStackTrace();
         }
         save();
-        return;
     }
 
     public synchronized static void save() {
@@ -224,6 +213,7 @@ public class Main implements Serializable {
     }
 
     public static String getCRLF() {
+        String CRLF = "\r\n";
         return CRLF;
     }
 
