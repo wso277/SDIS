@@ -55,20 +55,11 @@ public class Backup extends Thread {
         return sending;
     }
 
-    public Boolean getRunning() {
-        return running;
-    }
-
-    public void setRunning(Boolean running) {
-        this.running = false;
-    }
-
     public void close() {
         mcbComm.close();
     }
 
-    public Communicator getMcbComm() {
-        return mcbComm;
+    public void setRunning(boolean running) {
+        this.running = running;
     }
-
 }

@@ -72,9 +72,6 @@ public class Cli {
 
     private void processFirstMenu() {
 
-        String ip;
-        String port;
-
         if (input.equals("1")) {
 
             Address mc = null;
@@ -114,8 +111,6 @@ public class Cli {
     }
 
     private void processInput() {
-
-        String result;
 
         switch (input) {
             case "1":

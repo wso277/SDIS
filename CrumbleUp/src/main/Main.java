@@ -66,16 +66,6 @@ public class Main implements Serializable {
 
     }
 
-    public static void shutdown() {
-        service.shutdown();
-        try {
-            service.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        save();
-    }
-
     public synchronized static void save() {
 
         ObjectOutputStream save = null;
@@ -158,7 +148,6 @@ public class Main implements Serializable {
     public static void loadNetwork() {
 
         ObjectInputStream load = null;
-        Boolean newdb = false;
 
         try {
             load = new ObjectInputStream(new FileInputStream("network.cu"));
@@ -169,22 +158,19 @@ public class Main implements Serializable {
             e.printStackTrace();
         }
 
-        if (!newdb) {
+        try {
+            assert load != null;
+            ipData.put("mc", (Address) load.readObject());
+            ipData.put("mcr", (Address) load.readObject());
+            ipData.put("mcb", (Address) load.readObject());
 
-            try {
-                assert load != null;
-                ipData.put("mc", (Address) load.readObject());
-                ipData.put("mcr", (Address) load.readObject());
-                ipData.put("mcb", (Address) load.readObject());
-
-                System.out.println("\nRead network configurations!");
-            } catch (ClassNotFoundException e) {
-                System.err.println("network.cu not found!");
-                e.printStackTrace();
-            } catch (IOException e) {
-                System.err.println("Error loading network configurations!");
-                e.printStackTrace();
-            }
+            System.out.println("\nRead network configurations!");
+        } catch (ClassNotFoundException e) {
+            System.err.println("network.cu not found!");
+            e.printStackTrace();
+        } catch (IOException e) {
+            System.err.println("Error loading network configurations!");
+            e.printStackTrace();
         }
     }
 
@@ -205,14 +191,6 @@ public class Main implements Serializable {
         return file.exists();
     }
 
-    public static boolean checkVersion(String ver) {
-        return version.equals(ver);
-    }
-
-    public static Address getipData(String channel) {
-        return ipData.get(channel);
-    }
-
     public static String getCRLF() {
         String CRLF = "\r\n";
         return CRLF;
@@ -220,10 +198,6 @@ public class Main implements Serializable {
 
     public static String getVersion() {
         return version;
-    }
-
-    public static void setVersion(String version) {
-        Main.version = version;
     }
 
     public static int getDiskSize() {
@@ -238,24 +212,8 @@ public class Main implements Serializable {
         return chunkSize;
     }
 
-    public static void setChunkSize(int chunkSize) {
-        Main.chunkSize = chunkSize;
-    }
-
-    public static HashMap<String, Address> getIpData() {
-        return ipData;
-    }
-
-    public static void setIpData(HashMap<String, Address> ipData) {
-        Main.ipData = ipData;
-    }
-
     public static Database getDatabase() {
         return database;
-    }
-
-    public static void setDatabase(Database database) {
-        Main.database = database;
     }
 
     public static ExecutorService getService() {
@@ -266,40 +224,12 @@ public class Main implements Serializable {
         return backup;
     }
 
-    public static void setBackup(Backup backup) {
-        Main.backup = backup;
-    }
-
     public static Restore getRestore() {
         return restore;
     }
 
-    public static void setRestore(Restore restore) {
-        Main.restore = restore;
-    }
-
     public static Control getControl() {
         return control;
-    }
-
-    public static void setControl(Control control) {
-        Main.control = control;
-    }
-
-    public static Cli getCli() {
-        return cli;
-    }
-
-    public static void setCli(Cli cli) {
-        Main.cli = cli;
-    }
-
-    public static long getSerialversionuid() {
-        return serialVersionUID;
-    }
-
-    public static void setService(ExecutorService service) {
-        Main.service = service;
     }
 
     public static RestoreSend getRestoring() {
