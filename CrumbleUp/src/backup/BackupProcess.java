@@ -93,7 +93,7 @@ class BackupProcess extends Thread {
         }
 
         String mssg = "STORED" + " " + Main.getVersion() + " " + header.get(2) + " " + header.get(3) + Main.getCRLF()
-                .toString() + Main.getCRLF().toString();
+                + Main.getCRLF();
 
         Random r = new Random();
         int time = r.nextInt(401);

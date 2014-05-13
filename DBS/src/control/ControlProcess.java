@@ -18,8 +18,8 @@ class ControlProcess extends Thread {
     private final byte[] message;
     private ArrayList<String> header;
 
-    public ControlProcess(byte[] newmessage) {
-        message = newmessage;
+    public ControlProcess(byte[] newMessage) {
+        message = newMessage;
     }
 
     public void run() {
