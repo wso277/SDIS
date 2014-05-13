@@ -1,18 +1,18 @@
 package restore;
 
-import communication.Communicator;
+import communication.UDPCommunicator;
 import main.Main;
 
 import java.io.UnsupportedEncodingException;
 
 public class Restore extends Thread {
 
-    private final Communicator mcrComm;
+    private final UDPCommunicator mcrComm;
     private Boolean running;
 
     public Restore(String newip, int newport) {
 
-        mcrComm = new Communicator(newip, newport);
+        mcrComm = new UDPCommunicator(newip, newport);
         running = true;
     }
 

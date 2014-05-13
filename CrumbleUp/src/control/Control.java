@@ -1,18 +1,18 @@
 package control;
 
-import communication.Communicator;
+import communication.UDPCommunicator;
 import main.Main;
 
 import java.io.UnsupportedEncodingException;
 
 public class Control extends Thread {
 
-    private final Communicator ctrlComm;
+    private final UDPCommunicator ctrlComm;
     private Boolean running;
 
     public Control(String newip, int newport) {
 
-        ctrlComm = new Communicator(newip, newport);
+        ctrlComm = new UDPCommunicator(newip, newport);
         running = true;
     }
 

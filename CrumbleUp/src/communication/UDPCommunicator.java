@@ -6,13 +6,13 @@ import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.net.UnknownHostException;
 
-public class Communicator {
+public class UDPCommunicator {
 
     private final Integer port;
     private MulticastSocket socket;
     private InetAddress address;
 
-    public Communicator(String newip, Integer newport) {
+    public UDPCommunicator(String newip, Integer newport) {
 
         port = newport;
 
