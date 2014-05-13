@@ -81,7 +81,7 @@ public class Main implements Serializable {
         ObjectOutputStream save = null;
 
         try {
-            save = new ObjectOutputStream(new FileOutputStream("database.dbs"));
+            save = new ObjectOutputStream(new FileOutputStream("database.cu"));
         } catch (FileNotFoundException e) {
             System.err.println("Database.dbs not found!");
             e.printStackTrace();
@@ -105,12 +105,12 @@ public class Main implements Serializable {
         Boolean newdb = false;
 
         try {
-            load = new ObjectInputStream(new FileInputStream("database.dbs"));
+            load = new ObjectInputStream(new FileInputStream("database.cu"));
         } catch (FileNotFoundException e) {
             database = new Database();
             newdb = true;
         } catch (IOException e) {
-            System.err.println("Error creating database.dbs");
+            System.err.println("Error creating database.cu");
             e.printStackTrace();
         }
 
@@ -135,12 +135,12 @@ public class Main implements Serializable {
         ObjectOutputStream save = null;
 
         try {
-            save = new ObjectOutputStream(new FileOutputStream("network.dbs"));
+            save = new ObjectOutputStream(new FileOutputStream("network.cu"));
         } catch (FileNotFoundException e) {
-            System.err.println("Network.dbs not found!");
+            System.err.println("Network.cu not found!");
             e.printStackTrace();
         } catch (IOException e) {
-            System.err.println("Error creating network.dbs");
+            System.err.println("Error creating network.cu");
             e.printStackTrace();
         }
 
@@ -161,11 +161,11 @@ public class Main implements Serializable {
         Boolean newdb = false;
 
         try {
-            load = new ObjectInputStream(new FileInputStream("network.dbs"));
+            load = new ObjectInputStream(new FileInputStream("network.cu"));
         } catch (FileNotFoundException e) {
-            System.err.println("Network.dbs not found!");
+            System.err.println("Network.cu not found!");
         } catch (IOException e) {
-            System.err.println("Error creating network.dbs");
+            System.err.println("Error creating network.cu");
             e.printStackTrace();
         }
 
@@ -178,7 +178,7 @@ public class Main implements Serializable {
                 ipData.put("mcb", (Address) load.readObject());
                 System.out.println("\nRead network configurations!");
             } catch (ClassNotFoundException e) {
-                System.err.println("network.dbs not found!");
+                System.err.println("network.cu not found!");
                 e.printStackTrace();
             } catch (IOException e) {
                 System.err.println("Error loading network configurations!");
