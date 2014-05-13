@@ -190,7 +190,7 @@ public class Main implements Serializable {
     /*
     Method to append two byte arrays found on StackOverflow
      */
-    public static byte[] appendArray( byte[] arr, byte[] arr1 ) {
+    public static byte[] appendArray(byte[] arr, byte[] arr1) {
         int aLen = arr.length;
         int bLen = arr1.length;
         byte[] C = new byte[aLen + bLen];

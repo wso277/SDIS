@@ -42,61 +42,51 @@ public class Cli {
         }
     }
 
+    private String readIp(String module) throws IOException {
+        System.out.print("Insert " + module + " IP: ");
+        String result;
+        boolean failed = false;
+        do {
+            if(failed) {
+                System.out.println("Invalid Multicast Address! Try again: ");
+            }
+            result = in.readLine();
+            failed = true;
+        } while (!result.matches("2(?:2[4-9]|3\\d)(?:\\.(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]\\d?|0)){3}"));
+        return result;
+    }
+
+    private int readPort(String module) throws IOException {
+        System.out.print("Insert " + module + " Port: ");
+        int result;
+        boolean failed = false;
+        do {
+            if(failed) {
+                System.out.println("Invalid Port! Try again: ");
+            }
+            result = Integer.parseInt(in.readLine());
+            failed = true;
+        } while (result < 1 || result > 65535);
+        return result;
+    }
+
     private void processFirstMenu() {
 
         String ip;
         String port;
 
         if (input.equals("1")) {
-            System.out.print("Insert Control IP: ");
-            System.out.flush();
-            ip = "";
-            port = "";
-            try {
-                ip = in.readLine();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            System.out.print("Insert Control port: ");
-            System.out.flush();
-            try {
-                port = in.readLine();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Address mc = new Address(ip, Integer.parseInt(port));
 
-            System.out.print("Insert Restore IP: ");
-            System.out.flush();
+            Address mc = null;
+            Address mcr = null;
+            Address mcb = null;
             try {
-                ip = in.readLine();
+                mc = new Address(readIp("Control"), readPort("Control"));
+                mcr = new Address(readIp("Restore"), readPort("Restore"));
+                mcb = new Address(readIp("Backup"), readPort("Backup"));
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            System.out.print("Insert Restore port: ");
-            System.out.flush();
-            try {
-                port = in.readLine();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Address mcr = new Address(ip, Integer.parseInt(port));
-
-            System.out.print("Insert Backup IP: ");
-            System.out.flush();
-            try {
-                ip = in.readLine();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            System.out.print("Insert Backup port: ");
-            System.out.flush();
-            try {
-                port = in.readLine();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Address mcb = new Address(ip, Integer.parseInt(port));
 
             Main.saveNetwork(mc, mcr, mcb);
 
