@@ -85,14 +85,12 @@ class BackupProcess extends Thread {
 
         if (!found) {
             Chunk chunk;
-            FileManager fm = new FileManager(header.get(2), Integer.parseInt(header.get(4)), true);
-            fm.writeToFile(Integer.parseInt(header.get(3)), body);
             chunk = new Chunk(header.get(2), Integer.parseInt(header.get(3)), Integer.parseInt(header.get(4)));
             Main.getDatabase().addChunk(chunk);
 
         }
 
-        String mssg = "STORED" + " " + Main.getVersion() + " " + header.get(2) + " " + header.get(3) + Main.getCRLF()
+        String msg = "STORED" + " " + Main.getVersion() + " " + header.get(2) + " " + header.get(3) + Main.getCRLF()
                 + Main.getCRLF();
 
         Random r = new Random();
@@ -103,6 +101,22 @@ class BackupProcess extends Thread {
             e.printStackTrace();
         }
 
-        Main.getControl().send(mssg.getBytes(StandardCharsets.ISO_8859_1));
+        //Finding the chunk in database to check the repDegree
+        for (Chunk chunk : Main.getDatabase().getChunks()) {
+            if (chunk.getFileId().equals(header.get(2))) {
+                if (chunk.getChunkNo() == Integer.parseInt(header.get(3))) {
+                    if (chunk.getKnownReps() >= chunk.getRepDegree()) {
+                        System.out.println("Already reached desired reps!");
+                        Main.getDatabase().removeChunk(header.get(2), Integer.parseInt(header.get(3)));
+                    } else {
+                        FileManager fm = new FileManager(header.get(2), Integer.parseInt(header.get(4)), true);
+                        fm.writeToFile(Integer.parseInt(header.get(3)), body);
+                        Main.getControl().send(msg.getBytes(StandardCharsets.ISO_8859_1));
+                    }
+                    break;
+                }
+            }
+        }
+
     }
 }
