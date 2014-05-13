@@ -1,6 +1,6 @@
 package backup;
 
-import communication.Communicator;
+import communication.UDPCommunicator;
 import main.Main;
 
 import java.io.UnsupportedEncodingException;
@@ -9,14 +9,14 @@ import java.util.ArrayList;
 
 public class Backup extends Thread {
 
-    private final Communicator mcbComm;
+    private final UDPCommunicator mcbComm;
     private final ArrayList<BackupSend> sending;
     private Boolean running;
 
     public Backup(String newip, int newport) throws SocketException {
 
         sending = new ArrayList<>();
-        mcbComm = new Communicator(newip, newport);
+        mcbComm = new UDPCommunicator(newip, newport);
         running = true;
     }
 
@@ -61,10 +61,6 @@ public class Backup extends Thread {
 
     public void close() {
         mcbComm.close();
-    }
-
-    public Communicator getMcbComm() {
-        return mcbComm;
     }
 
 }
