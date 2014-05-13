@@ -97,6 +97,7 @@ public class Cli {
 
     public void menu() {
         input = "";
+        clearConsole();
         while (!input.equals("exit") && !input.equals("Exit") && !input.equals("6")) {
 
             System.out.print("\nChoose a command:\n" + "1. Backup a File\n" + "2. Restore a File\n" + "3. Delete a " +
@@ -121,131 +122,154 @@ public class Cli {
             case "backup":
             case "Backup":
             case "BACKUP":
-                System.out.print("Type path to file: ");
-                String filePath = "";
-                try {
-                    filePath = in.readLine();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                if (Main.fileExists(filePath)) {
-                    System.out.println("File Exists! Enter replication degree: ");
-                    String repDegree = "";
-                    try {
-                        repDegree = in.readLine();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    if (Integer.parseInt(repDegree) >= 1) {
-                        BackupSend send = new BackupSend(filePath, Integer.parseInt(repDegree), true, -1);
-                        Main.getBackup().addSending(send);
-                        System.out.println("Iniatilizing backup! Message will be outputted when finished.");
-                        Main.getService().submit(send);
-                    }
-                } else {
-                    System.out.println("Invalid file path. Please try again with a valid file path");
-                }
+                processBackupInput();
                 break;
             case "2":
             case "restore":
             case "Restore":
             case "RESTORE":
-                Main.getDatabase().showBackedUpFiles();
-                System.out.print("Choose file to be backed up (number): ");
-                try {
-                    input = in.readLine();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                result = Main.getDatabase().getHash(Integer.parseInt(input));
-                if (!result.equals("fail")) {
-                    System.out.println("Sending RESTORE message!");
-                    Main.setRestoring(new RestoreSend(result));
-                    Main.getRestoring().process();
-                } else {
-                    System.out.println("Invalid file. Choose one of the availvable numbers!");
-                }
-
+                processRestoreInput();
                 break;
             case "3":
             case "delete":
             case "Delete":
             case "DELETE":
-                Main.getDatabase().showBackedUpFiles();
-                System.out.print("Choose file to be deleted (number): ");
-                try {
-                    input = in.readLine();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                result = Main.getDatabase().getHash(Integer.parseInt(input));
-                if (!result.equals("fail")) {
-                    System.out.println("Sending DELETE message!");
-                    new Delete(result).process();
-                } else {
-                    System.out.println("Invalid file. Choose one of the availvable numbers!");
-                }
-
+                processDeleteInput();
                 break;
             case "4":
             case "reclaim":
             case "Reclaim":
             case "RECLAIM":
-                System.out.println("Space currently occupied - " + Main.getDiskSize());
-                System.out.print("Choose space to release (1 byte to " + (Main.getDiskSize() - 64) + " bytes): ");
-                try {
-                    input = in.readLine();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                if (Integer.parseInt(input) > 0 && Integer.parseInt(input) <= (Main.getDiskSize() - 64)) {
-                    new SpaceReclaim(Integer.parseInt(input)).process();
-                } else {
-                    System.out.println("Invalid Size. Choose from the available range!");
-                }
+                processReclaimInput();
                 break;
             case "5":
             case "increase":
             case "Increase":
             case "INCREASE":
-                System.out.println("Space currently occupied - " + Main.getDiskSize());
-                System.out.print("Choose space to add (byte): ");
-                try {
-                    input = in.readLine();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                if (Integer.parseInt(input) > 0) {
-                    Main.setDiskSize(Main.getDiskSize() + Integer.parseInt(input));
-                } else {
-                    System.out.println("Invalid Size. Choose from the available range!");
-                }
+                processIncreaseInput();
                 break;
             case "6":
             case "exit":
             case "Exit":
             case "EXIT":
-                System.out.println("Exiting program!");
-                Main.getBackup().setRunning(false);
-                Main.getControl().setRunning(false);
-                Main.getRestore().setRunning(false);
-                Main.getBackup().close();
-                Main.getControl().close();
-                Main.getRestore().close();
+                processExitInput();
                 break;
             default:
                 System.out.println("Invalid Option!\n");
         }
     }
 
+    private void processExitInput() {
+        System.out.println("Exiting program!");
+        Main.getBackup().setRunning(false);
+        Main.getControl().setRunning(false);
+        Main.getRestore().setRunning(false);
+        Main.getBackup().close();
+        Main.getControl().close();
+        Main.getRestore().close();
+    }
+
+    private void processIncreaseInput() {
+        System.out.println("Space currently occupied - " + Main.getDiskSize());
+        System.out.print("Choose space to add (byte): ");
+        try {
+            input = in.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (Integer.parseInt(input) > 0) {
+            Main.setDiskSize(Main.getDiskSize() + Integer.parseInt(input));
+        } else {
+            System.out.println("Invalid Size. Choose from the available range!");
+        }
+    }
+
+    private void processReclaimInput() {
+        System.out.println("Space currently occupied - " + Main.getDiskSize());
+        System.out.print("Choose space to release (1 byte to " + (Main.getDiskSize() - 64) + " bytes): ");
+        try {
+            input = in.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (Integer.parseInt(input) > 0 && Integer.parseInt(input) <= (Main.getDiskSize() - 64)) {
+            new SpaceReclaim(Integer.parseInt(input)).process();
+        } else {
+            System.out.println("Invalid Size. Choose from the available range!");
+        }
+    }
+
+    private void processDeleteInput() {
+        String result;
+        Main.getDatabase().showBackedUpFiles();
+        System.out.print("Choose file to be deleted (number): ");
+        try {
+            input = in.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        result = Main.getDatabase().getHash(Integer.parseInt(input));
+        if (!result.equals("fail")) {
+            System.out.println("Sending DELETE message!");
+            new Delete(result).process();
+        } else {
+            System.out.println("Invalid file. Choose one of the availvable numbers!");
+        }
+    }
+
+    private void processRestoreInput() {
+        String result;
+        Main.getDatabase().showBackedUpFiles();
+        System.out.print("Choose file to be backed up (number): ");
+        try {
+            input = in.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        result = Main.getDatabase().getHash(Integer.parseInt(input));
+        if (!result.equals("fail")) {
+            System.out.println("Sending RESTORE message!");
+            Main.setRestoring(new RestoreSend(result));
+            Main.getRestoring().process();
+        } else {
+            System.out.println("Invalid file. Choose one of the availvable numbers!");
+        }
+    }
+
+    private void processBackupInput() {
+        System.out.print("Type path to file: ");
+        String filePath = "";
+        try {
+            filePath = in.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (Main.fileExists(filePath)) {
+            System.out.println("File Exists! Enter replication degree: ");
+            String repDegree = "";
+            try {
+                repDegree = in.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if (Integer.parseInt(repDegree) >= 1) {
+                BackupSend send = new BackupSend(filePath, Integer.parseInt(repDegree), true, -1);
+                Main.getBackup().addSending(send);
+                System.out.println("Iniatilizing backup! Message will be outputted when finished.");
+                Main.getService().submit(send);
+            }
+        } else {
+            System.out.println("Invalid file path. Please try again with a valid file path");
+        }
+    }
+
     private static void clearConsole() {
         try {
             String os = System.getProperty("os.name");
-
             if (os.contains("Windows")) {
                 Runtime.getRuntime().exec("cls");
             } else {

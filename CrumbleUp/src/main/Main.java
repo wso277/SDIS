@@ -86,7 +86,7 @@ public class Main implements Serializable {
             System.err.println("Database.dbs not found!");
             e.printStackTrace();
         } catch (IOException e) {
-            System.err.println("Error creating database.dbs");
+            System.err.println("Error creating database.cu");
             e.printStackTrace();
         }
 
@@ -176,6 +176,7 @@ public class Main implements Serializable {
                 ipData.put("mc", (Address) load.readObject());
                 ipData.put("mcr", (Address) load.readObject());
                 ipData.put("mcb", (Address) load.readObject());
+
                 System.out.println("\nRead network configurations!");
             } catch (ClassNotFoundException e) {
                 System.err.println("network.cu not found!");
