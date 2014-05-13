@@ -2,7 +2,6 @@ package backup;
 
 import main.FileManager;
 import main.Main;
-
 import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
@@ -42,7 +41,7 @@ public class BackupSend extends Thread {
 
                 while (fm.readChunk(chunkNo)) {
 
-                    String message = "";
+                    String message;
                     message = "PUTCHUNK " + Main.getVersion() + " " + fileHash + " " + chunkNo + " " + fm.getRep() +
                             Main.getCRLF() + Main.getCRLF();
 
@@ -132,47 +131,11 @@ public class BackupSend extends Thread {
         return fileHash;
     }
 
-    public FileManager getFm() {
-        return fm;
-    }
-
-    public Integer getTime() {
-        return time;
-    }
-
-    public void setTime(Integer time) {
-        this.time = time;
-    }
-
-    public Integer getStoreds() {
-        return storeds;
-    }
-
-    public void setStoreds(Integer storeds) {
-        this.storeds = storeds;
-    }
-
-    public Integer getTries() {
-        return tries;
-    }
-
-    public void setTries(Integer tries) {
-        this.tries = tries;
-    }
-
-    public Boolean getSent() {
-        return sent;
-    }
-
     public void setSent(Boolean sent) {
         this.sent = sent;
     }
 
     public Integer getChunkN() {
         return chunkN;
-    }
-
-    public void setChunkN(Integer chunkN) {
-        this.chunkN = chunkN;
     }
 }

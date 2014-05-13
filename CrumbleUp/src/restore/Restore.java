@@ -42,10 +42,6 @@ public class Restore extends Thread {
         mcrComm.send(message);
     }
 
-    public Boolean getRunning() {
-        return running;
-    }
-
     public void setRunning(Boolean running) {
         this.running = running;
     }

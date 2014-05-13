@@ -13,12 +13,8 @@ public class RestoreSend {
         fileId = id;
     }
 
-    public Integer getWaitingConfirmation() {
-        return waitingConfirmation;
-    }
-
-    public void setWaitingConfirmation(Integer newwaitingConfirmation) {
-        waitingConfirmation = newwaitingConfirmation;
+    public void setWaitingConfirmation(Integer newWaitingConfirmation) {
+        waitingConfirmation = newWaitingConfirmation;
     }
 
     public void process() {

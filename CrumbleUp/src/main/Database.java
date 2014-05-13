@@ -32,7 +32,7 @@ public class Database implements Serializable {
 
     public synchronized void removeChunk(String fileid, Integer chunkNo) {
         for (int i = 0; i < chunks.size(); i++) {
-            if (chunks.get(i).getFileId().equals(fileid) && chunks.get(i).getChunkNo() == chunkNo) {
+            if (chunks.get(i).getFileId().equals(fileid) && chunks.get(i).getChunkNo().equals(chunkNo)) {
                 chunks.remove(i);
                 break;
             }
@@ -65,7 +65,7 @@ public class Database implements Serializable {
 	}
 
 	public synchronized String getHash(Integer input) {
-		Integer i = 1;
+		int i = 1;
 		for (Entry<String, String> entry : fileList.entrySet()) {
 			if(i == input) {
 				return entry.getKey();

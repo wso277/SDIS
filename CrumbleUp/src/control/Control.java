@@ -41,10 +41,6 @@ public class Control extends Thread {
         ctrlComm.send(message);
     }
 
-    public Boolean getRunning() {
-        return running;
-    }
-
     public void setRunning(Boolean running) {
         this.running = running;
     }

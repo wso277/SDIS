@@ -7,7 +7,7 @@ import java.security.NoSuchAlgorithmException;
 public class FileManager {
 
     private File file;
-    private long fileSize;
+    public long fileSize;
     private InputStream in;
     private OutputStream out;
     private byte[] chunkData;
@@ -274,75 +274,15 @@ public class FileManager {
 
     }
 
-    public File getFile() {
-        return file;
-    }
-
-    public void setFile(File file) {
-        this.file = file;
-    }
-
-    public long getFileSize() {
-        return fileSize;
-    }
-
-    public void setFileSize(long fileSize) {
-        this.fileSize = fileSize;
-    }
-
-    public InputStream getIn() {
-        return in;
-    }
-
-    public void setIn(InputStream in) {
-        this.in = in;
-    }
-
-    public OutputStream getOut() {
-        return out;
-    }
-
-    public void setOut(OutputStream out) {
-        this.out = out;
-    }
-
     public byte[] getChunkData() {
         return chunkData;
-    }
-
-    public void setChunkData(byte[] chunkData) {
-        this.chunkData = chunkData;
-    }
-
-    public byte[] getHashFileName() {
-        return hashFileName;
-    }
-
-    public void setHashFileName(byte[] hashFileName) {
-        this.hashFileName = hashFileName;
-    }
-
-    public String getFileName() {
-        return fileName;
-    }
-
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
     }
 
     public Integer getRep() {
         return rep;
     }
 
-    public void setRep(Integer rep) {
-        this.rep = rep;
-    }
-
     public StringBuffer getHashString() {
         return hashString;
-    }
-
-    public void setHashString(StringBuffer hashString) {
-        this.hashString = hashString;
     }
 }

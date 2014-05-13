@@ -23,24 +23,12 @@ public class Chunk implements Serializable, Comparable<Chunk> {
         return fileId;
     }
 
-    public synchronized void setFileId(String newfileId) {
-        fileId = newfileId;
-    }
-
     public Integer getChunkNo() {
         return chunkNo;
     }
 
-    public synchronized void setChunkNo(Integer newchunkNo) {
-        chunkNo = newchunkNo;
-    }
-
     public Integer getRepDegree() {
         return repDegree;
-    }
-
-    public synchronized void setRepDegree(Integer newrepDegree) {
-        repDegree = newrepDegree;
     }
 
     public int getKnownReps() {
@@ -65,7 +53,6 @@ public class Chunk implements Serializable, Comparable<Chunk> {
 
     @Override
     public int compareTo(Chunk o) {
-
         return getCurrentReps();
     }
 }
