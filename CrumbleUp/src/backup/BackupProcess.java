@@ -38,7 +38,7 @@ class BackupProcess extends Thread {
         }
 
         String[] tmp1 = tmp.split("\\s+");
-
+        System.out.println(tmp);
         for (String aTmp1 : tmp1) {
             header.add(aTmp1.trim());
         }
@@ -82,41 +82,43 @@ class BackupProcess extends Thread {
                 }
             }
         }
-
+        String msg = "STORED" + " " + Main.getVersion() + " " + header.get(2) + " " + header.get(3) + Main.getCRLF()
+                + Main.getCRLF();
         if (!found) {
             Chunk chunk;
             chunk = new Chunk(header.get(2), Integer.parseInt(header.get(3)), Integer.parseInt(header.get(4)));
             Main.getDatabase().addChunk(chunk);
 
-        }
 
-        String msg = "STORED" + " " + Main.getVersion() + " " + header.get(2) + " " + header.get(3) + Main.getCRLF()
-                + Main.getCRLF();
+            Random r = new Random();
+            int time = r.nextInt(401);
+            try {
+                sleep(time);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
-        Random r = new Random();
-        int time = r.nextInt(401);
-        try {
-            sleep(time);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        //Finding the chunk in database to check the repDegree
-        for (Chunk chunk : Main.getDatabase().getChunks()) {
-            if (chunk.getFileId().equals(header.get(2))) {
-                if (chunk.getChunkNo() == Integer.parseInt(header.get(3))) {
-                    if (chunk.getKnownReps() >= chunk.getRepDegree()) {
-                        System.out.println("Already reached desired reps!");
-                        Main.getDatabase().removeChunk(header.get(2), Integer.parseInt(header.get(3)));
-                    } else {
-                        FileManager fm = new FileManager(header.get(2), Integer.parseInt(header.get(4)), true);
-                        fm.writeToFile(Integer.parseInt(header.get(3)), body);
-                        Main.getControl().send(msg.getBytes(StandardCharsets.ISO_8859_1));
+            //Finding the chunk in database to check the repDegree
+            for (Chunk chunkTmp : Main.getDatabase().getChunks()) {
+                if (chunkTmp.getFileId().equals(header.get(2))) {
+                    if (chunkTmp.getChunkNo() == Integer.parseInt(header.get(3))) {
+                        if (chunkTmp.getKnownReps() >= chunkTmp.getRepDegree()) {
+                            System.out.println("Already reached desired reps!");
+                            Main.getDatabase().removeChunk(header.get(2), Integer.parseInt(header.get(3)));
+                        } else {
+                            FileManager fm = new FileManager(header.get(2), Integer.parseInt(header.get(4)), true);
+                            fm.writeToFile(Integer.parseInt(header.get(3)), body);
+                            Main.getControl().send(msg.getBytes(StandardCharsets.ISO_8859_1));
+                        }
+                        break;
                     }
-                    break;
                 }
             }
+
+        } else {
+
         }
+
 
     }
 }
