@@ -47,7 +47,7 @@ public class Cli {
         String result;
         boolean failed = false;
         do {
-            if(failed) {
+            if (failed) {
                 System.out.println("Invalid Multicast Address! Try again: ");
             }
             result = in.readLine();
@@ -61,7 +61,7 @@ public class Cli {
         int result;
         boolean failed = false;
         do {
-            if(failed) {
+            if (failed) {
                 System.out.println("Invalid Port! Try again: ");
             }
             result = Integer.parseInt(in.readLine());
