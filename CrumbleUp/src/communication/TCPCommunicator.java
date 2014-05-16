@@ -1,7 +1,11 @@
 package communication;
 
-import java.io.*;
-import java.net.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 /**
  * Created by wso277 on 5/13/14.
@@ -46,6 +50,7 @@ public class TCPCommunicator {
             in = new DataInputStream(socket.getInputStream());
 
             int msgSize = in.readInt();
+            System.out.println("RECEIVE SIZE = " + msgSize);
             msg = new byte[msgSize];
             in.readFully(msg);
 
@@ -80,5 +85,32 @@ public class TCPCommunicator {
             e.printStackTrace();
         }
     }
+
+  /*  public static void main(String args[])
+    {
+        TCPCommunicator communicator;
+        Scanner s = new Scanner(System.in);
+        System.out.println("Server? ");
+        int server = s.nextInt();
+        if(server == 1)
+        {
+            communicator = new TCPCommunicator("localhost", 1234, true);
+            System.out.println("UNLOCKED");
+            byte []answer = communicator.receive();
+            System.out.println(new String(answer,StandardCharsets.UTF_8));
+            String sendBack = "Received";
+            communicator.send(sendBack.getBytes(StandardCharsets.UTF_8));
+        }
+
+        else
+        {
+            communicator = new TCPCommunicator("localhost", 1234, false);
+            System.out.println("UNLOCKED");
+            String msg = "Test";
+            communicator.send(msg.getBytes(StandardCharsets.UTF_8));
+            byte[]answer = communicator.receive();
+            System.out.println(new String(answer,StandardCharsets.UTF_8));
+        }
+    }*/
 
 }
