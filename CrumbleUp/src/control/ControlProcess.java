@@ -1,6 +1,7 @@
 package control;
 
 import backup.BackupSend;
+import communication.TCPCommunicator;
 import main.Chunk;
 import main.FileManager;
 import main.Main;
@@ -9,6 +10,9 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.InetAddress;
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Random;
@@ -84,32 +88,33 @@ class ControlProcess extends Thread {
 
             //TODO change to tcp New message: ME fileId chunkNo ip port
             //TODO create tcp communicator
-            String message = "CHUNK " + Main.getVersion() + " " + header.get(2) + " " + header.get(3) +
-                    Main.getCRLF() + Main.getCRLF();
-
-            byte[] mssg = message.getBytes(StandardCharsets.ISO_8859_1);
-            byte[] mssg1 = Main.appendArray(mssg, chunk.getChunkData());
-
-            Random r = new Random();
-            int time = r.nextInt(401);
+            String ip = "";
             try {
-                sleep(time);
-            } catch (InterruptedException e) {
+                ip = InetAddress.getLocalHost().toString().split("/")[1];
+            } catch (UnknownHostException e) {
                 e.printStackTrace();
             }
 
+            String message = "ME " + header.get(2) + " " + header.get(3) + ip + Main.getTCPport() + Main.getCRLF() +
+                    Main.getCRLF();
+            System.out.println(message);
 
-            if (!ch.getSent()) {
-                Main.getRestore().send(mssg1);
-            }
+            byte[] msg = message.getBytes(StandardCharsets.ISO_8859_1);
+            Main.getRestore().send(msg);
 
             try {
-                sleep(200);
-            } catch (InterruptedException e) {
+                TCPCommunicator tcpSocket = new TCPCommunicator(ip, Main.getTCPport(), true);
+                String chunkMsg = "CHUNK " + header.get(2) + " " + header.get(3) +
+                        Main.getCRLF() + Main.getCRLF();
+
+                byte[] chunkBytes = Main.appendArray(chunkMsg.getBytes(StandardCharsets.ISO_8859_1), chunk.getChunkData());
+                tcpSocket.send(chunkBytes);
+
+            } catch (SocketTimeoutException e) {
+                System.out.println("I was not the chosen one!");
+            } catch (IOException e) {
                 e.printStackTrace();
             }
-
-            ch.setSent(false);
         }
     }
 

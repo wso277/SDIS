@@ -27,7 +27,7 @@ public class Main implements Serializable {
     private static HashMap<String, Address> ipData;
     private static ExecutorService service;
     private static RestoreSend restoring;
-
+    private static int TCPport = 7777;
 
     public static void main(String[] args) throws IOException {
 
@@ -238,5 +238,9 @@ public class Main implements Serializable {
 
     public static void setRestoring(RestoreSend restoring) {
         Main.restoring = restoring;
+    }
+
+    public static int getTCPport() {
+        return TCPport;
     }
 }

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 
 /**
  * Created by wso277 on 5/13/14.
@@ -18,19 +19,15 @@ public class TCPCommunicator {
     private InetAddress address;
     private Boolean isServer;
 
-    public TCPCommunicator(String newIp, Integer newPort, Boolean isServer) {
+    public TCPCommunicator(String newIp, Integer newPort, Boolean isServer) throws SocketTimeoutException, IOException {
 
         this.isServer = isServer;
         port = newPort;
 
         if (isServer) {
-
-            try {
-                server = new ServerSocket(port);
-                socket = server.accept();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            server = new ServerSocket(port);
+            server.setSoTimeout(5000);
+            socket = server.accept();
         } else {
 
             try {
