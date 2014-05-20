@@ -104,7 +104,11 @@ public class FileManager {
         int chunkNo = 0;
 
         while (readChunk(chunkNo)) {
-            writeToFile(-1, chunkData, false);
+            if (chunkNo == 0) {
+                writeToFile(-1, chunkData, false);
+            } else {
+                writeToFile(-1, chunkData, true);
+            }
             deleteChunk(chunkNo);
             chunkNo++;
         }
@@ -222,7 +226,7 @@ public class FileManager {
         }
 
         try {
-            if (chunkNo != 1 || isChunk) {
+            if (isChunk) {
                 out = new BufferedOutputStream(new FileOutputStream(newFile, true));
             } else {
                 out = new BufferedOutputStream(new FileOutputStream(newFile, false));
