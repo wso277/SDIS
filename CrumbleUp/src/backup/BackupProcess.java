@@ -104,7 +104,7 @@ class BackupProcess extends Thread {
                             Main.getDatabase().removeChunk(header.get(2), Integer.parseInt(header.get(3)));
                         } else {
                             FileManager fm = new FileManager(header.get(2), Integer.parseInt(header.get(4)), true);
-                            fm.writeToFile(Integer.parseInt(header.get(3)), body);
+                            fm.writeToFile(Integer.parseInt(header.get(3)), body, true);
                             Main.getControl().send(msg.getBytes(StandardCharsets.ISO_8859_1));
                         }
                         break;

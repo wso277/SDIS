@@ -85,8 +85,6 @@ class ControlProcess extends Thread {
             FileManager chunk = new FileManager(header.get(2), 0, true);
             chunk.readChunk(Integer.parseInt(header.get(3)));
 
-            //TODO change to tcp New message: ME fileId chunkNo ip port
-            //TODO create tcp communicator
             String ip = "";
             try {
                 ip = InetAddress.getLocalHost().toString().split("/")[1];

@@ -100,7 +100,7 @@ class RestoreProcess extends Thread {
                 }
 
                 FileManager fm = new FileManager(chunkMsg.get(1), repDegree, true);
-                fm.writeToFile(Integer.parseInt(chunkMsg.get(2)), body);
+                fm.writeToFile(Integer.parseInt(chunkMsg.get(2)), body, true);
                 chunk = new Chunk(chunkMsg.get(1), Integer.parseInt(chunkMsg.get(2)), repDegree);
                 Main.getDatabase().addChunk(chunk);
                 Main.getRestoring().setWaitingConfirmation(body.length);

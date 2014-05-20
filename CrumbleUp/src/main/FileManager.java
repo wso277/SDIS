@@ -35,7 +35,6 @@ public class FileManager {
     }
 
     public boolean deleteChunk(Integer chunkNo) {
-        //TODO WRITE FIRST CHUNK WITH W
         File chunk = new File(hashString.toString() + "/" + chunkNo + ".part");
         if (chunk.exists()) {
             if (!chunk.delete()) {
@@ -105,7 +104,7 @@ public class FileManager {
         int chunkNo = 0;
 
         while (readChunk(chunkNo)) {
-            writeToFile(-1, chunkData);
+            writeToFile(-1, chunkData, false);
             deleteChunk(chunkNo);
             chunkNo++;
         }
@@ -152,7 +151,7 @@ public class FileManager {
                     totalBytesRead += bytesRead;
                     Chunk chunk = new Chunk(hashString.toString(), chunkNo, rep);
 
-                    writeToFile(chunkNo, chunkData);
+                    writeToFile(chunkNo, chunkData, true);
 
                     Main.getDatabase().addChunk(chunk);
 
@@ -194,7 +193,7 @@ public class FileManager {
         return true;
     }
 
-    public void writeToFile(int chunkNo, byte[] data) {
+    public void writeToFile(int chunkNo, byte[] data, boolean isChunk) {
         File dir = new File(hashString.toString());
 
         if (!dir.exists()) {
@@ -223,7 +222,11 @@ public class FileManager {
         }
 
         try {
-            out = new BufferedOutputStream(new FileOutputStream(newFile, true));
+            if (chunkNo != 1 || isChunk) {
+                out = new BufferedOutputStream(new FileOutputStream(newFile, true));
+            } else {
+                out = new BufferedOutputStream(new FileOutputStream(newFile, false));
+            }
         } catch (FileNotFoundException e) {
             System.err.println("Error creating output stream");
             e.printStackTrace();
