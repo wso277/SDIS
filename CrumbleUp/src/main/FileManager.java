@@ -35,7 +35,7 @@ public class FileManager {
     }
 
     public boolean deleteChunk(Integer chunkNo) {
-
+        //TODO WRITE FIRST CHUNK WITH W
         File chunk = new File(hashString.toString() + "/" + chunkNo + ".part");
         if (chunk.exists()) {
             if (!chunk.delete()) {

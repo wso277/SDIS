@@ -61,8 +61,7 @@ class BackupProcess extends Thread {
     private void putProcess() {
 
         for (int i = 0; i < Main.getBackup().getSending().size(); i++) {
-            if (Main.getBackup().getSending().get(i).getFileHash().equals(header.get(2)) && Main.getBackup()
-                    .getSending().get(i).getChunkN() == Integer.parseInt(header.get(3))) {
+            if (Main.getBackup().getSending().get(i).getFileHash().equals(header.get(2)) && Main.getBackup().getSending().get(i).getChunkN() == Integer.parseInt(header.get(3))) {
                 Main.getBackup().getSending().get(i).setSent(true);
                 break;
             }
@@ -82,13 +81,11 @@ class BackupProcess extends Thread {
                 }
             }
         }
-        String msg = "STORED" + " " + Main.getVersion() + " " + header.get(2) + " " + header.get(3) + Main.getCRLF()
-                + Main.getCRLF();
+        String msg = "STORED" + " " + Main.getVersion() + " " + header.get(2) + " " + header.get(3) + Main.getCRLF() + Main.getCRLF();
         if (!found) {
             Chunk chunk;
             chunk = new Chunk(header.get(2), Integer.parseInt(header.get(3)), Integer.parseInt(header.get(4)));
             Main.getDatabase().addChunk(chunk);
-
 
             Random r = new Random();
             int time = r.nextInt(401);
@@ -116,9 +113,8 @@ class BackupProcess extends Thread {
             }
 
         } else {
-
+            //TODO ADD STORED IF THE CHUNK IS IN DISK
         }
-
 
     }
 }

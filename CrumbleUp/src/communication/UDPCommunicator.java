@@ -53,14 +53,13 @@ public class UDPCommunicator {
             return null;
         }
 
-
-    /*    try {
+        try {
             if (rpacket.getAddress().toString().equals("/" + InetAddress.getLocalHost().getHostAddress())) {
                 return null;
             }
         } catch (UnknownHostException e) {
             e.printStackTrace();
-        }*/
+        }
 
 
     /*

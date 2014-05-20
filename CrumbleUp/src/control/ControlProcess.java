@@ -15,7 +15,6 @@ import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Random;
 
 class ControlProcess extends Thread {
 
@@ -95,7 +94,7 @@ class ControlProcess extends Thread {
                 e.printStackTrace();
             }
 
-            String message = "ME " + header.get(2) + " " + header.get(3) + ip + Main.getTCPport() + Main.getCRLF() +
+            String message = "ME " + header.get(2) + " " + header.get(3) + " " + ip + " " + Main.getTCPport() + Main.getCRLF() +
                     Main.getCRLF();
             System.out.println(message);
 
@@ -109,6 +108,8 @@ class ControlProcess extends Thread {
 
                 byte[] chunkBytes = Main.appendArray(chunkMsg.getBytes(StandardCharsets.ISO_8859_1), chunk.getChunkData());
                 tcpSocket.send(chunkBytes);
+
+                tcpSocket.close();
 
             } catch (SocketTimeoutException e) {
                 System.out.println("I was not the chosen one!");
