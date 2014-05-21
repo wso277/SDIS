@@ -27,8 +27,11 @@ public class Main implements Serializable {
     private static HashMap<String, Address> ipData;
     private static ExecutorService service;
     private static RestoreSend restoring;
-    private static int TCPport = 7777;
+    private static int MIN_PORT = 6000;
+    private static int MAX_PORT = 7000;
+    private static int TCPport = 6000;
 
+    //TODO implement function to increment tcpPort and return port
     public static void main(String[] args) throws IOException {
 
         // Load database
