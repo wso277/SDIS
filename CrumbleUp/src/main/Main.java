@@ -31,7 +31,6 @@ public class Main implements Serializable {
     private static int MAX_PORT = 7000;
     private static int TCPport = 6000;
 
-    //TODO implement function to increment tcpPort and return port
     public static void main(String[] args) throws IOException {
 
         // Load database
@@ -244,6 +243,13 @@ public class Main implements Serializable {
     }
 
     public static int getTCPport() {
-        return TCPport;
+
+        if (TCPport == MAX_PORT) {
+            TCPport = MIN_PORT;
+            return TCPport;
+        } else {
+            TCPport++;
+            return TCPport;
+        }
     }
 }

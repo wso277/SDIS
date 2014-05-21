@@ -92,7 +92,8 @@ class ControlProcess extends Thread {
                 e.printStackTrace();
             }
 
-            String message = "ME " + header.get(2) + " " + header.get(3) + " " + ip + " " + Main.getTCPport() + Main.getCRLF() +
+            int tcp_port = Main.getTCPport();
+            String message = "ME " + header.get(2) + " " + header.get(3) + " " + ip + " " + tcp_port + Main.getCRLF() +
                     Main.getCRLF();
             System.out.println(message);
 
@@ -100,7 +101,7 @@ class ControlProcess extends Thread {
             Main.getRestore().send(msg);
 
             try {
-                TCPCommunicator tcpSocket = new TCPCommunicator(ip, Main.getTCPport(), true);
+                TCPCommunicator tcpSocket = new TCPCommunicator(ip, tcp_port, true);
                 String chunkMsg = "CHUNK " + header.get(2) + " " + header.get(3) +
                         Main.getCRLF() + Main.getCRLF();
 
