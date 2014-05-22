@@ -3,8 +3,6 @@ package delete;
 import main.Main;
 
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -23,6 +21,7 @@ public class DeleteProcess extends Thread{
             if((Integer)pairs.getValue() > 0){
                 msg = "DELETE " + (String)pairs.getKey() + Main.getCRLF() + Main.getCRLF();
                 Main.getControl().send(msg.getBytes(StandardCharsets.ISO_8859_1));
+                it.remove();
             }
         }
     }
