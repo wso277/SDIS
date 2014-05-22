@@ -20,7 +20,7 @@ public class Delete {
 
         Collections.sort(Main.getDatabase().getChunks());
 
-        for (int i = 0; i < Main.getDatabase().getChunks().size(); i++) {
+        for (int i = Main.getDatabase().getChunks().size() - 1; i >= 0; i--) {
             Chunk c = Main.getDatabase().getChunk(i);
             if (c.getFileId() == fileId) {
                 if (c.getKnownReps() > max_rep) {
