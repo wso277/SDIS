@@ -159,6 +159,7 @@ public class Cli {
         Main.getBackup().setRunning(false);
         Main.getControl().setRunning(false);
         Main.getRestore().setRunning(false);
+        Main.getDelete().setRunning(false);
         Main.getBackup().close();
         Main.getControl().close();
         Main.getRestore().close();

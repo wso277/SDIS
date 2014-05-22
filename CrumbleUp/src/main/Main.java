@@ -256,4 +256,8 @@ public class Main implements Serializable {
             return TCPport;
         }
     }
+
+    public static DeleteProcess getDelete() {
+        return delete;
+    }
 }
