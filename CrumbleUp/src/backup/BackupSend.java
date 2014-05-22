@@ -2,6 +2,7 @@ package backup;
 
 import main.FileManager;
 import main.Main;
+
 import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
@@ -50,7 +51,6 @@ public class BackupSend extends Thread {
 
                     while (storeds < fm.getRep() && tries < 5) {
 
-                        storeds = 0;
                         Main.getBackup().send(mssg1);
 
                         try {

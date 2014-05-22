@@ -4,7 +4,10 @@ import main.Chunk;
 import main.FileManager;
 import main.Main;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Random;
@@ -109,22 +112,6 @@ class BackupProcess extends Thread {
                 }
             }
 
-        } else {
-
-            File chunk = new File(header.get(2) + "/" + header.get(3) + ".part");
-
-            if (chunk.exists()) {
-                Random r = new Random();
-                int time = r.nextInt(401);
-                try {
-                    sleep(time);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                Main.getControl().send(msg.getBytes(StandardCharsets.ISO_8859_1));
-                System.out.println("SENT STORED");
-            }
         }
 
     }
