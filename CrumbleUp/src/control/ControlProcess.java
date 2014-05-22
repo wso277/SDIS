@@ -63,11 +63,21 @@ class ControlProcess extends Thread {
                 storedProcess();
                 Main.save();
             }
-
+        } else if (header.get(0).equals("DELETED")) {
+            updateDeletes();
+            Main.save();
         } else {
             System.err.println("Operation Invalid!");
         }
 
+    }
+
+    private void updateDeletes() {
+        Integer reps = Main.getDatabase().getDeletedFiles().get(header.get(1));
+
+        if (reps != null) {
+            Main.getDatabase().changeRepDegree(header.get(1), reps - 1);
+        }
     }
 
     private void getChunkProcess() {
@@ -155,6 +165,12 @@ class ControlProcess extends Thread {
 
     private void deleteProcess() {
         FileManager del = new FileManager(header.get(1), 0, true);
-        del.deleteFile();
+        boolean result = del.deleteFile();
+
+        if (result) {
+            String msg = "DELETED " + header.get(1) + Main.getCRLF() + Main.getCRLF();
+            Main.getControl().send(msg.getBytes(StandardCharsets.ISO_8859_1));
+
+        }
     }
 }

@@ -47,7 +47,7 @@ public class FileManager {
         return false;
     }
 
-    public void deleteFile() {
+    public boolean deleteFile() {
 
         int chunkNo = 0;
 
@@ -63,9 +63,15 @@ public class FileManager {
 
         File folder = new File(hashString.toString());
 
-        folder.delete();
+        boolean result = folder.delete();
 
-        Main.getDatabase().removeFile(hashString.toString());
+        if (result) {
+            Main.getDatabase().removeFile(hashString.toString());
+            return result;
+        } else {
+            return false;
+        }
+
     }
 
     public boolean readChunk(Integer chunkNo) {
