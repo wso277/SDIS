@@ -11,10 +11,21 @@ public class Database implements Serializable {
 	private final ArrayList<Chunk> chunks;
 	private final HashMap<String, String> fileList;
 
+    private final HashMap<String,Integer> deletedFiles;
+
 	public Database() {
 		chunks = new ArrayList<>();
 		fileList = new HashMap<>();
+        deletedFiles = new HashMap<>();
 	}
+
+    public synchronized HashMap<String, Integer> getDeletedFiles() {
+        return deletedFiles;
+    }
+
+    public synchronized void changeRepDegree(String fileId, Integer repDegree) {
+        deletedFiles.put(fileId,repDegree);
+    }
 
 	public synchronized void addFile(String fileid, String filename) {
 
