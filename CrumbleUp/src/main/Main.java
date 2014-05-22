@@ -4,6 +4,7 @@ import backup.Backup;
 import cli.Cli;
 import communication.Address;
 import control.Control;
+import delete.DeleteProcess;
 import restore.Restore;
 import restore.RestoreSend;
 
@@ -22,6 +23,7 @@ public class Main implements Serializable {
     private static Backup backup;
     private static Restore restore;
     private static Control control;
+    private static DeleteProcess delete;
     private static Cli cli;
     private static Database database;
     private static HashMap<String, Address> ipData;
@@ -47,11 +49,13 @@ public class Main implements Serializable {
         backup = new Backup(ipData.get("mcb").getIp(), ipData.get("mcb").getPort());
         control = new Control(ipData.get("mc").getIp(), ipData.get("mc").getPort());
         restore = new Restore(ipData.get("mcr").getIp(), ipData.get("mcr").getPort());
+        delete = new DeleteProcess();
 
         // Pushing main components to job queue
         service.submit(backup);
         service.submit(control);
         service.submit(restore);
+        service.submit(delete);
         cli.menu();
 
         // When cli ends
