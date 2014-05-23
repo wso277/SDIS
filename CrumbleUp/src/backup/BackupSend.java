@@ -67,12 +67,13 @@ public class BackupSend extends Thread {
                     int reps = 0;
                     for (int i = 0; i < Main.getDatabase().getChunks().size(); i++) {
                         Chunk c = Main.getDatabase().getChunk(i);
-                        if (c.getFileId() == fileHash && c.getChunkNo() == chunkNo) {
+                        if (c.getFileId().equals(fileHash) && c.getChunkNo().equals(chunkNo)) {
                             reps = c.getKnownReps();
                         }
                     }
 
                     Main.getDatabase().addFileRep(fileHash, reps);
+                    //TODO CONICES DA FILHA DA PUTA DA PUTA DO PRINT CARALHO
                     if (reps < fm.getRep()) {
                         System.err.println("Chunk number " + chunkNo + " replicated only " + reps + " " +
                                 "times!");

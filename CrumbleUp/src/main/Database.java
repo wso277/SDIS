@@ -21,7 +21,7 @@ public class Database implements Serializable {
     }
 
     public synchronized void addFileRep(String fileId, Integer rep) {
-        if (rep > fileReps.get(fileId)) {
+        if (fileReps.get(fileId) == null || rep > fileReps.get(fileId)) {
             fileReps.put(fileId, rep);
         }
     }
