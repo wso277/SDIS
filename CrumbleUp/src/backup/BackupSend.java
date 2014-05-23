@@ -17,7 +17,7 @@ public class BackupSend extends Thread {
     private Boolean sent = false;
 
     public BackupSend(String filePath, Integer repDegree, Boolean file, Integer newChunkNo) {
-        if(file) {
+        if (file) {
             fm = new FileManager(filePath, repDegree, false);
         } else {
             fm = new FileManager(filePath, repDegree, true);
@@ -61,6 +61,13 @@ public class BackupSend extends Thread {
 
                         tries++;
                         time += time;
+                    }
+
+                    int reps = Main.getDatabase().getChunk(chunkNo).getKnownReps();
+                    Main.getDatabase().addFileRep(fileHash, reps);
+                    if (reps < fm.getRep()) {
+                        System.err.println("Chunk number " + chunkNo + " replicated only " + reps + " " +
+                                "times!");
                     }
 
                     fm.deleteChunk(chunkNo);
@@ -118,7 +125,7 @@ public class BackupSend extends Thread {
             }
         }
 
-        if(storeds < fm.getRep()){
+        if (storeds < fm.getRep()) {
             System.out.println("Backup timed out for chunk no " + chunkNo + ". Achieved reps: " + fm.getRep());
         }
     }
