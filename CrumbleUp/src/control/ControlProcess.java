@@ -141,6 +141,7 @@ class ControlProcess extends Thread {
             Chunk chunk = Main.getDatabase().getChunk(i);
             if (chunk.getFileId().equals(header.get(2)) && (chunk.getChunkNo() == Integer.parseInt(header.get(3)))) {
                 chunk.setKnownReps(1);
+                System.out.println(chunk.getKnownReps());
                 break;
             }
         }
