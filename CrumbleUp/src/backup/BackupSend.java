@@ -1,5 +1,6 @@
 package backup;
 
+import main.Chunk;
 import main.FileManager;
 import main.Main;
 
@@ -63,7 +64,14 @@ public class BackupSend extends Thread {
                         time += time;
                     }
 
-                    int reps = Main.getDatabase().getChunk(chunkNo).getKnownReps();
+                    int reps = 0;
+                    for (int i = 0; i < Main.getDatabase().getChunks().size(); i++) {
+                        Chunk c = Main.getDatabase().getChunk(i);
+                        if (c.getFileId() == fileHash && c.getChunkNo() == chunkNo) {
+                            reps = c.getKnownReps();
+                        }
+                    }
+
                     Main.getDatabase().addFileRep(fileHash, reps);
                     if (reps < fm.getRep()) {
                         System.err.println("Chunk number " + chunkNo + " replicated only " + reps + " " +
