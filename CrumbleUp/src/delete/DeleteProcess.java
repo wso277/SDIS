@@ -16,17 +16,17 @@ public class DeleteProcess extends Thread {
     public DeleteProcess() {
         msg = null;
         running = true;
-        System.out.println("Nasci.");
+        //System.out.println("Nasci.");
     }
 
     public void run() {
 
         while (running) {
             Iterator it = Main.getDatabase().getDeletedFiles().entrySet().iterator();
-            System.out.println("Hai :D");
+            //System.out.println("Hai :D");
             while (it.hasNext()) {
                 Map.Entry pairs = (Map.Entry) it.next();
-                System.out.println("Correr 1 :D");
+                //System.out.println("Correr 1 :D");
                 System.out.println((Integer) pairs.getValue());
                 if ((Integer) pairs.getValue() > 0) {
                     System.out.println("Correr 2");
@@ -38,7 +38,7 @@ public class DeleteProcess extends Thread {
             }
 
             try {
-                System.out.println("Hellooooooooo");
+                //System.out.println("Hellooooooooo");
                 sleep(1000 * 30); //TODO change to half an hour
             } catch (InterruptedException e) {
                 e.printStackTrace();

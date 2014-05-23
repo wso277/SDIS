@@ -60,6 +60,7 @@ class ControlProcess extends Thread {
             }
         } else if (header.get(0).equals("STORED")) {
             if (Main.getVersion().equals(header.get(1))) {
+                System.out.println(header);
                 storedProcess();
                 Main.save();
             }
