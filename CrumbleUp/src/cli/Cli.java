@@ -3,6 +3,7 @@ package cli;
 import backup.BackupSend;
 import communication.Address;
 import delete.Delete;
+import main.Database;
 import main.Main;
 import restore.RestoreSend;
 import space_reclaim.SpaceReclaim;
@@ -166,7 +167,7 @@ public class Cli {
     }
 
     private void processIncreaseInput() {
-        System.out.println("Space currently occupied - " + Main.getDiskSize());
+        System.out.println("Space currently occupied - " + Database.getDiskSize());
         System.out.print("Choose space to add (byte): ");
         try {
             input = in.readLine();
@@ -174,21 +175,21 @@ public class Cli {
             e.printStackTrace();
         }
         if (Integer.parseInt(input) > 0) {
-            Main.setDiskSize(Main.getDiskSize() + Integer.parseInt(input));
+            Database.setDiskSize(Database.getDiskSize() + Integer.parseInt(input));
         } else {
             System.out.println("Invalid Size. Choose from the available range!");
         }
     }
 
     private void processReclaimInput() {
-        System.out.println("Space currently occupied - " + Main.getDiskSize());
-        System.out.print("Choose space to release (1 byte to " + (Main.getDiskSize() - 64) + " bytes): ");
+        System.out.println("Space currently occupied - " + Database.getDiskSize());
+        System.out.print("Choose space to release (1 byte to " + (Database.getDiskSize() - 64) + " bytes): ");
         try {
             input = in.readLine();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if (Integer.parseInt(input) > 0 && Integer.parseInt(input) <= (Main.getDiskSize() - 64)) {
+        if (Integer.parseInt(input) > 0 && Integer.parseInt(input) <= (Database.getDiskSize() - 64)) {
             new SpaceReclaim(Integer.parseInt(input)).process();
         } else {
             System.out.println("Invalid Size. Choose from the available range!");

@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 public class Database implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    static int diskSize = 100000000;
     private final ArrayList<Chunk> chunks;
     private final HashMap<String, String> fileList;
     private final HashMap<String, Integer> fileReps;
@@ -18,6 +19,14 @@ public class Database implements Serializable {
         fileList = new HashMap<>();
         deletedFiles = new HashMap<>();
         fileReps = new HashMap<>();
+    }
+
+    public static int getDiskSize() {
+        return diskSize;
+    }
+
+    public static void setDiskSize(int diskSize) {
+        Database.diskSize = diskSize;
     }
 
     public synchronized void addFileRep(String fileId, Integer rep) {
@@ -75,7 +84,7 @@ public class Database implements Serializable {
     }
 
     public synchronized float getFreeSpace() {
-        return Main.getDiskSize() - chunks.size() * Main.getChunkSize();
+        return getDiskSize() - chunks.size() * Main.getChunkSize();
     }
 
     public synchronized void showBackedUpFiles() {

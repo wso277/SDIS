@@ -1,6 +1,7 @@
 package space_reclaim;
 
 import main.Chunk;
+import main.Database;
 import main.FileManager;
 import main.Main;
 
@@ -26,8 +27,7 @@ public class SpaceReclaim {
         if (delete) {
             int numberOfChunks = Main.getDatabase().getChunksSize();
 
-            Integer chunksToDelete = (int) Math.ceil((spaceToReclaim - Main.getDatabase().getFreeSpace()) / Main
-                    .getChunkSize());
+            Integer chunksToDelete = (int) Math.ceil((spaceToReclaim - Main.getDatabase().getFreeSpace()) / Main.getChunkSize());
 
             chunks = new Chunk[chunksToDelete];
 
@@ -49,7 +49,7 @@ public class SpaceReclaim {
             }
         }
 
-        Main.setDiskSize(Main.getDiskSize() - spaceToReclaim);
+        Database.setDiskSize(Database.getDiskSize() - spaceToReclaim);
 
         System.out.println("Space Reclaimed!");
     }

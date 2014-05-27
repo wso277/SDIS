@@ -18,7 +18,6 @@ public class Main implements Serializable {
     /*asdfghjkl*/
     private static final long serialVersionUID = 1L;
     private static String version = "1.0";
-    private static int diskSize = 100000000;
     private static int chunkSize = 64000;
     private static Backup backup;
     private static Restore restore;
@@ -206,14 +205,6 @@ public class Main implements Serializable {
 
     public static String getVersion() {
         return version;
-    }
-
-    public static int getDiskSize() {
-        return diskSize;
-    }
-
-    public static void setDiskSize(int diskSize) {
-        Main.diskSize = diskSize;
     }
 
     public static int getChunkSize() {
