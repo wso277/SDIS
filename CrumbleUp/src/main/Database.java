@@ -1,5 +1,7 @@
 package main;
 
+import space_reclaim.FileChunks;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,12 +15,14 @@ public class Database implements Serializable {
     private final HashMap<String, String> fileList;
     private final HashMap<String, Integer> fileReps;
     private final HashMap<String, Integer> deletedFiles;
+    private final ArrayList<FileChunks> filesToBeReclaimed;
 
     public Database() {
         chunks = new ArrayList<>();
         fileList = new HashMap<>();
         deletedFiles = new HashMap<>();
         fileReps = new HashMap<>();
+        filesToBeReclaimed = new ArrayList<>();
     }
 
     public static int getDiskSize() {
