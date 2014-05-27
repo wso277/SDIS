@@ -35,6 +35,8 @@ public class Main implements Serializable {
 
     public static void main(String[] args) throws IOException {
 
+        //C:\Users\Vinnie\Downloads\database.sql C:\Users\Vinnie\Dropbox\tremelo.pdf
+
         // Load database
         load();
 

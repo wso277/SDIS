@@ -21,6 +21,8 @@ public class Delete {
 
         Main.getControl().send(message.getBytes(StandardCharsets.ISO_8859_1));
         System.out.println("Delete message sent!");
+        Main.getDatabase().removeFile(fileId);
+        System.out.println("File deleted!");
     }
 
 }
