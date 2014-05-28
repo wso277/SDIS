@@ -43,6 +43,14 @@ public class Database implements Serializable {
         return fileReps.get(fileId);
     }
 
+    public ArrayList<FileChunks> getFilesToBeReclaimed() {
+        return filesToBeReclaimed;
+    }
+
+    public void addFileToBeReclaimed(FileChunks f) {
+        filesToBeReclaimed.add(f);
+    }
+
     public synchronized HashMap<String, Integer> getDeletedFiles() {
         return deletedFiles;
     }

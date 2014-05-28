@@ -7,10 +7,12 @@ import java.util.HashMap;
  */
 public class FileChunks {
     private String fileId;
+    private int repDegree;
     private HashMap<Integer,Integer> chunksRep;
 
-    public FileChunks(String f) {
+    public FileChunks(String f, int rep) {
         fileId = f;
+        repDegree = rep;
         chunksRep = new HashMap<>();
     }
 
@@ -28,5 +30,13 @@ public class FileChunks {
 
     public void addChunkRep(Integer chunkNo, Integer repDegree) {
         chunksRep.put(chunkNo,repDegree);
+    }
+
+    public int getRepDegree() {
+        return repDegree;
+    }
+
+    public void setRepDegree(int rep) {
+        repDegree = rep;
     }
 }
