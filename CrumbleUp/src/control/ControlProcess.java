@@ -5,6 +5,8 @@ import communication.TCPCommunicator;
 import main.Chunk;
 import main.FileManager;
 import main.Main;
+import space_reclaim.FileChunks;
+import space_reclaim.ReclaimProcess;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -79,6 +81,8 @@ class ControlProcess extends Thread {
         if (reps != null) {
             Main.getDatabase().changeRepDegree(header.get(1), reps - 1);
         }
+
+        Main.getService().submit(new ReclaimProcess());
     }
 
     private void getChunkProcess() {
@@ -167,6 +171,14 @@ class ControlProcess extends Thread {
     private void deleteProcess() {
         FileManager del = new FileManager(header.get(1), 0, true);
         boolean result = del.deleteFile();
+
+        for (FileChunks file : Main.getDatabase().getFilesToBeReclaimed()) {
+            if (file.getFileId().equals(header.get(1))) {
+                Main.getDatabase().getFilesToBeReclaimed().remove(file);
+                break;
+            }
+        }
+
 
         if (result) {
             String msg = "DELETED " + header.get(1) + Main.getCRLF() + Main.getCRLF();

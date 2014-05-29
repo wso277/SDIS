@@ -7,7 +7,6 @@ import control.Control;
 import delete.DeleteProcess;
 import restore.Restore;
 import restore.RestoreSend;
-import space_reclaim.ReclaimProcess;
 
 import java.io.*;
 import java.util.HashMap;
@@ -24,7 +23,6 @@ public class Main implements Serializable {
     private static Restore restore;
     private static Control control;
     private static DeleteProcess delete;
-    private static ReclaimProcess reclaim;
     private static Cli cli;
     private static Database database;
     private static HashMap<String, Address> ipData;
@@ -42,7 +40,7 @@ public class Main implements Serializable {
         load();
 
         // Initializing job queue
-        service = Executors.newFixedThreadPool(12);
+        service = Executors.newFixedThreadPool(15);
 
         // Store address info
         ipData = new HashMap<>();
@@ -53,14 +51,12 @@ public class Main implements Serializable {
         control = new Control(ipData.get("mc").getIp(), ipData.get("mc").getPort());
         restore = new Restore(ipData.get("mcr").getIp(), ipData.get("mcr").getPort());
         delete = new DeleteProcess();
-        reclaim = new ReclaimProcess();
 
         // Pushing main components to job queue
         service.submit(backup);
         service.submit(control);
         service.submit(restore);
         service.submit(delete);
-        service.submit(reclaim);
         cli.menu();
 
         // When cli ends
@@ -258,7 +254,4 @@ public class Main implements Serializable {
         return delete;
     }
 
-    public static ReclaimProcess getReclaim() {
-        return reclaim;
-    }
 }
