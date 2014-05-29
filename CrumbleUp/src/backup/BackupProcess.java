@@ -73,14 +73,21 @@ class BackupProcess extends Thread {
         }
         Boolean found = false;
 
-        for (Chunk chunk : Main.getDatabase().getChunks()) {
-            if (chunk.getFileId().equals(header.get(2))) {
-                if (chunk.getChunkNo() == Integer.parseInt(header.get(3))) {
-                    found = true;
-                    break;
+        if (Main.getDatabase().getFileRep(header.get(2)) != null) {
+            found = true;
+        }
+
+        if (!found) {
+            for (Chunk chunk : Main.getDatabase().getChunks()) {
+                if (chunk.getFileId().equals(header.get(2))) {
+                    if (chunk.getChunkNo() == Integer.parseInt(header.get(3))) {
+                        found = true;
+                        break;
+                    }
                 }
             }
         }
+
         String msg = "STORED" + " " + Main.getVersion() + " " + header.get(2) + " " + header.get(3) + Main.getCRLF() + Main.getCRLF();
         if (!found) {
             Chunk chunk;

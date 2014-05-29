@@ -13,6 +13,7 @@ public class Database implements Serializable {
     static int diskSize = 100000000;
     private final ArrayList<Chunk> chunks;
     private final HashMap<String, String> fileList;
+    //fileReps saves the fileid of the owner backed up files in the network with rep count
     private final HashMap<String, Integer> fileReps;
     private final HashMap<String, Integer> deletedFiles;
     private final ArrayList<FileChunks> filesToBeReclaimed;
