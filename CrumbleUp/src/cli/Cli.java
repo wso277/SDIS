@@ -254,7 +254,7 @@ public class Cli {
             }
 
             if (Integer.parseInt(repDegree) >= 1) {
-                BackupSend send = new BackupSend(filePath, Integer.parseInt(repDegree), true, -1);
+                BackupSend send = new BackupSend(filePath, Integer.parseInt(repDegree), true, -1, -1);
                 Main.getBackup().addSending(send);
                 System.out.println("Iniatilizing backup! Message will be outputted when finished.");
                 Main.getService().submit(send);

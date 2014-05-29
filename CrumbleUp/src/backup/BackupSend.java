@@ -3,6 +3,7 @@ package backup;
 import main.Chunk;
 import main.FileManager;
 import main.Main;
+import space_reclaim.FileChunks;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Random;
@@ -14,10 +15,12 @@ public class BackupSend extends Thread {
     private Integer storeds;
     private Integer tries;
     private Integer chunkN;
+    private int knownReps;
+    private int repDegree;
     private Boolean isFile;
     private Boolean sent = false;
 
-    public BackupSend(String filePath, Integer repDegree, Boolean file, Integer newChunkNo) {
+    public BackupSend(String filePath, Integer repDegree, Boolean file, Integer newChunkNo, int knownReps) {
         if (file) {
             fm = new FileManager(filePath, repDegree, false);
         } else {
@@ -30,6 +33,8 @@ public class BackupSend extends Thread {
         tries = 0;
         isFile = file;
         chunkN = newChunkNo;
+        this.knownReps = knownReps;
+        this.repDegree = repDegree;
     }
 
     public void run() {
@@ -120,7 +125,6 @@ public class BackupSend extends Thread {
 
             while (storeds < fm.getRep() && tries < 5) {
 
-                storeds = 0;
                 Main.getBackup().send(mssg1);
 
                 try {
@@ -131,6 +135,20 @@ public class BackupSend extends Thread {
 
                 tries++;
                 time += time;
+            }
+
+            boolean found = false;
+            for (FileChunks file : Main.getDatabase().getFilesToBeReclaimed()) {
+                if (file.getFileId().equals(fileHash)) {
+                    file.addChunkRep(chunkNo, knownReps + storeds);
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) {
+                FileChunks file = new FileChunks(fileHash, repDegree);
+                Main.getDatabase().addFileToBeReclaimed(file);
             }
         }
 

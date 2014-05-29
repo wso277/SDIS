@@ -153,7 +153,7 @@ class ControlProcess extends Thread {
             if (chunk.getFileId().equals(header.get(2)) && (chunk.getChunkNo() == Integer.parseInt(header.get(3)))) {
                 chunk.setKnownReps(-1);
                 if (chunk.getKnownReps() < chunk.getRepDegree()) {
-                    BackupSend send = new BackupSend(chunk.getFileId(), chunk.getRepDegree(), false, chunk.getChunkNo());
+                    BackupSend send = new BackupSend(chunk.getFileId(), chunk.getRepDegree(), false, chunk.getChunkNo(), chunk.getKnownReps());
                     Main.getBackup().addSending(send);
                     Main.getService().submit(send);
                 }
