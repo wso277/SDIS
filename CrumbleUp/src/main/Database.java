@@ -56,7 +56,12 @@ public class Database implements Serializable {
     }
 
     public synchronized void changeRepDegree(String fileId, Integer repDegree) {
-        deletedFiles.put(fileId, repDegree);
+        if (repDegree.equals(0)) {
+            deletedFiles.remove(fileId);
+        } else {
+            deletedFiles.put(fileId, repDegree);
+        }
+
     }
 
     public synchronized void addFile(String fileId, String filename) {
