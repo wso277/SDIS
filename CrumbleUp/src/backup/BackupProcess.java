@@ -51,7 +51,7 @@ class BackupProcess extends Thread {
         if (header.get(0).equals("PUTCHUNK")) {
             if (Main.getVersion().equals(header.get(1))) {
                 putProcess();
-                Main.save();
+                Main.save(Main.getDatabase().getUsername());
             }
         } else {
             System.out.println("Invalid Message");

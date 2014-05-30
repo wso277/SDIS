@@ -33,7 +33,7 @@ public class DeleteProcess extends Thread {
             }
 
             try {
-                sleep(1000 * 60 * 30); //TODO change to half an hour
+                sleep(1000 * 60 * 30);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

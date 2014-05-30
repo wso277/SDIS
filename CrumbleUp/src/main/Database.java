@@ -3,6 +3,9 @@ package main;
 import space_reclaim.FileChunks;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -10,7 +13,11 @@ import java.util.Map.Entry;
 public class Database implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    static int diskSize = 100000000;
+    private String username;
+    private String password;
+    private byte[] passwordByte;
+    private StringBuffer passwordStr;
+    private static int diskSize = 100000000;
     private final ArrayList<Chunk> chunks;
     private final HashMap<String, String> fileList;
     //fileReps saves the fileid of the owner backed up files in the network with rep count
@@ -18,12 +25,15 @@ public class Database implements Serializable {
     private final HashMap<String, Integer> deletedFiles;
     private final ArrayList<FileChunks> filesToBeReclaimed;
 
-    public Database() {
+    public Database(String username, String password) {
         chunks = new ArrayList<>();
         fileList = new HashMap<>();
         deletedFiles = new HashMap<>();
         fileReps = new HashMap<>();
         filesToBeReclaimed = new ArrayList<>();
+        this.username = username;
+        this.password = password;
+        encodePassword(password);
     }
 
     public static int getDiskSize() {
@@ -134,5 +144,52 @@ public class Database implements Serializable {
 
     public synchronized ArrayList<Chunk> getChunks() {
         return chunks;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public StringBuffer getPassword() {
+        return passwordStr;
+    }
+
+    public boolean login(String password) {
+        if (this.password.equals(password)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private void encodePassword(String password) {
+
+        MessageDigest digest = null;
+        try {
+            digest = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            assert digest != null;
+            passwordByte = digest.digest(password.getBytes("UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+
+    /*
+    Method to convert a byte array to hexadecimal form found on StackOverflow
+     */
+        passwordStr = new StringBuffer();
+        for (byte aHashFileName : passwordByte) {
+            passwordStr.append(Integer.toString((aHashFileName & 0xff) + 0x100, 16).substring(1));
+        }
+
     }
 }

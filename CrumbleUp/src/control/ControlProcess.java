@@ -53,22 +53,22 @@ class ControlProcess extends Thread {
             }
         } else if (header.get(0).equals("DELETE")) {
             deleteProcess();
-            Main.save();
+            Main.save(Main.getDatabase().getUsername());
 
         } else if (header.get(0).equals("REMOVED")) {
             if (Main.getVersion().equals(header.get(1))) {
                 removedProcess();
-                Main.save();
+                Main.save(Main.getDatabase().getUsername());
             }
         } else if (header.get(0).equals("STORED")) {
             if (Main.getVersion().equals(header.get(1))) {
                 System.out.println(header);
                 storedProcess();
-                Main.save();
+                Main.save(Main.getDatabase().getUsername());
             }
         } else if (header.get(0).equals("DELETED")) {
             updateDeletes();
-            Main.save();
+            Main.save(Main.getDatabase().getUsername());
         } else {
             System.err.println("Operation Invalid!");
         }

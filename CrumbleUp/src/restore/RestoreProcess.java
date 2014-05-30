@@ -42,7 +42,7 @@ class RestoreProcess extends Thread {
 
         if (header.get(0).equals("ME")) {
             restoreChunkProcess();
-            Main.save();
+            Main.save(Main.getDatabase().getUsername());
         }
     }
 

@@ -30,12 +30,12 @@ public class FileManager {
     }
 
     public int getChunkSize(int chunkNo) {
-        file = new File(hashString.toString() + "/" + chunkNo + ".part");
+        file = new File(Main.getDatabase().getUsername() + "/" + hashString.toString() + "/" + chunkNo + ".part");
         return (int) file.length();
     }
 
     public boolean deleteChunk(Integer chunkNo) {
-        File chunk = new File(hashString.toString() + "/" + chunkNo + ".part");
+        File chunk = new File(Main.getDatabase().getUsername() + "/" + hashString.toString() + "/" + chunkNo + ".part");
         if (chunk.exists()) {
             if (!chunk.delete()) {
                 System.out.println("FAILED TO DELETE FILE!");
@@ -76,7 +76,7 @@ public class FileManager {
 
     public boolean readChunk(Integer chunkNo) {
 
-        File chunk = new File(hashString.toString() + "/" + chunkNo + ".part");
+        File chunk = new File(Main.getDatabase().getUsername() + "/" + hashString.toString() + "/" + chunkNo + ".part");
 
         if (chunk.exists()) {
 
@@ -204,7 +204,7 @@ public class FileManager {
     }
 
     public void writeToFile(int chunkNo, byte[] data, boolean isChunk) {
-        File dir = new File(hashString.toString());
+        File dir = new File(Main.getDatabase().getUsername() + "/" + hashString.toString());
 
         if (!dir.exists()) {
             Boolean result = dir.mkdir();
@@ -217,7 +217,7 @@ public class FileManager {
         File newFile;
 
         if (chunkNo >= 0) {
-            newFile = new File(hashString.toString() + "/" + chunkNo + ".part");
+            newFile = new File(Main.getDatabase().getUsername() + "/" + hashString.toString() + "/" + chunkNo + ".part");
         } else {
             newFile = new File(Main.getDatabase().getFile(hashString.toString()));
         }

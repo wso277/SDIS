@@ -36,9 +36,6 @@ public class Main implements Serializable {
 
         //C:\Users\Vinnie\Downloads\database.sql C:\Users\Vinnie\Dropbox\tremelo.pdf
 
-        // Load database
-        load();
-
         // Initializing job queue
         service = Executors.newFixedThreadPool(15);
 
@@ -69,18 +66,18 @@ public class Main implements Serializable {
         }
 
         // save database
-        save();
+        save(database.getUsername());
 
     }
 
-    public synchronized static void save() {
+    public synchronized static void save(String username) {
 
         ObjectOutputStream save = null;
 
         try {
-            save = new ObjectOutputStream(new FileOutputStream("database.cu"));
+            save = new ObjectOutputStream(new FileOutputStream(username + "/database.cu"));
         } catch (FileNotFoundException e) {
-            System.err.println("Database.dbs not found!");
+            System.err.println("database.cu not found!");
             e.printStackTrace();
         } catch (IOException e) {
             System.err.println("Error creating database.cu");
@@ -96,35 +93,32 @@ public class Main implements Serializable {
         }
     }
 
-    private static void load() {
+    public static boolean load(String username) {
 
         ObjectInputStream load = null;
-        Boolean newdb = false;
 
         try {
-            load = new ObjectInputStream(new FileInputStream("database.cu"));
+            load = new ObjectInputStream(new FileInputStream(username + "/database.cu"));
         } catch (FileNotFoundException e) {
-            database = new Database();
-            newdb = true;
+            return false;
         } catch (IOException e) {
             System.err.println("Error creating database.cu");
             e.printStackTrace();
         }
 
-        if (!newdb) {
-
-            try {
-                assert load != null;
-                database = (Database) load.readObject();
-                System.out.println("Read database!");
-            } catch (ClassNotFoundException e) {
-                System.err.println("Database not found!");
-                e.printStackTrace();
-            } catch (IOException e) {
-                System.err.println("Error loading database!");
-                e.printStackTrace();
-            }
+        try {
+            assert load != null;
+            database = (Database) load.readObject();
+            System.out.println("Read database!");
+        } catch (ClassNotFoundException e) {
+            System.err.println("Database not found!");
+            return false;
+        } catch (IOException e) {
+            System.err.println("Error loading database!");
+            return false;
         }
+
+        return true;
     }
 
     public static void saveNetwork(Address mc, Address mcr, Address mcb) {
