@@ -9,6 +9,7 @@ import restore.RestoreSend;
 import space_reclaim.SpaceReclaim;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
@@ -21,16 +22,15 @@ public class Cli {
 
     public Cli() {
 
-
         in = new BufferedReader(new InputStreamReader(System.in));
 
         username = "";
 
         password = "";
 
-        chooseNetworkConfigType();
+        cliLogin();
 
-        processFirstMenu();
+        chooseNetworkConfigType();
     }
 
     private void chooseNetworkConfigType() {
@@ -48,6 +48,8 @@ public class Cli {
             }
             clearConsole();
         }
+
+        processFirstMenu();
     }
 
     private String readIp(String module) throws IOException {
@@ -103,17 +105,6 @@ public class Cli {
     public void menu() {
         input = "";
         clearConsole();
-        do{
-            System.out.print("\nChoose a command:\n" + "1. Create Account\n" + "2. Log in\n" + "3. Exit\n\n" + "Option: ");
-            System.out.flush();
-            try {
-                input = in.readLine();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } while(input != "1" && input != "2" && input != "3");
-
-        processIntroMenu();
 
         while (!input.equals("exit") && !input.equals("Exit") && !input.equals("6")) {
 
@@ -130,8 +121,22 @@ public class Cli {
         }
     }
 
+    private void cliLogin() {
+        do {
+            System.out.print("\nChoose a command:\n" + "1. Create Account\n" + "2. Log in\n" + "3. Exit\n\n" + "Option: ");
+            System.out.flush();
+            try {
+                input = in.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } while (!input.equals("1") && !input.equals("2") && !input.equals("3"));
+
+        processIntroMenu();
+    }
+
     private void processIntroMenu() {
-        switch(input) {
+        switch (input) {
             case "1":
                 processRegister();
                 break;
@@ -139,7 +144,7 @@ public class Cli {
                 processLogin();
                 break;
             case "3":
-                processExitInput();
+                System.exit(0);
                 break;
             default:
                 System.out.println("Invalid Option!\n");
@@ -162,12 +167,18 @@ public class Cli {
             e.printStackTrace();
         }
 
-        Main.getDatabase() = new Database(username,password);
+        Main.setDatabase(new Database(username, password));
+        File dir = new File(username);
+
+        if (!dir.exists()) {
+            dir.mkdir();
+        }
+        Main.save(username);
     }
 
     private void processLogin() {
         Boolean res = false;
-        while(!res) {
+        while (!res) {
             System.out.println("Enter your desired username: ");
             try {
                 username = in.readLine();
@@ -184,12 +195,18 @@ public class Cli {
 
             res = Main.load(username);
             if (res) {
-                Main.getDatabase().login(password);
-                break;
+                if (Main.getDatabase().login(password)) {
+                    break;
+                } else {
+                    res = false;
+                    System.err.println("Wrong Password!");
+                }
             } else {
-                System.out.println("Wrong Login!");
+                System.out.println("Wrong Username!");
             }
         }
+
+        Main.save(username);
     }
 
     private void processInput() {
