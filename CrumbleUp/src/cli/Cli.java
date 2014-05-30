@@ -16,10 +16,17 @@ public class Cli {
 
     private final BufferedReader in;
     private String input;
+    private static String username;
+    private static String password;
 
     public Cli() {
 
+
         in = new BufferedReader(new InputStreamReader(System.in));
+
+        username = "";
+
+        password = "";
 
         chooseNetworkConfigType();
 
@@ -96,6 +103,18 @@ public class Cli {
     public void menu() {
         input = "";
         clearConsole();
+        do{
+            System.out.print("\nChoose a command:\n" + "1. Create Account\n" + "2. Log in\n" + "3. Exit\n\n" + "Option: ");
+            System.out.flush();
+            try {
+                input = in.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } while(input != "1" && input != "2" && input != "3");
+
+        processIntroMenu();
+
         while (!input.equals("exit") && !input.equals("Exit") && !input.equals("6")) {
 
             System.out.print("\nChoose a command:\n" + "1. Backup a File\n" + "2. Restore a File\n" + "3. Delete a " +
@@ -108,6 +127,68 @@ public class Cli {
             }
             clearConsole();
             processInput();
+        }
+    }
+
+    private void processIntroMenu() {
+        switch(input) {
+            case "1":
+                processRegister();
+                break;
+            case "2":
+                processLogin();
+                break;
+            case "3":
+                processExitInput();
+                break;
+            default:
+                System.out.println("Invalid Option!\n");
+        }
+    }
+
+    public static void processRegister() {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        System.out.println("Enter your desired username: ");
+        try {
+            username = reader.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Enter your desired password: ");
+        try {
+            password = reader.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Main.getDatabase() = new Database(username,password);
+    }
+
+    private void processLogin() {
+        Boolean res = false;
+        while(!res) {
+            System.out.println("Enter your desired username: ");
+            try {
+                username = in.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            System.out.println("Enter your desired password: ");
+            try {
+                password = in.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            res = Main.load(username);
+            if (res) {
+                Main.getDatabase().login(password);
+                break;
+            } else {
+                System.out.println("Wrong Login!");
+            }
         }
     }
 
