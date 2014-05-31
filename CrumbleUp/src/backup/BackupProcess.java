@@ -38,7 +38,6 @@ class BackupProcess extends Thread {
         }
 
         String[] tmp1 = tmp.split("\\s+");
-        System.out.println(tmp);
         for (String aTmp1 : tmp1) {
             header.add(aTmp1.trim());
         }

@@ -97,7 +97,7 @@ public class BackupSend extends Thread {
                 System.out.println("Not enough space for backup!");
             }
 
-            System.out.println("Finished backup of fileid " + fileHash);
+            System.out.println("\nFinished backup of fileid " + fileHash);
         } else {
             backupChunk(chunkN);
         }
