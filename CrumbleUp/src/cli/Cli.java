@@ -2,6 +2,7 @@ package cli;
 
 import backup.BackupSend;
 import communication.Address;
+import communication.Network;
 import delete.Delete;
 import main.Database;
 import main.Main;
@@ -12,6 +13,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class Cli {
 
@@ -30,10 +35,79 @@ public class Cli {
 
         cliLogin();
 
-        chooseNetworkConfigType();
+        Main.loadNetwork();
+
+        introNetwork();
     }
 
-    private void chooseNetworkConfigType() {
+    private void introNetwork() {
+        input = "";
+        while (!input.equals("1") && !input.equals("2")) {
+
+            System.out.print("Choose a command:\n" + "1. Create new network configuration\n" + "2. Load existing " +
+                    "network configuration\n\n" + "Option: ");
+            System.out.flush();
+
+            try {
+                input = in.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            clearConsole();
+        }
+        processIntroNetwork();
+    }
+
+    private void processIntroNetwork() {
+        switch(input) {
+            case "1":
+                createNetworkConfiguration();
+                break;
+            case "2":
+                loadNetworkConfiguration();
+                break;
+            default:
+                System.out.println("Invalid Input!");
+                break;
+        }
+    }
+
+    private void createNetworkConfiguration() {
+        System.out.println("Enter the configuration name: ");
+        try {
+            input = in.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        processFirstMenu(input);
+    }
+
+    private void loadNetworkConfiguration() {
+        HashMap<String, Network> confs = Main.getConfigurations();
+        int i = 0, size = confs.size(), op = -1;
+        ArrayList<String> tmp = new ArrayList<>();
+        while (op < 1 || op > size) {
+            System.out.println("Available configurations: ");
+            Iterator it = confs.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry pairs = (Map.Entry) it.next();
+                System.out.println(i + 1 + " - " + pairs.getKey());
+                i++;
+                tmp.add((String) pairs.getKey());
+            }
+
+            try {
+                input = in.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            op = Integer.parseInt(input);
+        }
+        Main.chooseNetwork(tmp.get(op-1));
+    }
+
+    /*private void chooseNetworkConfigType() {
         input = "";
         while (!input.equals("1") && !input.equals("2")) {
 
@@ -50,7 +124,7 @@ public class Cli {
         }
 
         processFirstMenu();
-    }
+    }*/
 
     private String readIp(String module) throws IOException {
         System.out.print("Insert " + module + " IP: ");
@@ -80,10 +154,7 @@ public class Cli {
         return result;
     }
 
-    private void processFirstMenu() {
-
-        if (input.equals("1")) {
-
+    private void processFirstMenu(String configurationName) {
             Address mc = null;
             Address mcr = null;
             Address mcb = null;
@@ -95,11 +166,10 @@ public class Cli {
                 e.printStackTrace();
             }
 
-            Main.saveNetwork(mc, mcr, mcb);
-
-        }
+        Main.saveNetwork(configurationName,mc, mcr, mcb);
 
         Main.loadNetwork();
+        Main.chooseNetwork(configurationName);
     }
 
     public void menu() {
