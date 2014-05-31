@@ -37,6 +37,8 @@ class BackupProcess extends Thread {
             e.printStackTrace();
         }
 
+        Main.getLogger().log(tmp);
+
         String[] tmp1 = tmp.split("\\s+");
         for (String aTmp1 : tmp1) {
             header.add(aTmp1.trim());
@@ -88,6 +90,8 @@ class BackupProcess extends Thread {
         }
 
         String msg = "STORED" + " " + Main.getVersion() + " " + header.get(2) + " " + header.get(3) + Main.getCRLF() + Main.getCRLF();
+        Main.getLogger().log(msg);
+
         if (!found) {
             Chunk chunk;
             chunk = new Chunk(header.get(2), Integer.parseInt(header.get(3)), Integer.parseInt(header.get(4)));

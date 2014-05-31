@@ -2,9 +2,14 @@ package main;
 
 import space_reclaim.FileChunks;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.SecretKeySpec;
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
+import java.nio.charset.StandardCharsets;
+import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,9 +19,9 @@ public class Database implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private String username;
+    private String salt = "#a81nb29";
     private String password;
     private byte[] passwordByte;
-    private StringBuffer passwordStr;
     private static int diskSize = 100000000;
     private final ArrayList<Chunk> chunks;
     private final HashMap<String, String> fileList;
@@ -25,15 +30,16 @@ public class Database implements Serializable {
     private final HashMap<String, Integer> deletedFiles;
     private final ArrayList<FileChunks> filesToBeReclaimed;
 
-    public Database(String username, String password) {
+    public Database(String newUsername, String newPassword) {
         chunks = new ArrayList<>();
         fileList = new HashMap<>();
         deletedFiles = new HashMap<>();
         fileReps = new HashMap<>();
         filesToBeReclaimed = new ArrayList<>();
-        this.username = username;
-        this.password = password;
-        encodePassword(password);
+        username = newUsername;
+        password = newPassword;
+        encodePassword();
+
     }
 
     public static int getDiskSize() {
@@ -154,8 +160,8 @@ public class Database implements Serializable {
         this.username = username;
     }
 
-    public StringBuffer getPassword() {
-        return passwordStr;
+    public byte[] getPassword() {
+        return passwordByte;
     }
 
     public boolean login(String password) {
@@ -166,30 +172,41 @@ public class Database implements Serializable {
         }
     }
 
-    private void encodePassword(String password) {
+    private void encodePassword() {
 
-        MessageDigest digest = null;
+        Cipher cipher = null;
+
+        Main.getLogger().log("Merdou na Cypher");
         try {
-            digest = MessageDigest.getInstance("SHA-256");
+            cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
-        }
-
-        try {
-            assert digest != null;
-            passwordByte = digest.digest(password.getBytes("UTF-8"));
-        } catch (UnsupportedEncodingException e) {
+        } catch (NoSuchPaddingException e) {
             e.printStackTrace();
         }
 
+        SecretKeySpec key = null;
 
-    /*
-    Method to convert a byte array to hexadecimal form found on StackOverflow
-     */
-        passwordStr = new StringBuffer();
-        for (byte aHashFileName : passwordByte) {
-            passwordStr.append(Integer.toString((aHashFileName & 0xff) + 0x100, 16).substring(1));
+        Main.getLogger().log("Merdou na criar a key");
+        key = new SecretKeySpec(salt.getBytes(StandardCharsets.ISO_8859_1), "DES");
+
+        try {
+            Main.getLogger().log("Merdou no init da Cypher");
+            cipher.init(Cipher.ENCRYPT_MODE, key/*, new IvParameterSpec(Main.getDatabase().getUsernameByte())*/);
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        }/* catch (InvalidAlgorithmParameterException e) {
+            e.printStackTrace();
+        }*/
+
+        Main.getLogger().log("Merdou a finalizar");
+        try {
+            passwordByte = cipher.doFinal(password.getBytes(StandardCharsets.ISO_8859_1));
+        } catch (IllegalBlockSizeException e) {
+            e.printStackTrace();
+        } catch (BadPaddingException e) {
+            e.printStackTrace();
         }
-
     }
+
 }

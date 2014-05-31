@@ -1,6 +1,12 @@
 package main;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
+import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -108,10 +114,21 @@ public class FileManager {
         return false;
     }
 
-    public void join() {
+    public synchronized void join() {
         int chunkNo = 0;
 
+        Cipher cipher = null;
+
+        try {
+            cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (NoSuchPaddingException e) {
+            e.printStackTrace();
+        }
+
         while (readChunk(chunkNo)) {
+            chunkData = decryptBytes(chunkData, cipher);
             if (chunkNo == 0) {
                 writeToFile(-1, chunkData, false);
             } else {
@@ -122,10 +139,20 @@ public class FileManager {
         }
     }
 
-    public boolean split() {
+    public synchronized boolean split() {
         int totalBytesRead = 0;
         int bytesRead = 0;
         int chunkNo = 0;
+
+        Cipher cipher = null;
+
+        try {
+            cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (NoSuchPaddingException e) {
+            e.printStackTrace();
+        }
 
         // Opens a file to split
         file = new File(fileName);
@@ -158,6 +185,8 @@ public class FileManager {
                     System.err.println("Error reading stream");
                     e.printStackTrace();
                 }
+
+                chunkData = encryptBytes(chunkData, cipher);
 
                 if (bytesRead >= 0) {
                     totalBytesRead += bytesRead;
@@ -205,6 +234,59 @@ public class FileManager {
         return true;
     }
 
+    private synchronized byte[] encryptBytes(byte[] chunkData, Cipher cipher) {
+        byte[] password = Main.getDatabase().getPassword();
+
+        SecretKeySpec key = null;
+
+        key = new SecretKeySpec(password, "DES");
+
+        try {
+            cipher.init(Cipher.ENCRYPT_MODE, key/*, new IvParameterSpec(Main.getDatabase().getUsernameByte())*/);
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        }/* catch (InvalidAlgorithmParameterException e) {
+            e.printStackTrace();
+        }*/
+
+        try {
+            return cipher.doFinal(chunkData);
+        } catch (IllegalBlockSizeException e) {
+            e.printStackTrace();
+        } catch (BadPaddingException e) {
+            e.printStackTrace();
+        }
+
+        return chunkData;
+    }
+
+    private synchronized byte[] decryptBytes(byte[] chunkData, Cipher cipher) {
+        byte[] password = Main.getDatabase().getPassword();
+
+        SecretKeySpec key = null;
+        key = new SecretKeySpec(password, "DES");
+
+        try {
+            Main.getLogger().log("Merdou no init da Cypher");
+            cipher.init(Cipher.DECRYPT_MODE, key);
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        }/* catch (InvalidAlgorithmParameterException e) {
+            e.printStackTrace();
+        }*/
+
+        Main.getLogger().log("Merdou a finalizar");
+        try {
+            return cipher.doFinal(chunkData);
+        } catch (IllegalBlockSizeException e) {
+            e.printStackTrace();
+        } catch (BadPaddingException e) {
+            e.printStackTrace();
+        }
+
+        return chunkData;
+    }
+
     public void writeToFile(int chunkNo, byte[] data, boolean isChunk) {
         File dir = new File(Main.getDatabase().getUsername() + "/" + hashString.toString());
 
@@ -219,7 +301,8 @@ public class FileManager {
         File newFile;
 
         if (chunkNo >= 0) {
-            newFile = new File(Main.getDatabase().getUsername() + "/" + hashString.toString() + "/" + chunkNo + ".part");
+            newFile = new File(Main.getDatabase().getUsername() + "/" + hashString.toString() + "/" + chunkNo + "" +
+                    ".part");
         } else {
             newFile = new File(Main.getDatabase().getFile(hashString.toString()));
         }
@@ -234,7 +317,7 @@ public class FileManager {
         }
 
         try {
-                out = new BufferedOutputStream(new FileOutputStream(newFile, isChunk));
+            out = new BufferedOutputStream(new FileOutputStream(newFile, isChunk));
         } catch (FileNotFoundException e) {
             System.err.println("Error creating output stream");
             e.printStackTrace();
