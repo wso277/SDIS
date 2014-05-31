@@ -28,16 +28,16 @@ public class TCPCommunicator {
         } else {
 
             address = InetAddress.getByName(newIp);
-            socket = new Socket(address, port);
+            socket = new Socket();
+            socket.connect(new InetSocketAddress(address, port), 5000);
 
         }
     }
 
-    public byte[] receive() throws SocketException, SocketTimeoutException {
+    public byte[] receive() {
         DataInputStream in;
         byte[] msg = null;
 
-        socket.setSoTimeout(5000);
         try {
             in = new DataInputStream(socket.getInputStream());
 

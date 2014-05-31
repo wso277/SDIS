@@ -9,7 +9,7 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
@@ -61,18 +61,17 @@ class RestoreProcess extends Thread {
 
             TCPCommunicator receiver;
             try {
-                receiver = new TCPCommunicator(header.get(3), Integer.parseInt(header.get(4)), false);
-
-                byte[] msg = null;
                 try {
-                    msg = receiver.receive();
-                } catch (SocketException e) {
-                    receiver.close();
+                    receiver = new TCPCommunicator(header.get(3), Integer.parseInt(header.get(4)), false);
+                } catch (SocketTimeoutException e) {
                     String get = "GETCHUNK " + Main.getVersion() + " " + header.get(1) +
                             " " + header.get(2) + Main.getCRLF() + Main.getCRLF();
                     Main.getControl().send(get.getBytes(StandardCharsets.ISO_8859_1));
                     return;
                 }
+
+                byte[] msg = null;
+                msg = receiver.receive();
 
                 receiver.close();
 
