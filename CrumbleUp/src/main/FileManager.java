@@ -63,7 +63,7 @@ public class FileManager {
             }
         }
 
-        File folder = new File(hashString.toString());
+        File folder = new File(Main.getDatabase().getUsername() + "/" + hashString.toString());
 
         boolean result = folder.delete();
 

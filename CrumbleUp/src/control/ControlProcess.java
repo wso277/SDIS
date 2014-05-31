@@ -76,16 +76,6 @@ class ControlProcess extends Thread {
 
     }
 
-    private void updateDeletes() {
-        Integer reps = Main.getDatabase().getDeletedFiles().get(header.get(1));
-
-        if (reps != null) {
-            Main.getDatabase().changeRepDegree(header.get(1), reps - 1);
-        }
-
-        Main.getService().submit(new ReclaimProcess());
-    }
-
     private void getChunkProcess() {
         Chunk ch = null;
         Boolean found = false;
@@ -192,4 +182,15 @@ class ControlProcess extends Thread {
 
         }
     }
+
+    private void updateDeletes() {
+        Integer reps = Main.getDatabase().getDeletedFiles().get(header.get(1));
+
+        if (reps != null) {
+            Main.getDatabase().changeRepDegree(header.get(1), reps - 1);
+        }
+
+        Main.getService().submit(new ReclaimProcess());
+    }
+
 }
