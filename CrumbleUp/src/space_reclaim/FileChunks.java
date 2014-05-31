@@ -1,11 +1,12 @@
 package space_reclaim;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
 /**
  * Created by João on 27/05/2014.
  */
-public class FileChunks {
+public class FileChunks implements Serializable{
     private String fileId;
     private int repDegree;
     private HashMap<Integer,Integer> chunksRep;
