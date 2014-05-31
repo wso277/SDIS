@@ -59,6 +59,7 @@ public class Log {
         }
         if(PRINT_TO_FILE) {
             logWriter.write(logMsg + "\n");
+            logWriter.flush();
         }
     }
 

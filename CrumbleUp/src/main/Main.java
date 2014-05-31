@@ -34,7 +34,7 @@ public class Main implements Serializable {
     private static int TCPport = 6000;
 
     public static void main(String[] args) throws IOException {
-        //C:\Users\Vinnie\Downloads\database.sql C:\Users\Vinnie\Dropbox\tremelo.pdf
+        //C:\Users\Vinnie\Downloads\compressi.zip C:\Users\Vinnie\Dropbox\tremelo.pdf
 
         /*TODO:
         * Log
