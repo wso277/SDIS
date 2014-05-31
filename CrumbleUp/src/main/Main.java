@@ -3,6 +3,7 @@ package main;
 import backup.Backup;
 import cli.Cli;
 import communication.Address;
+import communication.Network;
 import control.Control;
 import delete.DeleteProcess;
 import restore.Restore;
@@ -29,6 +30,7 @@ public class Main implements Serializable {
     private static Log logger;
     private static Database database;
     private static HashMap<String, Address> ipData;
+    private static HashMap<String, Network> configurations;
     private static ExecutorService service;
     private static RestoreSend restoring;
     private static int MIN_PORT = 6000;
@@ -67,6 +69,7 @@ public class Main implements Serializable {
 
         // Store address info
         ipData = new HashMap<>();
+        configurations = new HashMap<>();
 
         // Initializing components
         cli = new Cli();
@@ -148,7 +151,7 @@ public class Main implements Serializable {
         return true;
     }
 
-    public static void saveNetwork(Address mc, Address mcr, Address mcb) {
+    public static void saveNetwork(String confName, Address mc, Address mcr, Address mcb) {
 
         ObjectOutputStream save = null;
 
@@ -164,9 +167,9 @@ public class Main implements Serializable {
 
         try {
             assert save != null;
-            save.writeObject(mc);
-            save.writeObject(mcr);
-            save.writeObject(mcb);
+            Network network = new Network(mc,mcb,mcr);
+            configurations.put(confName, network);
+            save.writeObject(configurations);
         } catch (IOException e) {
             System.err.println("Error saving network configurations");
             e.printStackTrace();
@@ -176,7 +179,6 @@ public class Main implements Serializable {
     public static void loadNetwork() {
 
         ObjectInputStream load = null;
-
         try {
             load = new ObjectInputStream(new FileInputStream(database.getUsername() + "/network.cu"));
         } catch (FileNotFoundException e) {
@@ -184,14 +186,12 @@ public class Main implements Serializable {
         } catch (IOException e) {
             System.err.println("Error creating network.cu");
             e.printStackTrace();
+        } catch (NullPointerException e){
         }
 
         try {
             assert load != null;
-            ipData.put("mc", (Address) load.readObject());
-            ipData.put("mcr", (Address) load.readObject());
-            ipData.put("mcb", (Address) load.readObject());
-
+            configurations = (HashMap<String,Network>) load.readObject();
             System.out.println("\nRead network configurations!");
         } catch (ClassNotFoundException e) {
             System.err.println("network.cu not found!");
@@ -199,7 +199,16 @@ public class Main implements Serializable {
         } catch (IOException e) {
             System.err.println("Error loading network configurations!");
             e.printStackTrace();
+        } catch(NullPointerException e){
+
         }
+    }
+
+    public static void chooseNetwork(String confName) {
+        Network network = configurations.get(confName);
+        ipData.put("mc", network.getMc());
+        ipData.put("mcr", network.getMcr());
+        ipData.put("mcb", network.getMcb());
     }
 
     /*
@@ -281,6 +290,10 @@ public class Main implements Serializable {
 
     public static Log getLogger() {
         return logger;
+    }
+
+    public static HashMap<String, Network> getConfigurations() {
+        return configurations;
     }
 
 }
