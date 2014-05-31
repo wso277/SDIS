@@ -42,6 +42,8 @@ public class FileManager {
             }
             Main.getDatabase().removeChunk(hashString.toString(), chunkNo);
             return true;
+        } else {
+            System.out.println("Chunk doesn't exist!");
         }
 
         return false;
