@@ -18,7 +18,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class Main implements Serializable {
-    /*asdfghjkl*/
     private static final long serialVersionUID = 1L;
     private static String version = "1.0";
     private static int chunkSize = 64000;
@@ -46,16 +45,10 @@ public class Main implements Serializable {
         */
 
         /*TODO:
-        * Log
+        * Write-Ahead Logging
         */
         /*TODO:
         * Partilha da Base de Dados - Todos
-        */
-        /*TODO:
-        * Encriptação dos chunks - Vinnie e Wilson
-        */
-        /*TODO:
-        * Servidor de DNS com RMI - Spaces e Pato
         */
         /*TODO:
         * Sliding window no restore
