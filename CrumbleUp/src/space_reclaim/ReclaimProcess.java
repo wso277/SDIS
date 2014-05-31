@@ -13,7 +13,8 @@ import java.util.Map;
 public class ReclaimProcess extends Thread {
 
     public void run() {
-        /* Vai buscar o arraylist dos chunks que tenham chunks com rep degree menor que o desejado apos o space reclaim */
+        /* Vai buscar o arraylist dos chunks que tenham chunks com rep degree menor que o desejado apos o space
+        reclaim */
         /* Vai tu */
         ArrayList<FileChunks> filesToBeReclaimed = Main.getDatabase().getFilesToBeReclaimed();
 
@@ -24,10 +25,10 @@ public class ReclaimProcess extends Thread {
                 Map.Entry pairs = (Map.Entry) it.next();
                 if ((Integer) pairs.getValue() < file.getRepDegree()) {
                     /* Para cada um inicia um putchunk */
-                    BackupSend send = new BackupSend(file.getFileId(), file.getRepDegree(), false, (Integer) pairs.getKey(), (Integer) pairs.getValue());
+                    BackupSend send = new BackupSend(file.getFileId(), file.getRepDegree(), false,
+                            (Integer) pairs.getKey(), (Integer) pairs.getValue());
                     Main.getBackup().addSending(send);
                     Main.getService().submit(send);
-                    it.remove();
                 }
             }
         }

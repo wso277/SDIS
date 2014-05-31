@@ -9,6 +9,8 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.SocketException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 class RestoreProcess extends Thread {
@@ -55,28 +57,22 @@ class RestoreProcess extends Thread {
         Boolean repFound = false;
         Integer repDegree = 2;
 
-        for (int i = 0; i < Main.getDatabase().getChunksSize(); i++) {
-            chunk = Main.getDatabase().getChunk(i);
-            if (chunk.getFileId().equals(header.get(1))) {
-
-                if (!repFound) {
-                    repDegree = chunk.getRepDegree();
-                    repFound = true;
-                }
-
-                if (chunk.getChunkNo() == Integer.parseInt(header.get(2))) {
-                    found = true;
-                    break;
-                }
-            }
-        }
-
-        if (!found) {
+        if (Main.getRestoring().getFileId().equals(header.get(1))) {
 
             TCPCommunicator receiver;
             try {
                 receiver = new TCPCommunicator(header.get(3), Integer.parseInt(header.get(4)), false);
-                byte[] msg = receiver.receive();
+
+                byte[] msg = null;
+                try {
+                    msg = receiver.receive();
+                } catch (SocketException e) {
+                    receiver.close();
+                    String get = "GETCHUNK " + Main.getVersion() + " " + header.get(1) +
+                            " " + header.get(2) + Main.getCRLF() + Main.getCRLF();
+                    Main.getControl().send(get.getBytes(StandardCharsets.ISO_8859_1));
+                    return;
+                }
 
                 receiver.close();
 

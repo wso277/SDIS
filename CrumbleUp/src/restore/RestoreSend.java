@@ -59,4 +59,8 @@ public class RestoreSend {
         System.out.println("Restore Complete!");
     }
 
+    public String getFileId() {
+        return fileId;
+    }
+
 }

@@ -1,14 +1,9 @@
 package communication;
 
-import main.Main;
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.SocketTimeoutException;
+import java.net.*;
 
 /**
  * Created by wso277 on 5/13/14.
@@ -32,19 +27,17 @@ public class TCPCommunicator {
             socket = server.accept();
         } else {
 
-            try {
-                address = InetAddress.getByName(newIp);
-                socket = new Socket(address, port);
+            address = InetAddress.getByName(newIp);
+            socket = new Socket(address, port);
 
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
     }
 
-    public byte[] receive() {
+    public byte[] receive() throws SocketException, SocketTimeoutException {
         DataInputStream in;
         byte[] msg = null;
+
+        socket.setSoTimeout(5000);
         try {
             in = new DataInputStream(socket.getInputStream());
 

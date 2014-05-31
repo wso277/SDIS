@@ -31,7 +31,6 @@ public class DeleteProcess extends Thread {
 
                     System.out.println("Sleep is over! Sent another DELETE message!");
                     Main.getControl().send(msg.getBytes(StandardCharsets.ISO_8859_1));
-                    it.remove();
                 }
             }
 
