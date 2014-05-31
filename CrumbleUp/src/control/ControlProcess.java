@@ -64,7 +64,6 @@ class ControlProcess extends Thread {
             }
         } else if (header.get(0).equals("STORED")) {
             if (Main.getVersion().equals(header.get(1))) {
-                System.out.println(header);
                 storedProcess();
                 Main.save(Main.getDatabase().getUsername());
             }
@@ -112,7 +111,6 @@ class ControlProcess extends Thread {
             int tcp_port = Main.getTCPport();
             String message = "ME " + header.get(2) + " " + header.get(3) + " " + ip + " " + tcp_port + Main.getCRLF() +
                     Main.getCRLF();
-            System.out.println(message);
 
             byte[] msg = message.getBytes(StandardCharsets.ISO_8859_1);
             Main.getRestore().send(msg);

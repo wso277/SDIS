@@ -34,7 +34,11 @@ public class Main implements Serializable {
     private static int TCPport = 6000;
 
     public static void main(String[] args) throws IOException {
-        //C:\Users\Vinnie\Downloads\compressi.zip C:\Users\Vinnie\Dropbox\tremelo.pdf
+        /*
+            C:\Users\Vinnie\Downloads\compressi.zip
+            C:\Users\Vinnie\Dropbox\Screenshots\Screenshot 2014-01-27 22.39.52.png
+            C:\Users\Vinnie\Dropbox\Camera Uploads\2014-05-28 19.34.01.jpg
+        */
 
         /*TODO:
         * Log
@@ -47,6 +51,12 @@ public class Main implements Serializable {
         */
         /*TODO:
         * Servidor de DNS com RMI - Spaces e Pato
+        */
+        /*TODO:
+        * Sliding window no restore
+        */
+        /*TODO:
+        * Velocidade de transferência
         */
 
         // Initializing job queue

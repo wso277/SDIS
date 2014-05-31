@@ -52,13 +52,14 @@ public class Log {
 
     public static void log(String msg) {
         java.util.Date date = new java.util.Date();
+        msg = msg.trim();
         String logMsg = new Timestamp(date.getTime()) + " => " + msg;
 
         if (PRINT_LOGS) {
             System.out.println(logMsg);
         }
         if(PRINT_TO_FILE) {
-            logWriter.write(logMsg + "\n");
+            logWriter.write(logMsg + "\n\n");
             logWriter.flush();
         }
     }
