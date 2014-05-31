@@ -32,23 +32,37 @@ public class RestoreSend {
 
             System.out.println("Waiting for chunk No " + currentChunk);
 
+            int timeout = 0;
+            boolean restored = false;
             while (waitingConfirmation == -1) {
+                timeout++;
                 try {
                     Thread.sleep(300);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+
+                if (timeout == 10) {
+                    if (waitingConfirmation != -1) {
+                        restored = true;
+                    }
+                    break;
+                }
             }
 
-            fm = new FileManager(fileId, 0, true);
+            if (restored) {
 
-            System.out.println("Received " + currentChunk + " with size " + fm.getChunkSize(currentChunk));
+                fm = new FileManager(fileId, 0, true);
 
-            if(fm.getChunkSize(currentChunk) < 64000){
-                break;
+                System.out.println("Received " + currentChunk + " with size " + fm.getChunkSize(currentChunk));
+
+                if (fm.getChunkSize(currentChunk) < 64000) {
+                    break;
+                }
+
+                currentChunk++;
             }
 
-            currentChunk++;
         } while (true);
 
         System.out.println("Exited receive");
