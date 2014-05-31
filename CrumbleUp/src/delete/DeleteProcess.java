@@ -26,6 +26,9 @@ public class DeleteProcess extends Thread {
                 Map.Entry pairs = (Map.Entry) it.next();
                 if ((Integer) pairs.getValue() > 0) {
                     msg = "DELETE " + (String) pairs.getKey() + Main.getCRLF() + Main.getCRLF();
+
+                    Main.getLogger().log("Sent: " + msg);
+
                     System.out.println("Sleep is over! Sent another DELETE message!");
                     Main.getControl().send(msg.getBytes(StandardCharsets.ISO_8859_1));
                     it.remove();

@@ -123,7 +123,8 @@ public class Cli {
 
     private void cliLogin() {
         do {
-            System.out.print("\nChoose a command:\n" + "1. Create Account\n" + "2. Log in\n" + "3. Exit\n\n" + "Option: ");
+            System.out.print("\nChoose a command:\n" + "1. Create Account\n" + "2. Log in\n" + "3. Exit\n\n" +
+                    "Option: ");
             System.out.flush();
             try {
                 input = in.readLine();
@@ -179,31 +180,36 @@ public class Cli {
     private void processLogin() {
         Boolean res = false;
         while (!res) {
-            System.out.println("Enter your desired username: ");
+            System.out.println("Enter your username: ");
             try {
                 username = in.readLine();
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            System.out.println("Enter your desired password: ");
-            try {
-                password = in.readLine();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
             res = Main.load(username);
+
             if (res) {
-                if (Main.getDatabase().login(password)) {
-                    break;
-                } else {
-                    res = false;
-                    System.err.println("Wrong Password!");
+                res = false;
+                while (!res) {
+                    System.out.println("Enter your password: ");
+                    try {
+                        password = in.readLine();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    if (Main.getDatabase().login(password)) {
+                        res = true;
+                    } else {
+                        res = false;
+                        System.out.println("Wrong Password!");
+                    }
                 }
             } else {
                 System.out.println("Wrong Username!");
             }
+
+
         }
 
         Main.save(username);
@@ -262,6 +268,7 @@ public class Cli {
         Main.getBackup().close();
         Main.getControl().close();
         Main.getRestore().close();
+        Main.getLogger().close();
     }
 
     private void processIncreaseInput() {

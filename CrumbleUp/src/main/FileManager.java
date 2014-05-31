@@ -232,11 +232,7 @@ public class FileManager {
         }
 
         try {
-            if (isChunk) {
-                out = new BufferedOutputStream(new FileOutputStream(newFile, true));
-            } else {
-                out = new BufferedOutputStream(new FileOutputStream(newFile, false));
-            }
+                out = new BufferedOutputStream(new FileOutputStream(newFile, isChunk));
         } catch (FileNotFoundException e) {
             System.err.println("Error creating output stream");
             e.printStackTrace();
@@ -298,4 +294,5 @@ public class FileManager {
     public StringBuffer getHashString() {
         return hashString;
     }
+
 }

@@ -48,11 +48,13 @@ public class BackupSend extends Thread {
 
                 while (fm.readChunk(chunkNo)) {
 
-                    String message;
-                    message = "PUTCHUNK " + Main.getVersion() + " " + fileHash + " " + chunkNo + " " + fm.getRep() +
+                    String msg;
+                    msg = "PUTCHUNK " + Main.getVersion() + " " + fileHash + " " + chunkNo + " " + fm.getRep() +
                             Main.getCRLF() + Main.getCRLF();
+                    
+                    Main.getLogger().log("Sent: " + msg);
 
-                    byte[] mssg = message.getBytes(StandardCharsets.ISO_8859_1);
+                    byte[] mssg = msg.getBytes(StandardCharsets.ISO_8859_1);
                     byte[] mssg1 = Main.appendArray(mssg, fm.getChunkData());
 
                     while (storeds < fm.getRep() && tries < 5) {
@@ -78,7 +80,7 @@ public class BackupSend extends Thread {
                     }
 
                     Main.getDatabase().addFileRep(fileHash, reps);
-                    //TODO CONICES DA FILHA DA PUTA DA PUTA DO PRINT CARALHO
+
                     if (reps < fm.getRep()) {
                         System.err.println("Chunk number " + chunkNo + " replicated only " + reps + " " +
                                 "times!");
@@ -108,6 +110,8 @@ public class BackupSend extends Thread {
         String message;
         message = "PUTCHUNK " + Main.getVersion() + " " + fileHash + " " + chunkNo + " " + fm.getRep() +
                 Main.getCRLF() + Main.getCRLF();
+
+        Main.getLogger().log("Sent: " + message);
 
         byte[] mssg = message.getBytes(StandardCharsets.ISO_8859_1);
         byte[] mssg1 = Main.appendArray(mssg, fm.getChunkData());

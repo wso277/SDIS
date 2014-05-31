@@ -41,6 +41,8 @@ class ControlProcess extends Thread {
             e.printStackTrace();
         }
 
+        Main.getLogger().log("RECEIVED: " + tmp);
+
         String[] tmp1 = tmp.split("\\s+");
 
         for (String aTmp1 : tmp1) {
@@ -114,13 +116,17 @@ class ControlProcess extends Thread {
 
             byte[] msg = message.getBytes(StandardCharsets.ISO_8859_1);
             Main.getRestore().send(msg);
+            Main.getLogger().log("Sent: " + msg);
 
             try {
                 TCPCommunicator tcpSocket = new TCPCommunicator(ip, tcp_port, true);
                 String chunkMsg = "CHUNK " + header.get(2) + " " + header.get(3) +
                         Main.getCRLF() + Main.getCRLF();
 
-                byte[] chunkBytes = Main.appendArray(chunkMsg.getBytes(StandardCharsets.ISO_8859_1), chunk.getChunkData());
+                Main.getLogger().log("Sent: " + chunkMsg);
+
+                byte[] chunkBytes = Main.appendArray(chunkMsg.getBytes(StandardCharsets.ISO_8859_1),
+                        chunk.getChunkData());
                 tcpSocket.send(chunkBytes);
 
                 tcpSocket.close();
@@ -134,7 +140,7 @@ class ControlProcess extends Thread {
     }
 
     private void storedProcess() {
-        //TODO fix this filter and the array list
+
         for (int j = 0; j < Main.getBackup().getSending().size(); j++) {
             if (Main.getBackup().getSending().get(j).getFileHash().equals(header.get(2))) {
                 Main.getBackup().getSending().get(j).incStoreds(1);
@@ -157,7 +163,8 @@ class ControlProcess extends Thread {
             if (chunk.getFileId().equals(header.get(2)) && (chunk.getChunkNo() == Integer.parseInt(header.get(3)))) {
                 chunk.setKnownReps(-1);
                 if (chunk.getKnownReps() < chunk.getRepDegree()) {
-                    BackupSend send = new BackupSend(chunk.getFileId(), chunk.getRepDegree(), false, chunk.getChunkNo(), chunk.getKnownReps());
+                    BackupSend send = new BackupSend(chunk.getFileId(), chunk.getRepDegree(), false,
+                            chunk.getChunkNo(), chunk.getKnownReps());
                     Main.getBackup().addSending(send);
                     Main.getService().submit(send);
                 }
@@ -182,6 +189,7 @@ class ControlProcess extends Thread {
 
         if (result) {
             String msg = "DELETED " + header.get(1) + Main.getCRLF() + Main.getCRLF();
+            Main.getLogger().log("Sent: " + msg);
             Main.getControl().send(msg.getBytes(StandardCharsets.ISO_8859_1));
 
         }

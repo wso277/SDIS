@@ -19,6 +19,8 @@ public class Delete {
         Main.getDatabase().changeRepDegree(fileId, Main.getDatabase().getFileRep(fileId));
         System.out.println(Main.getDatabase().getFileRep(fileId));
 
+        Main.getLogger().log("Sent: " + message);
+
         Main.getControl().send(message.getBytes(StandardCharsets.ISO_8859_1));
         System.out.println("Delete message sent!");
         Main.getDatabase().removeFile(fileId);

@@ -26,6 +26,8 @@ public class RestoreSend {
                     " " + currentChunk + Main.getCRLF() + Main.getCRLF();
             waitingConfirmation = -1;
 
+            Main.getLogger().log("Sent: " + msg);
+
             Main.getControl().send(msg.getBytes(StandardCharsets.ISO_8859_1));
 
             System.out.println("Waiting for chunk No " + currentChunk);

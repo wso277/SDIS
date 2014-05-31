@@ -55,10 +55,12 @@ public class SpaceReclaim {
     }
 
     private void sendMessage(int j) {
-        String mssg = "REMOVED " + Main.getVersion() + " " + chunks[j].getFileId() + " " + chunks[j].getChunkNo() +
+        String msg = "REMOVED " + Main.getVersion() + " " + chunks[j].getFileId() + " " + chunks[j].getChunkNo() +
                 Main.getCRLF() + Main.getCRLF();
 
-        Main.getControl().send(mssg.getBytes(StandardCharsets.ISO_8859_1));
+        Main.getLogger().log("Sent: " + msg);
+
+        Main.getControl().send(msg.getBytes(StandardCharsets.ISO_8859_1));
 
     }
 }

@@ -1,5 +1,7 @@
 package communication;
 
+import main.Main;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -54,7 +56,6 @@ public class TCPCommunicator {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return msg;
     }
 

@@ -33,7 +33,9 @@ class RestoreProcess extends Thread {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println(tmp);
+
+        Main.getLogger().log("Sent: " + tmp);
+
         String[] tmp1 = tmp.split("\\s+");
 
         for (String aTmp1 : tmp1) {
@@ -87,6 +89,8 @@ class RestoreProcess extends Thread {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+
+                Main.getLogger().log("Sent: " + tmp);
 
                 String[] tmp1 = tmp.split("\\s+");
                 ArrayList<String> chunkMsg = new ArrayList<>();

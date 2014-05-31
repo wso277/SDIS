@@ -14,6 +14,7 @@ public class ReclaimProcess extends Thread {
 
     public void run() {
         /* Vai buscar o arraylist dos chunks que tenham chunks com rep degree menor que o desejado apos o space reclaim */
+        /* Vai tu */
         ArrayList<FileChunks> filesToBeReclaimed = Main.getDatabase().getFilesToBeReclaimed();
 
         for (FileChunks file : filesToBeReclaimed) {

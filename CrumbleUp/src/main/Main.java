@@ -24,6 +24,7 @@ public class Main implements Serializable {
     private static Control control;
     private static DeleteProcess delete;
     private static Cli cli;
+    private static Log logger;
     private static Database database;
     private static HashMap<String, Address> ipData;
     private static ExecutorService service;
@@ -33,8 +34,20 @@ public class Main implements Serializable {
     private static int TCPport = 6000;
 
     public static void main(String[] args) throws IOException {
-
         //C:\Users\Vinnie\Downloads\database.sql C:\Users\Vinnie\Dropbox\tremelo.pdf
+
+        /*TODO:
+        * Log
+        */
+        /*TODO:
+        * Partilha da Base de Dados - Todos
+        */
+        /*TODO:
+        * Encriptação dos chunks - Vinnie e Wilson
+        */
+        /*TODO:
+        * Servidor de DNS com RMI - Spaces e Pato
+        */
 
         // Initializing job queue
         service = Executors.newFixedThreadPool(15);
@@ -44,6 +57,7 @@ public class Main implements Serializable {
 
         // Initializing components
         cli = new Cli();
+        logger = new Log(true, true);
         backup = new Backup(ipData.get("mcb").getIp(), ipData.get("mcb").getPort());
         control = new Control(ipData.get("mc").getIp(), ipData.get("mc").getPort());
         restore = new Restore(ipData.get("mcr").getIp(), ipData.get("mcr").getPort());
@@ -252,4 +266,7 @@ public class Main implements Serializable {
         return delete;
     }
 
+    public static Log getLogger() {
+        return logger;
+    }
 }
