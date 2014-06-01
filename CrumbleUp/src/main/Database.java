@@ -220,7 +220,7 @@ public class Database implements Serializable {
     }
 
     private StringBuffer getDBHash() {
-        String hash = Main.getDatabase().getUsername() + Main.getDatabase().getPassword() + Main.getDatabase().getMail();
+        String hash = username + password + mail;
 
         MessageDigest digest = null;
         try {
