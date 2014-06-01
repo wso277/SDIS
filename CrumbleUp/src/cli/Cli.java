@@ -258,13 +258,14 @@ public class Cli {
             if (restoreDB.process()) {
                 Main.getLogger().log("RESTored");
                 Main.load(username);
+                Main.getDatabase().checkForLostChunks();
                 try {
                     Main.getLogger().log(Main.getDatabase().getUsername());
                 } catch (Exception e) {
                     Main.getLogger().log("FODEU");
                 }
                 Main.getLogger().log("CENAS");
-                while (!Main.getDatabase().login(passwordHash)) {
+                while (Main.getDatabase().login(passwordHash)) {
                     System.out.println("Wrong password!");
                     System.out.println("Enter your password: ");
                     try {
@@ -290,7 +291,7 @@ public class Cli {
         } else {
 
             Main.getLogger().log("OLD");
-            while (!Main.getDatabase().login(passwordHash)) {
+            while (Main.getDatabase().login(passwordHash)) {
                 System.out.println("Wrong password!");
                 System.out.println("Enter your password: ");
                 try {
@@ -318,7 +319,7 @@ public class Cli {
             }
 
             res = Main.load(username);
-
+            Main.getDatabase().checkForLostChunks();
             if (res) {
                 res = false;
                 while (!res) {

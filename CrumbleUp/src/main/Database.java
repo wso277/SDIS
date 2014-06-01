@@ -171,7 +171,10 @@ public class Database implements Serializable {
     }
 
     public boolean login(StringBuffer password) {
-        if (this.passwordHash.equals(password)) {
+        Main.getLogger().log("Pass lida: " + password);
+        Main.getLogger().log("Pass DB: " + this.passwordHash);
+
+        if (this.passwordHash == password) {
             return true;
         } else {
             return false;
@@ -277,6 +280,27 @@ public class Database implements Serializable {
 
     public StringBuffer getDbId() {
         return DbId;
+    }
+
+    public void checkForLostChunks() {
+        for (Chunk chunk : chunks) {
+            if (!FileManager.fileExists(username + "/" + chunk.getFileId() + "/" + chunk.getChunkNo() + ".part")) {
+                for (FileChunks file : Main.getDatabase().getFilesToBeReclaimed()) {
+                    if (file.getFileId().equals(chunk.getFileId())) {
+                        Main.getDatabase().getFilesToBeReclaimed().remove(file);
+                        break;
+                    }
+                }
+
+                FileManager del = new FileManager(chunk.getFileId(), 0, true);
+                del.deleteFile();
+
+                String msg = "DELETED " + chunk.getFileId() + Main.getCRLF() + Main.getCRLF();
+                Main.getLogger().log("Sent: " + msg);
+                Main.getControl().send(msg.getBytes(StandardCharsets.ISO_8859_1));
+
+            }
+        }
     }
 
     public byte[] getPasswordByte() {

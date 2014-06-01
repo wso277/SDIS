@@ -45,16 +45,7 @@ public class Main implements Serializable {
         */
 
         /*TODO:
-        * Write-Ahead Logging
-        */
-        /*TODO:
-        * Partilha da Base de Dados - Todos
-        */
-        /*TODO:
         * Sliding window no restore
-        */
-        /*TODO:
-        * Velocidade de transferência
         */
         /*TODO:
         * mensagem in para garantir replicacao
@@ -165,7 +156,7 @@ public class Main implements Serializable {
 
         try {
             assert save != null;
-            Network network = new Network(mc,mcb,mcr);
+            Network network = new Network(mc, mcb, mcr);
             configurations.put(confName, network);
             save.writeObject(configurations);
         } catch (IOException e) {
@@ -184,12 +175,12 @@ public class Main implements Serializable {
         } catch (IOException e) {
             System.err.println("Error creating network.cu");
             e.printStackTrace();
-        } catch (NullPointerException e){
+        } catch (NullPointerException e) {
         }
 
         try {
             assert load != null;
-            configurations = (HashMap<String,Network>) load.readObject();
+            configurations = (HashMap<String, Network>) load.readObject();
             System.out.println("\nRead network configurations!");
         } catch (ClassNotFoundException e) {
             System.err.println("network.cu not found!");
@@ -197,7 +188,7 @@ public class Main implements Serializable {
         } catch (IOException e) {
             System.err.println("Error loading network configurations!");
             e.printStackTrace();
-        } catch(NullPointerException e){
+        } catch (NullPointerException e) {
 
         }
     }
