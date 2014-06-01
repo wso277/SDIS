@@ -7,11 +7,10 @@ import communication.Network;
 import control.Control;
 import delete.DeleteProcess;
 import restore.Restore;
+import restore.RestoreDB;
 import restore.RestoreSend;
 
-import javax.crypto.Cipher;
 import java.io.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -32,6 +31,7 @@ public class Main implements Serializable {
     private static HashMap<String, Network> configurations;
     private static ExecutorService service;
     private static RestoreSend restoring;
+    private static RestoreDB restoreDB;
     private static int MIN_PORT = 6000;
     private static int MAX_PORT = 7000;
     private static int TCPport = 6000;
@@ -285,6 +285,14 @@ public class Main implements Serializable {
 
     public static HashMap<String, Network> getConfigurations() {
         return configurations;
+    }
+
+    public static RestoreDB getRestoreDB() {
+        return restoreDB;
+    }
+
+    public static void setRestoreDB(RestoreDB restore) {
+        restoreDB = restore;
     }
 
 }

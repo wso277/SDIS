@@ -47,6 +47,27 @@ class RestoreProcess extends Thread {
         if (header.get(0).equals("ME")) {
             restoreChunkProcess();
             Main.save(Main.getDatabase().getUsername());
+        } else if (header.get(0).equals("DB")) {
+            restoreDBProcess();
+        }
+    }
+
+    private void restoreDBProcess() {
+        boolean found = false;
+        for (Chunk ch : Main.getDatabase().getChunks()) {
+            if (ch.getFileId().equals(header.get(1)) && ch.getChunkNo() == Integer.parseInt(header.get(2))) {
+                ch.setSent(true);
+                found = true;
+                break;
+            }
+        }
+
+        if (!found) {
+            FileManager.writeDb(header.get(1), Integer.parseInt(header.get(2)), body);
+
+            if (Main.getRestoreDB().getFileId().equals(header.get(1))) {
+                Main.getRestoreDB().setWaitingConfirmation(body.length);
+            }
         }
     }
 

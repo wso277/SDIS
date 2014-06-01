@@ -17,6 +17,7 @@ import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Random;
 
 class ControlProcess extends Thread {
 
@@ -70,10 +71,38 @@ class ControlProcess extends Thread {
         } else if (header.get(0).equals("DELETED")) {
             updateDeletes();
             Main.save(Main.getDatabase().getUsername());
+        } else if (header.get(0).equals("GETDB")) {
+            processDB();
         } else {
             System.err.println("Operation Invalid!");
         }
 
+    }
+
+    private void processDB() {
+        FileManager fm = new FileManager(header.get(1), 0, true);
+        if (fm.readChunk(Integer.parseInt(header.get(2)))) {
+            Chunk ch = new Chunk(header.get(1), Integer.parseInt(header.get(2)), 0);
+
+            Main.getDatabase().addChunk(ch);
+            String msg = "DB " + header.get(1) + " " + header.get(2) + Main.getCRLF() + Main.getCRLF();
+
+            byte[] msgByte = msg.getBytes(StandardCharsets.ISO_8859_1);
+            byte[] msgFull = Main.appendArray(msgByte, fm.getChunkData());
+
+            Random r = new Random();
+            try {
+                sleep(r.nextInt(400));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            if (!ch.getSent()) {
+                Main.getRestore().send(msgFull);
+            }
+
+            Main.getDatabase().removeChunk(header.get(1), Integer.parseInt(header.get(2)));
+        }
     }
 
     private void getChunkProcess() {
@@ -173,7 +202,6 @@ class ControlProcess extends Thread {
                 break;
             }
         }
-
 
         if (result) {
             String msg = "DELETED " + header.get(1) + Main.getCRLF() + Main.getCRLF();
