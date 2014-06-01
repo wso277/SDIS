@@ -54,15 +54,23 @@ class BackupProcess extends Thread {
                 putProcess();
                 Main.save(Main.getDatabase().getUsername());
             }
+        } else if (header.get(0).equals("PUTDB")) {
+            putDbProcess();
+            Main.save(Main.getDatabase().getUsername());
         } else {
             System.out.println("Invalid Message");
         }
     }
 
+    private void putDbProcess() {
+        FileManager.writeDb(header.get(1), Integer.parseInt(header.get(2)), body);
+    }
+
     private void putProcess() {
 
         for (int i = 0; i < Main.getBackup().getSending().size(); i++) {
-            if (Main.getBackup().getSending().get(i).getFileHash().equals(header.get(2)) && Main.getBackup().getSending().get(i).getChunkN() == Integer.parseInt(header.get(3))) {
+            if (Main.getBackup().getSending().get(i).getFileHash().equals(header.get(2)) && Main.getBackup()
+                    .getSending().get(i).getChunkN() == Integer.parseInt(header.get(3))) {
                 Main.getBackup().getSending().get(i).setSent(true);
                 break;
             }
@@ -89,7 +97,8 @@ class BackupProcess extends Thread {
             }
         }
 
-        String msg = "STORED" + " " + Main.getVersion() + " " + header.get(2) + " " + header.get(3) + Main.getCRLF() + Main.getCRLF();
+        String msg = "STORED" + " " + Main.getVersion() + " " + header.get(2) + " " + header.get(3) + Main.getCRLF()
+                + Main.getCRLF();
         Main.getLogger().log(msg);
 
         if (!found) {
