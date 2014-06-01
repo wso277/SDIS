@@ -12,9 +12,9 @@ public class RestoreDB {
     private Integer waitingConfirmation = -1;
     private String fileId;
     private String username;
-    private byte[] password;
+    private StringBuffer password;
 
-    public RestoreDB(String id, String user, byte[] pass) {
+    public RestoreDB(String id, String user, StringBuffer pass) {
         fileId = id;
         username = user;
         password = pass;

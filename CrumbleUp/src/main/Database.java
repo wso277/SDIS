@@ -24,6 +24,7 @@ public class Database implements Serializable {
     private static String salt = "#a81nb29";
     private String mail;
     private StringBuffer DbId;
+    private StringBuffer passwordHash;
     private byte[] passwordByte;
     private static int diskSize = 100000000;
     private final ArrayList<Chunk> chunks;
@@ -42,6 +43,7 @@ public class Database implements Serializable {
         username = newUsername;
         mail = newMail;
         passwordByte = encodePassword(newPassword);
+        passwordHash = getPassHash(newPassword);
         DbId = getDBHash(username, newPassword, mail);
 
     }
@@ -164,12 +166,12 @@ public class Database implements Serializable {
         this.username = username;
     }
 
-    public byte[] getPassword() {
-        return passwordByte;
+    public StringBuffer getPassword() {
+        return passwordHash;
     }
 
-    public boolean login(byte[] password) {
-        if (this.passwordByte.equals(password)) {
+    public boolean login(StringBuffer password) {
+        if (this.passwordHash.equals(password)) {
             return true;
         } else {
             return false;
@@ -229,6 +231,35 @@ public class Database implements Serializable {
         try {
             assert digest != null;
             hashFileName = digest.digest(hash.getBytes("UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+
+        /*
+        Method to convert a byte array to hexadecimal form found on StackOverflow
+        */
+        StringBuffer hashString = new StringBuffer();
+        for (byte aHashFileName : hashFileName) {
+            hashString.append(Integer.toString((aHashFileName & 0xff) + 0x100, 16).substring(1));
+        }
+        return hashString;
+    }
+
+    public static StringBuffer getPassHash(String password) {
+
+        MessageDigest digest = null;
+        try {
+            digest = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        byte[] hashFileName = null;
+
+        try {
+            assert digest != null;
+            hashFileName = digest.digest(password.getBytes("UTF-8"));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
