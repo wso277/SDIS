@@ -44,7 +44,7 @@ public class Database implements Serializable {
         password = newPassword;
         mail = newMail;
         encodePassword();
-        DbId = getDBHash();
+        DbId = getDBHash(username, password, mail);
 
     }
 
@@ -219,7 +219,7 @@ public class Database implements Serializable {
         return mail;
     }
 
-    private StringBuffer getDBHash() {
+    public static StringBuffer getDBHash(String username, String password, String mail) {
         String hash = username + password + mail;
 
         MessageDigest digest = null;

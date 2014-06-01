@@ -8,6 +8,7 @@ import delete.Delete;
 import main.Database;
 import main.FileManager;
 import main.Main;
+import restore.RestoreDB;
 import restore.RestoreSend;
 import space_reclaim.SpaceReclaim;
 
@@ -224,7 +225,7 @@ public class Cli {
         }
     }
 
-    public static void processRegister() {
+    public void processRegister() {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("Enter your desired username: ");
         try {
@@ -248,14 +249,44 @@ public class Cli {
             e.printStackTrace();
         }
 
+        if (!FileManager.fileExists(username + "/database.cu")) {
+            RestoreDB restoreDB = new RestoreDB(Database.getDBHash(username, password, mail).toString());
+            Main.setRestoreDB(restoreDB);
+            if (restoreDB.process()) {
+                Main.load(username);
+                while (!Main.getDatabase().login(password)) {
+                    System.out.println("Wrong password!");
+                    System.out.println("Enter your password: ");
+                    try {
+                        password = in.readLine();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
-        Main.setDatabase(new Database(username, password, mail));
-        File dir = new File(username);
+                }
+            } else {
+                Main.setDatabase(new Database(username, password, mail));
+                File dir = new File(username);
+                if (!dir.exists()) {
+                    dir.mkdir();
+                }
+                Main.save(username);
+            }
 
-        if (!dir.exists()) {
-            dir.mkdir();
+        } else {
+            while (!Main.getDatabase().login(password)) {
+                System.out.println("Wrong password!");
+                System.out.println("Enter your password: ");
+                try {
+                    password = in.readLine();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
         }
-        Main.save(username);
+
+
     }
 
     private void processLogin() {
