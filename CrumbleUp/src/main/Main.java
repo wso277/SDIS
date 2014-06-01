@@ -63,13 +63,13 @@ public class Main implements Serializable {
         logger = new Log(true, true);
         backup = new Backup(ipData.get("mcb").getIp(), ipData.get("mcb").getPort());
         control = new Control(ipData.get("mc").getIp(), ipData.get("mc").getPort());
+        restore = new Restore(ipData.get("mcr").getIp(), ipData.get("mcr").getPort());
 
         // Pushing main components to job queue
         service.submit(backup);
         service.submit(control);
         service.submit(restore);
         cli.cliLogin();
-        restore = new Restore(ipData.get("mcr").getIp(), ipData.get("mcr").getPort());
         delete = new DeleteProcess();
         service.submit(delete);
         cli.menu();
