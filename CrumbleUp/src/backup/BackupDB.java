@@ -24,7 +24,7 @@ public class BackupDB extends Thread {
 
         Integer chunkNo = 0;
 
-        while (fm.readChunk(chunkNo)) {
+        while (fm.readChunk(chunkNo, Main.getDatabase().getUsername())) {
 
             String msg;
             msg = "PUTDB " + " " + dbId + " " + chunkNo + Main.getCRLF() + Main.getCRLF();
@@ -39,7 +39,6 @@ public class BackupDB extends Thread {
             fm.deleteChunk(chunkNo);
             chunkNo++;
         }
-
 
     }
 

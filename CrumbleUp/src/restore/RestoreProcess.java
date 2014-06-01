@@ -48,26 +48,43 @@ class RestoreProcess extends Thread {
             restoreChunkProcess();
             Main.save(Main.getDatabase().getUsername());
         } else if (header.get(0).equals("DB")) {
+            body = new byte[message.length - (tmp.length() + 4)];
+            for (int i = tmp.length() + 4, j = 0; i < message.length; i++, j++) {
+                body[j] = message[i];
+            }
             restoreDBProcess();
         }
     }
 
     private void restoreDBProcess() {
         boolean found = false;
-        for (Chunk ch : Main.getDatabase().getChunks()) {
-            if (ch.getFileId().equals(header.get(1)) && ch.getChunkNo() == Integer.parseInt(header.get(2))) {
-                ch.setSent(true);
-                found = true;
-                break;
+        Main.getLogger().log("PROCESS");
+        try {
+
+            for (Chunk ch : Main.getDatabase().getChunks()) {
+                if (ch.getFileId().equals(header.get(1)) && ch.getChunkNo() == Integer.parseInt(header.get(2))) {
+
+                    Main.getLogger().log("FOUND");
+                    ch.setSent(true);
+                    found = true;
+                    break;
+                }
             }
+        } catch (Exception e) {
+            Main.getLogger().log("CATCH");
+            FileManager.writeDb(Main.getRestoreDB().getUsername() + "/" + header.get(1),
+                    Integer.parseInt(header.get(2)), body, true);
+            found = true;
+            Main.getLogger().log("WRITE");
+            Main.getRestoreDB().setWaitingConfirmation(body.length);
+            Main.getLogger().log("SAVED");
         }
 
         if (!found) {
-            FileManager.writeDb(header.get(1), Integer.parseInt(header.get(2)), body);
 
-            if (Main.getRestoreDB().getFileId().equals(header.get(1))) {
-                Main.getRestoreDB().setWaitingConfirmation(body.length);
-            }
+            Main.getLogger().log("NOT FOUND");
+            FileManager.writeDb(header.get(1), Integer.parseInt(header.get(2)), body, false);
+
         }
     }
 
@@ -120,7 +137,7 @@ class RestoreProcess extends Thread {
                 }
 
                 FileManager fm = new FileManager(chunkMsg.get(1), repDegree, true);
-                fm.writeToFile(Integer.parseInt(chunkMsg.get(2)), body, true);
+                fm.writeToFile(Integer.parseInt(chunkMsg.get(2)), body, true, Main.getDatabase().getUsername(), false);
                 chunk = new Chunk(chunkMsg.get(1), Integer.parseInt(chunkMsg.get(2)), repDegree);
                 Main.getDatabase().addChunk(chunk);
                 Main.getRestoring().setWaitingConfirmation(body.length);

@@ -134,7 +134,6 @@ public class Main implements Serializable {
         }
 
         try {
-            assert load != null;
             database = (Database) load.readObject();
             System.out.println("Read database!");
         } catch (ClassNotFoundException e) {
@@ -143,6 +142,8 @@ public class Main implements Serializable {
         } catch (IOException e) {
             System.err.println("Error loading database!");
             return false;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return true;

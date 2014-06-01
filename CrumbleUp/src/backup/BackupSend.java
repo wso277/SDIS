@@ -41,12 +41,12 @@ public class BackupSend extends Thread {
 
         if (isFile) {
             Boolean enoughSpace;
-            enoughSpace = fm.split();
+            enoughSpace = fm.split(Main.getDatabase().getUsername());
 
             if (enoughSpace) {
                 Integer chunkNo = 0;
 
-                while (fm.readChunk(chunkNo)) {
+                while (fm.readChunk(chunkNo, Main.getDatabase().getUsername())) {
 
                     String msg;
                     msg = "PUTCHUNK " + Main.getVersion() + " " + fileHash + " " + chunkNo + " " + fm.getRep() +
@@ -106,7 +106,7 @@ public class BackupSend extends Thread {
 
     public void backupChunk(Integer chunkNo) {
 
-        fm.readChunk(chunkNo);
+        fm.readChunk(chunkNo, Main.getDatabase().getUsername());
 
         String message;
         message = "PUTCHUNK " + Main.getVersion() + " " + fileHash + " " + chunkNo + " " + fm.getRep() +

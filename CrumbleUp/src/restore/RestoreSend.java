@@ -69,7 +69,7 @@ public class RestoreSend {
         System.out.println("Exited receive");
 
         fm = new FileManager(fileId, 0, true);
-        fm.join();
+        fm.join(Main.getDatabase().getUsername(), Main.getDatabase().getPassword(), false);
 
         System.out.println("Restore Complete!");
     }

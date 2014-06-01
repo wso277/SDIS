@@ -63,7 +63,7 @@ class BackupProcess extends Thread {
     }
 
     private void putDbProcess() {
-        FileManager.writeDb(header.get(1), Integer.parseInt(header.get(2)), body);
+        FileManager.writeDb(header.get(1), Integer.parseInt(header.get(2)), body, false);
     }
 
     private void putProcess() {
@@ -123,7 +123,8 @@ class BackupProcess extends Thread {
                             Main.getDatabase().removeChunk(header.get(2), Integer.parseInt(header.get(3)));
                         } else {
                             FileManager fm = new FileManager(header.get(2), Integer.parseInt(header.get(4)), true);
-                            fm.writeToFile(Integer.parseInt(header.get(3)), body, true);
+                            fm.writeToFile(Integer.parseInt(header.get(3)), body, true,
+                                    Main.getDatabase().getUsername(), false);
                             Main.getControl().send(msg.getBytes(StandardCharsets.ISO_8859_1));
                             Main.getDatabase().getChunk(Integer.parseInt(header.get(3))).setKnownReps(1);
                         }

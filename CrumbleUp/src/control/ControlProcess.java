@@ -81,7 +81,7 @@ class ControlProcess extends Thread {
 
     private void processDB() {
         FileManager fm = new FileManager(header.get(1), 0, true);
-        if (fm.readChunk(Integer.parseInt(header.get(2)))) {
+        if (fm.readChunk(Integer.parseInt(header.get(2)), Main.getDatabase().getUsername())) {
             Chunk ch = new Chunk(header.get(1), Integer.parseInt(header.get(2)), 0);
 
             Main.getDatabase().addChunk(ch);
@@ -118,7 +118,7 @@ class ControlProcess extends Thread {
 
         if (found) {
             FileManager chunk = new FileManager(header.get(2), 0, true);
-            chunk.readChunk(Integer.parseInt(header.get(3)));
+            chunk.readChunk(Integer.parseInt(header.get(3)), Main.getDatabase().getUsername());
 
             String ip = "";
             try {

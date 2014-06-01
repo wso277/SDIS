@@ -21,8 +21,7 @@ public class Database implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private String username;
-    private String salt = "#a81nb29";
-    private String password;
+    private static String salt = "#a81nb29";
     private String mail;
     private StringBuffer DbId;
     private byte[] passwordByte;
@@ -41,10 +40,9 @@ public class Database implements Serializable {
         fileReps = new HashMap<>();
         filesToBeReclaimed = new ArrayList<>();
         username = newUsername;
-        password = newPassword;
         mail = newMail;
-        encodePassword();
-        DbId = getDBHash(username, password, mail);
+        passwordByte = encodePassword(newPassword);
+        DbId = getDBHash(username, newPassword, mail);
 
     }
 
@@ -170,15 +168,15 @@ public class Database implements Serializable {
         return passwordByte;
     }
 
-    public boolean login(String password) {
-        if (this.password.equals(password)) {
+    public boolean login(byte[] password) {
+        if (this.passwordByte.equals(password)) {
             return true;
         } else {
             return false;
         }
     }
 
-    private void encodePassword() {
+    public static byte[] encodePassword(String password) {
 
         Cipher cipher = null;
         try {
@@ -202,12 +200,14 @@ public class Database implements Serializable {
         }*/
 
         try {
-            passwordByte = cipher.doFinal(password.getBytes(StandardCharsets.ISO_8859_1));
+            return cipher.doFinal(password.getBytes(StandardCharsets.ISO_8859_1));
         } catch (IllegalBlockSizeException e) {
             e.printStackTrace();
         } catch (BadPaddingException e) {
             e.printStackTrace();
         }
+
+        return null;
     }
 
     public String getMail() {

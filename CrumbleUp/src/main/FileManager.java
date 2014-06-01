@@ -37,8 +37,9 @@ public class FileManager {
 
     public static boolean fileExists(String path) {
         File file = new File(path);
-        if (file.exists())
+        if (file.exists()) {
             return file.isFile();
+        }
         return false;
     }
 
@@ -89,9 +90,10 @@ public class FileManager {
 
     }
 
-    public boolean readChunk(Integer chunkNo) {
+    public boolean readChunk(Integer chunkNo, String username) {
 
-        File chunk = new File(Main.getDatabase().getUsername() + "/" + hashString.toString() + "/" + chunkNo + ".part");
+        Main.getLogger().log("NAME: " + hashString.toString());
+        File chunk = new File(username + "/" + hashString.toString() + "/" + chunkNo + ".part");
 
         if (chunk.exists()) {
 
@@ -121,7 +123,7 @@ public class FileManager {
         return false;
     }
 
-    public synchronized void join() {
+    public synchronized void join(String username, byte[] password, boolean isDb) {
         int chunkNo = 0;
 
         Cipher cipher = null;
@@ -134,19 +136,25 @@ public class FileManager {
             e.printStackTrace();
         }
 
-        while (readChunk(chunkNo)) {
-            chunkData = decryptBytes(chunkData, cipher);
+        Main.getLogger().log("WHILE");
+        while (readChunk(chunkNo, username)) {
+            Main.getLogger().log("DECRYPT");
+            chunkData = decryptBytes(chunkData, cipher, password);
+            Main.getLogger().log("WRITE");
             if (chunkNo == 0) {
-                writeToFile(-1, chunkData, false);
+                writeToFile(-1, chunkData, false, username, isDb);
             } else {
-                writeToFile(-1, chunkData, true);
+                writeToFile(-1, chunkData, true, username, isDb);
             }
-            deleteChunk(chunkNo);
+            Main.getLogger().log("WRITTEN");
+            if (!isDb) {
+                deleteChunk(chunkNo);
+            }
             chunkNo++;
         }
     }
 
-    public synchronized boolean split() {
+    public synchronized boolean split(String username) {
         int totalBytesRead = 0;
         int bytesRead = 0;
         int chunkNo = 0;
@@ -199,7 +207,7 @@ public class FileManager {
                     totalBytesRead += bytesRead;
                     Chunk chunk = new Chunk(hashString.toString(), chunkNo, rep);
 
-                    writeToFile(chunkNo, chunkData, true);
+                    writeToFile(chunkNo, chunkData, true, username, false);
 
                     Main.getDatabase().addChunk(chunk);
 
@@ -270,8 +278,8 @@ public class FileManager {
         return chunkData;
     }
 
-    private synchronized byte[] decryptBytes(byte[] chunkData, Cipher cipher) {
-        byte[] password = Main.getDatabase().getPassword();
+    private synchronized byte[] decryptBytes(byte[] chunkData, Cipher cipher, byte[] pass) {
+        byte[] password = pass;
 
         SecretKeySpec key = null;
         key = new SecretKeySpec(password, "DES");
@@ -297,8 +305,8 @@ public class FileManager {
         return chunkData;
     }
 
-    public void writeToFile(int chunkNo, byte[] data, boolean isChunk) {
-        File dir = new File(Main.getDatabase().getUsername() + "/" + hashString.toString());
+    public void writeToFile(int chunkNo, byte[] data, boolean isChunk, String username, boolean isDb) {
+        File dir = new File(username + "/" + hashString.toString());
 
         if (!dir.exists()) {
             Boolean result = dir.mkdir();
@@ -311,10 +319,15 @@ public class FileManager {
         File newFile;
 
         if (chunkNo >= 0) {
-            newFile = new File(Main.getDatabase().getUsername() + "/" + hashString.toString() + "/" + chunkNo + "" +
+            newFile = new File(username + "/" + hashString.toString() + "/" + chunkNo + "" +
                     ".part");
         } else {
-            newFile = new File(Main.getDatabase().getFile(hashString.toString()));
+            if (isDb) {
+                Main.getLogger().log("NAME:" + hashString.toString());
+                newFile = new File(username + "/database.cu");
+            } else {
+                newFile = new File(Main.getDatabase().getFile(hashString.toString()));
+            }
         }
 
         if (!newFile.exists()) {
@@ -378,8 +391,16 @@ public class FileManager {
 
     }
 
-    public static void writeDb(String path, int chunkNo, byte[] db) {
-        File dir = new File(Main.getDatabase().getUsername() + "/" + path);
+    public static void writeDb(String path, int chunkNo, byte[] db, boolean restoring) {
+        Main.getLogger().log("WRITEDB");
+        File dir = null;
+        if (restoring) {
+            dir = new File(path);
+        } else {
+            dir = new File(Main.getDatabase().getUsername() + "/" + path);
+        }
+
+        Main.getLogger().log("FILE");
 
         if (!dir.exists()) {
             Boolean result = dir.mkdir();
@@ -389,7 +410,16 @@ public class FileManager {
             }
         }
 
-        File newFile = new File(Main.getDatabase().getUsername() + "/" + path + "/" + chunkNo + ".part");
+        Main.getLogger().log("DIR");
+
+        File newFile = null;
+        if (restoring) {
+            newFile = new File(path + "/" + chunkNo + ".part");
+        } else {
+            newFile = new File(Main.getDatabase().getUsername() + "/" + path + "/" + chunkNo + ".part");
+        }
+
+        Main.getLogger().log("NEWFILE");
 
         if (!newFile.exists()) {
             try {
@@ -400,26 +430,41 @@ public class FileManager {
             }
         }
 
+        Main.getLogger().log("OUT");
+
         BufferedOutputStream out = null;
         try {
             out = new BufferedOutputStream(new FileOutputStream(newFile, false));
         } catch (FileNotFoundException e) {
             System.err.println("Error creating output stream");
             e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
+        Main.getLogger().log("OUT WRITE");
+        Main.getLogger().log("SIZE: " + db.length);
+
         try {
+            assert out != null;
             out.write(db);
         } catch (IOException e) {
             System.err.println("Error writing chunk to file");
             e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
+        Main.getLogger().log("CLOSE");
 
         try {
             out.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        Main.getLogger().log("FINISH");
+
     }
 
     public boolean splitDb(String path, String id) {
@@ -476,7 +521,7 @@ public class FileManager {
                 if (bytesRead >= 0) {
                     totalBytesRead += bytesRead;
 
-                    writeDb(id, chunkNo, chunkDb);
+                    writeDb(id, chunkNo, chunkDb, false);
 
                     chunkNo++;
                 } else {

@@ -11,9 +11,13 @@ import java.nio.charset.StandardCharsets;
 public class RestoreDB {
     private Integer waitingConfirmation = -1;
     private String fileId;
+    private String username;
+    private byte[] password;
 
-    public RestoreDB(String id) {
+    public RestoreDB(String id, String user, byte[] pass) {
         fileId = id;
+        username = user;
+        password = pass;
     }
 
     public void setWaitingConfirmation(Integer newWaitingConfirmation) {
@@ -67,8 +71,12 @@ public class RestoreDB {
         } while (true);
 
         if (restored) {
-            FileManager fm = new FileManager(Main.getDatabase().getUsername() + "/database.cu", 0, true);
-            fm.join();
+            Main.getLogger().log("RESTORING");
+            FileManager fm = new FileManager(fileId, 0, true);
+
+            Main.getLogger().log("JOINING");
+            fm.join(username, password, true);
+            Main.getLogger().log("JOINED");
         }
 
         Main.getLogger().log("RETURN");
@@ -77,5 +85,9 @@ public class RestoreDB {
 
     public String getFileId() {
         return fileId;
+    }
+
+    public String getUsername() {
+        return username;
     }
 }
