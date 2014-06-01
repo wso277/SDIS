@@ -36,11 +36,12 @@ public class Cli {
 
         password = "";
 
-        cliLogin();
 
         Main.loadNetwork();
 
         introNetwork();
+
+        cliLogin();
     }
 
     private void introNetwork() {

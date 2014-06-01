@@ -152,7 +152,7 @@ public class Main implements Serializable {
         ObjectOutputStream save = null;
 
         try {
-            save = new ObjectOutputStream(new FileOutputStream(database.getUsername() + "/network.cu"));
+            save = new ObjectOutputStream(new FileOutputStream("network.cu"));
         } catch (FileNotFoundException e) {
             System.err.println("Network.cu not found!");
             e.printStackTrace();
@@ -176,7 +176,7 @@ public class Main implements Serializable {
 
         ObjectInputStream load = null;
         try {
-            load = new ObjectInputStream(new FileInputStream(database.getUsername() + "/network.cu"));
+            load = new ObjectInputStream(new FileInputStream("network.cu"));
         } catch (FileNotFoundException e) {
             System.err.println("Network.cu not found!");
         } catch (IOException e) {
