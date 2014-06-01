@@ -44,10 +44,21 @@ public class Main implements Serializable {
             C:\Users\Vinnie\Dropbox\ojogo.txt
         */
 
-        /*TODO: Write-Ahead Logging */
-        /*TODO: Partilha da Base de Dados - Todos */
-        /*TODO: Sliding window no restore */
-        /*TODO: Velocidade de transferência */
+        /*TODO:
+        * Write-Ahead Logging
+        */
+        /*TODO:
+        * Partilha da Base de Dados - Todos
+        */
+        /*TODO:
+        * Sliding window no restore
+        */
+        /*TODO:
+        * Velocidade de transferência
+        */
+        /*TODO:
+        * mensagem in para garantir replicacao
+         */
 
         // Initializing job queue
         service = Executors.newFixedThreadPool(15);

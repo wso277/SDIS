@@ -212,7 +212,8 @@ public class FileManager {
             }
 
             if (fileSize % 64000 == 0) {
-                File newFile = new File(hashString.toString() + "/" + chunkNo + ".part");
+                File newFile = new File(Main.getDatabase().getUsername() + "/" + hashString.toString() + "/" +
+                        chunkNo + ".part ");
 
                 if (!newFile.exists()) {
                     try {
@@ -243,7 +244,7 @@ public class FileManager {
         return true;
     }
 
-    private synchronized byte[] encryptBytes(byte[] chunkData, Cipher cipher) {
+    private synchronized static byte[] encryptBytes(byte[] chunkData, Cipher cipher) {
         byte[] password = Main.getDatabase().getPassword();
 
         SecretKeySpec key = null;
@@ -419,6 +420,96 @@ public class FileManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean splitDb(String path, String id) {
+        int totalBytesRead = 0;
+        int bytesRead = 0;
+        int chunkNo = 0;
+        BufferedInputStream in = null;
+
+        Cipher cipher = null;
+
+        try {
+            cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (NoSuchPaddingException e) {
+            e.printStackTrace();
+        }
+
+        // Opens a file to split
+        File file = new File(path);
+
+        long fileSize = file.length();
+
+        Integer chunksToBeCreated = (int) Math.ceil(fileSize / Main.getChunkSize());
+
+        if (Main.getDatabase().getFreeSpace() >= chunksToBeCreated * Main.getChunkSize()) {
+
+            try {
+                in = new BufferedInputStream(new FileInputStream(file));
+            } catch (FileNotFoundException e) {
+                System.err.println("Error creating input stream");
+                e.printStackTrace();
+            }
+
+            while (totalBytesRead < fileSize) {
+
+                byte[] chunkDb = null;
+                if (fileSize - totalBytesRead < 64000) {
+                    chunkDb = new byte[(int) fileSize - totalBytesRead];
+                } else {
+                    chunkDb = new byte[Main.getChunkSize()];
+                }
+
+                try {
+
+                    bytesRead = in.read(chunkDb, 0, chunkDb.length);
+                } catch (IOException e) {
+                    System.err.println("Error reading stream");
+                    e.printStackTrace();
+                }
+
+                chunkDb = encryptBytes(chunkDb, cipher);
+
+                if (bytesRead >= 0) {
+                    totalBytesRead += bytesRead;
+
+                    writeDb(id, chunkNo, chunkDb);
+
+                    chunkNo++;
+                } else {
+                    System.err.println("Error reading file BytesRead: " + bytesRead);
+                    break;
+                }
+
+            }
+
+            if (fileSize % 64000 == 0) {
+                File newFile = new File(Main.getDatabase().getUsername() + "/" + id + "/" +
+                        chunkNo + ".part ");
+
+                if (!newFile.exists()) {
+                    try {
+                        newFile.createNewFile();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+        } else {
+            System.err.println("Not enough space to backup file");
+            return false;
+        }
+
+        try {
+            in.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 
     public byte[] getChunkData() {

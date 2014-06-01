@@ -1,5 +1,6 @@
 package cli;
 
+import backup.BackupDB;
 import backup.BackupSend;
 import communication.Address;
 import communication.Network;
@@ -376,6 +377,8 @@ public class Cli {
         }
         if (Integer.parseInt(input) > 0 && Integer.parseInt(input) <= (Database.getDiskSize() - 64)) {
             new SpaceReclaim(Integer.parseInt(input)).process();
+            Main.getService().submit(new BackupDB());
+
         } else {
             System.out.println("Invalid Size. Choose from the available range!");
         }
@@ -395,6 +398,7 @@ public class Cli {
         if (!result.equals("fail")) {
             System.out.println("Sending DELETE message!");
             new Delete(result).process();
+            Main.getService().submit(new BackupDB());
         } else {
             System.out.println("Invalid file. Choose one of the availvable numbers!");
         }
