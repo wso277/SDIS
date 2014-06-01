@@ -42,8 +42,8 @@ public class Database implements Serializable {
         filesToBeReclaimed = new ArrayList<>();
         username = newUsername;
         mail = newMail;
-        passwordByte = encodePassword(newPassword);
         passwordHash = getPassHash(newPassword);
+        passwordByte = encodePassword(passwordHash.toString());
         DbId = getDBHash(username, newPassword, mail);
 
     }
@@ -279,4 +279,7 @@ public class Database implements Serializable {
         return DbId;
     }
 
+    public byte[] getPasswordByte() {
+        return passwordByte;
+    }
 }

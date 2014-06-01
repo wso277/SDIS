@@ -144,7 +144,7 @@ public class FileManager {
         while (readChunk(chunkNo, username)) {
             Main.getLogger().log("DECRYPT");
             if (!isDb) {
-                chunkData = decryptBytes(chunkData, cipher, password);
+                chunkData = decryptBytes(chunkData, cipher, Main.getDatabase().getPasswordByte());
             }
             Main.getLogger().log("WRITE");
             if (chunkNo == 0) {
@@ -260,7 +260,7 @@ public class FileManager {
 
     private synchronized static byte[] encryptBytes(byte[] chunkData, Cipher cipher) {
         Main.getLogger().log("Pass para o encrypt: " + new String(Main.getDatabase().getPassword()));
-        byte[] password = Main.getDatabase().getPassword().toString().getBytes(StandardCharsets.ISO_8859_1);
+        byte[] password = Main.getDatabase().getPasswordByte();
 
         SecretKeySpec key = null;
 
@@ -285,8 +285,8 @@ public class FileManager {
         return chunkData;
     }
 
-    private synchronized byte[] decryptBytes(byte[] chunkData, Cipher cipher, StringBuffer pass) {
-        byte[] password = pass.toString().getBytes(StandardCharsets.ISO_8859_1);
+    private synchronized byte[] decryptBytes(byte[] chunkData, Cipher cipher, byte[] pass) {
+        byte[] password = pass;
         Main.getLogger().log("Pass para o decrypt: " + new String(password));
 
         SecretKeySpec key = null;
