@@ -13,7 +13,7 @@ public class BackupDB extends Thread {
     private String dbId;
 
     public BackupDB() {
-        dbId = Main.getDatabase().getDbId();
+        dbId = Main.getDatabase().getDbId().toString();
     }
 
     @Override
