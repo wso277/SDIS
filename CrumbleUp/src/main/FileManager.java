@@ -6,6 +6,7 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -123,23 +124,28 @@ public class FileManager {
         return false;
     }
 
-    public synchronized void join(String username, byte[] password, boolean isDb) {
+    public synchronized void join(String username, StringBuffer password, boolean isDb) {
+        Cipher cipher = null;
         int chunkNo = 0;
 
-        Cipher cipher = null;
+        if (!isDb) {
 
-        try {
-            cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
+
+            try {
+                cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            } catch (NoSuchPaddingException e) {
+                e.printStackTrace();
+            }
         }
 
         Main.getLogger().log("WHILE");
         while (readChunk(chunkNo, username)) {
             Main.getLogger().log("DECRYPT");
-            chunkData = decryptBytes(chunkData, cipher, password);
+            if (!isDb) {
+                chunkData = decryptBytes(chunkData, cipher, Main.getDatabase().getPasswordByte());
+            }
             Main.getLogger().log("WRITE");
             if (chunkNo == 0) {
                 writeToFile(-1, chunkData, false, username, isDb);
@@ -253,7 +259,8 @@ public class FileManager {
     }
 
     private synchronized static byte[] encryptBytes(byte[] chunkData, Cipher cipher) {
-        byte[] password = Main.getDatabase().getPassword();
+        Main.getLogger().log("Pass para o encrypt: " + new String(Main.getDatabase().getPasswordByte()));
+        byte[] password = Main.getDatabase().getPasswordByte();
 
         SecretKeySpec key = null;
 
@@ -280,6 +287,7 @@ public class FileManager {
 
     private synchronized byte[] decryptBytes(byte[] chunkData, Cipher cipher, byte[] pass) {
         byte[] password = pass;
+        Main.getLogger().log("Pass para o decrypt: " + new String(password));
 
         SecretKeySpec key = null;
         key = new SecretKeySpec(password, "DES");
@@ -472,16 +480,6 @@ public class FileManager {
         int chunkNo = 0;
         BufferedInputStream in = null;
 
-        Cipher cipher = null;
-
-        try {
-            cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-        }
-
         // Opens a file to split
         File file = new File(path);
 
@@ -514,8 +512,6 @@ public class FileManager {
                     System.err.println("Error reading stream");
                     e.printStackTrace();
                 }
-
-                chunkDb = encryptBytes(chunkDb, cipher);
 
                 if (bytesRead >= 0) {
                     totalBytesRead += bytesRead;

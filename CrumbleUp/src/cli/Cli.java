@@ -227,7 +227,7 @@ public class Cli {
 
     public void processRegister() {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        byte[] passwordByte = null;
+        StringBuffer passwordHash = null;
         System.out.println("Enter your desired username: ");
         try {
             username = reader.readLine();
@@ -238,7 +238,7 @@ public class Cli {
         System.out.println("Enter your desired password: ");
         try {
             password = reader.readLine();
-            passwordByte = Database.encodePassword(password);
+            passwordHash = Database.getPassHash(password);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -253,7 +253,7 @@ public class Cli {
 
         if (!FileManager.fileExists(username + "/database.cu")) {
             RestoreDB restoreDB = new RestoreDB(Database.getDBHash(username, password, mail).toString(), username,
-                    passwordByte);
+                    passwordHash);
             Main.setRestoreDB(restoreDB);
             if (restoreDB.process()) {
                 Main.getLogger().log("RESTored");
@@ -264,12 +264,12 @@ public class Cli {
                     Main.getLogger().log("FODEU");
                 }
                 Main.getLogger().log("CENAS");
-                while (!Main.getDatabase().login(passwordByte)) {
+                while (!Main.getDatabase().login(passwordHash)) {
                     System.out.println("Wrong password!");
                     System.out.println("Enter your password: ");
                     try {
                         password = in.readLine();
-                        passwordByte = Database.encodePassword(password);
+                        passwordHash = Database.getPassHash(password);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -290,12 +290,12 @@ public class Cli {
         } else {
 
             Main.getLogger().log("OLD");
-            while (!Main.getDatabase().login(passwordByte)) {
+            while (!Main.getDatabase().login(passwordHash)) {
                 System.out.println("Wrong password!");
                 System.out.println("Enter your password: ");
                 try {
                     password = in.readLine();
-                    passwordByte = Database.encodePassword(password);
+                    passwordHash = Database.getPassHash(password);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -308,7 +308,7 @@ public class Cli {
 
     private void processLogin() {
         Boolean res = false;
-        byte[] passwordByte = null;
+        StringBuffer passwordHash = null;
         while (!res) {
             System.out.println("Enter your username: ");
             try {
@@ -325,11 +325,11 @@ public class Cli {
                     System.out.println("Enter your password: ");
                     try {
                         password = in.readLine();
-                        passwordByte = Database.encodePassword(password);
+                        passwordHash = Database.getPassHash(password);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    if (Main.getDatabase().login(passwordByte)) {
+                    if (Main.getDatabase().login(passwordHash)) {
                         res = true;
                     } else {
                         res = false;
