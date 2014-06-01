@@ -8,8 +8,10 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,6 +23,8 @@ public class Database implements Serializable {
     private String username;
     private String salt = "#a81nb29";
     private String password;
+    private String mail;
+    private StringBuffer DbId;
     private byte[] passwordByte;
     private static int diskSize = 100000000;
     private final ArrayList<Chunk> chunks;
@@ -30,7 +34,7 @@ public class Database implements Serializable {
     private final HashMap<String, Integer> deletedFiles;
     private final ArrayList<FileChunks> filesToBeReclaimed;
 
-    public Database(String newUsername, String newPassword) {
+    public Database(String newUsername, String newPassword, String newMail) {
         chunks = new ArrayList<>();
         fileList = new HashMap<>();
         deletedFiles = new HashMap<>();
@@ -38,7 +42,9 @@ public class Database implements Serializable {
         filesToBeReclaimed = new ArrayList<>();
         username = newUsername;
         password = newPassword;
+        mail = newMail;
         encodePassword();
+        DbId = getDBHash();
 
     }
 
@@ -207,6 +213,44 @@ public class Database implements Serializable {
         } catch (BadPaddingException e) {
             e.printStackTrace();
         }
+    }
+
+    public String getMail() {
+        return mail;
+    }
+
+    private StringBuffer getDBHash() {
+        String hash = Main.getDatabase().getUsername() + Main.getDatabase().getPassword() + Main.getDatabase().getMail();
+
+        MessageDigest digest = null;
+        try {
+            digest = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        byte[] hashFileName = null;
+
+        try {
+            assert digest != null;
+            hashFileName = digest.digest(hash.getBytes("UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+
+        /*
+        Method to convert a byte array to hexadecimal form found on StackOverflow
+        */
+        StringBuffer hashString = new StringBuffer();
+        for (byte aHashFileName : hashFileName) {
+            hashString.append(Integer.toString((aHashFileName & 0xff) + 0x100, 16).substring(1));
+        }
+        return hashString;
+    }
+
+    public StringBuffer getDbId() {
+        return DbId;
     }
 
 }
