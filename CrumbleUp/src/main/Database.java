@@ -181,8 +181,6 @@ public class Database implements Serializable {
     private void encodePassword() {
 
         Cipher cipher = null;
-
-        Main.getLogger().log("Merdou na Cypher");
         try {
             cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
         } catch (NoSuchAlgorithmException e) {
@@ -193,11 +191,9 @@ public class Database implements Serializable {
 
         SecretKeySpec key = null;
 
-        Main.getLogger().log("Merdou na criar a key");
         key = new SecretKeySpec(salt.getBytes(StandardCharsets.ISO_8859_1), "DES");
 
         try {
-            Main.getLogger().log("Merdou no init da Cypher");
             cipher.init(Cipher.ENCRYPT_MODE, key/*, new IvParameterSpec(Main.getDatabase().getUsernameByte())*/);
         } catch (InvalidKeyException e) {
             e.printStackTrace();
@@ -205,7 +201,6 @@ public class Database implements Serializable {
             e.printStackTrace();
         }*/
 
-        Main.getLogger().log("Merdou a finalizar");
         try {
             passwordByte = cipher.doFinal(password.getBytes(StandardCharsets.ISO_8859_1));
         } catch (IllegalBlockSizeException e) {

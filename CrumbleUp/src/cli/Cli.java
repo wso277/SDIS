@@ -271,6 +271,7 @@ public class Cli {
                     dir.mkdir();
                 }
                 Main.save(username);
+                Main.getService().submit(new BackupDB());
             }
 
         } else {
@@ -282,8 +283,8 @@ public class Cli {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
             }
+            Main.getService().submit(new BackupDB());
         }
 
 
