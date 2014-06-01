@@ -38,7 +38,7 @@ public class Main implements Serializable {
 
     public static void main(String[] args) throws IOException {
         /*
-            C:\Users\Vinnie\Downloads\compressi.zip
+            C:\Users\Vinnie\Downloads\COMPRESSI.pptx
             C:\Users\Vinnie\Dropbox\Screenshots\Screenshot 2014-01-27 22.39.52.png
             C:\Users\Vinnie\Dropbox\Camera Uploads\2014-05-28 19.34.01.jpg
             C:\Users\Vinnie\Dropbox\ojogo.txt
@@ -63,15 +63,15 @@ public class Main implements Serializable {
         logger = new Log(true, true);
         backup = new Backup(ipData.get("mcb").getIp(), ipData.get("mcb").getPort());
         control = new Control(ipData.get("mc").getIp(), ipData.get("mc").getPort());
-        restore = new Restore(ipData.get("mcr").getIp(), ipData.get("mcr").getPort());
-        delete = new DeleteProcess();
 
         // Pushing main components to job queue
         service.submit(backup);
         service.submit(control);
         service.submit(restore);
-        service.submit(delete);
         cli.cliLogin();
+        restore = new Restore(ipData.get("mcr").getIp(), ipData.get("mcr").getPort());
+        delete = new DeleteProcess();
+        service.submit(delete);
         cli.menu();
 
         // When cli ends
