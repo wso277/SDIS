@@ -43,7 +43,7 @@ public class Database implements Serializable {
         username = newUsername;
         mail = newMail;
         passwordHash = getPassHash(newPassword);
-        passwordByte = encodePassword(passwordHash.toString());
+        passwordByte = encodePassword(newPassword);
         DbId = getDBHash(username, newPassword, mail);
 
     }

@@ -259,7 +259,7 @@ public class FileManager {
     }
 
     private synchronized static byte[] encryptBytes(byte[] chunkData, Cipher cipher) {
-        Main.getLogger().log("Pass para o encrypt: " + new String(Main.getDatabase().getPassword()));
+        Main.getLogger().log("Pass para o encrypt: " + new String(Main.getDatabase().getPasswordByte()));
         byte[] password = Main.getDatabase().getPasswordByte();
 
         SecretKeySpec key = null;
