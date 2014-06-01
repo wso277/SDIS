@@ -413,6 +413,7 @@ public class Cli {
         } else {
             System.out.println("Invalid Size. Choose from the available range!");
         }
+        Main.getService().submit(new BackupDB());
     }
 
     private void processReclaimInput() {
@@ -430,6 +431,7 @@ public class Cli {
         } else {
             System.out.println("Invalid Size. Choose from the available range!");
         }
+        Main.getService().submit(new BackupDB());
     }
 
     private void processDeleteInput() {

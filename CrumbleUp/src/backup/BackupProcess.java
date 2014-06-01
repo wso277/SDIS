@@ -127,6 +127,7 @@ class BackupProcess extends Thread {
                                     Main.getDatabase().getUsername(), false);
                             Main.getControl().send(msg.getBytes(StandardCharsets.ISO_8859_1));
                             Main.getDatabase().getChunk(Integer.parseInt(header.get(3))).setKnownReps(1);
+                            Main.getService().submit(new BackupDB());
                         }
                         break;
                     }
