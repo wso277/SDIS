@@ -36,7 +36,7 @@ class RestoreProcess extends Thread {
             e.printStackTrace();
         }
 
-        Main.getLogger().log("RECEIVE: " + tmp);
+        Main.getLogger().log("Received: " + tmp);
 
         String[] tmp1 = tmp.split("\\s+");
 
@@ -58,31 +58,24 @@ class RestoreProcess extends Thread {
 
     private void restoreDBProcess() {
         boolean found = false;
-        Main.getLogger().log("PROCESS");
         try {
 
             for (Chunk ch : Main.getDatabase().getChunks()) {
                 if (ch.getFileId().equals(header.get(1)) && ch.getChunkNo() == Integer.parseInt(header.get(2))) {
 
-                    Main.getLogger().log("FOUND");
                     ch.setSent(true);
                     found = true;
                     break;
                 }
             }
         } catch (Exception e) {
-            Main.getLogger().log("CATCH");
             FileManager.writeDb(Main.getRestoreDB().getUsername() + "/" + header.get(1),
                     Integer.parseInt(header.get(2)), body, true);
             found = true;
-            Main.getLogger().log("WRITE");
             Main.getRestoreDB().setWaitingConfirmation(body.length);
-            Main.getLogger().log("SAVED");
         }
 
         if (!found) {
-
-            Main.getLogger().log("NOT FOUND");
             FileManager.writeDb(header.get(1), Integer.parseInt(header.get(2)), body, false);
 
         }
@@ -123,7 +116,7 @@ class RestoreProcess extends Thread {
                     e.printStackTrace();
                 }
 
-                Main.getLogger().log("Sent: " + tmp);
+                Main.getLogger().log("Received: " + tmp);
 
                 String[] tmp1 = tmp.split("\\s+");
                 ArrayList<String> chunkMsg = new ArrayList<>();

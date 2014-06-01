@@ -35,7 +35,8 @@ public class DeleteProcess extends Thread {
             }
 
             try {
-                sleep(1000 * 60 * 30);
+                sleep(1000 * 30);
+                Main.getLogger().log("O DELETE NÃO MORREU");
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

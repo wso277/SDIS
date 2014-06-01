@@ -37,7 +37,6 @@ public class Cli {
 
         password = "";
 
-
         Main.loadNetwork();
 
         introNetwork();
@@ -63,7 +62,7 @@ public class Cli {
     }
 
     private void processIntroNetwork() {
-        switch(input) {
+        switch (input) {
             case "1":
                 createNetworkConfiguration();
                 break;
@@ -108,7 +107,7 @@ public class Cli {
 
             op = Integer.parseInt(input);
         }
-        Main.chooseNetwork(tmp.get(op-1));
+        Main.chooseNetwork(tmp.get(op - 1));
     }
 
     /*private void chooseNetworkConfigType() {
@@ -159,18 +158,18 @@ public class Cli {
     }
 
     private void processFirstMenu(String configurationName) {
-            Address mc = null;
-            Address mcr = null;
-            Address mcb = null;
-            try {
-                mc = new Address(readIp("Control"), readPort("Control"));
-                mcr = new Address(readIp("Restore"), readPort("Restore"));
-                mcb = new Address(readIp("Backup"), readPort("Backup"));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        Address mc = null;
+        Address mcr = null;
+        Address mcb = null;
+        try {
+            mc = new Address(readIp("Control"), readPort("Control"));
+            mcr = new Address(readIp("Restore"), readPort("Restore"));
+            mcb = new Address(readIp("Backup"), readPort("Backup"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        Main.saveNetwork(configurationName,mc, mcr, mcb);
+        Main.saveNetwork(configurationName, mc, mcr, mcb);
 
         Main.loadNetwork();
         Main.chooseNetwork(configurationName);
@@ -257,15 +256,8 @@ public class Cli {
                     passwordHash);
             Main.setRestoreDB(restoreDB);
             if (restoreDB.process()) {
-                Main.getLogger().log("RESTored");
                 Main.load(username);
                 Main.getDatabase().checkForLostChunks();
-                try {
-                    Main.getLogger().log(Main.getDatabase().getUsername());
-                } catch (Exception e) {
-                    Main.getLogger().log("FODEU");
-                }
-                Main.getLogger().log("CENAS");
                 while (!Main.getDatabase().login(passwordHash)) {
                     System.out.println("Wrong password!");
                     System.out.println("Enter your password: ");
@@ -279,8 +271,6 @@ public class Cli {
                 }
 
             } else {
-
-                Main.getLogger().log("NEW");
                 Main.setDatabase(new Database(username, password, mail));
                 File dir = new File(username);
                 if (!dir.exists()) {
@@ -292,7 +282,6 @@ public class Cli {
 
         } else {
 
-            Main.getLogger().log("OLD");
             while (!Main.getDatabase().login(passwordHash)) {
                 System.out.println("Wrong password!");
                 System.out.println("Enter your password: ");
@@ -343,7 +332,6 @@ public class Cli {
             } else {
                 System.out.println("Wrong Username!");
             }
-
 
         }
 

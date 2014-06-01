@@ -6,7 +6,6 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -93,7 +92,6 @@ public class FileManager {
 
     public boolean readChunk(Integer chunkNo, String username) {
 
-        Main.getLogger().log("NAME: " + hashString.toString());
         File chunk = new File(username + "/" + hashString.toString() + "/" + chunkNo + ".part");
 
         if (chunk.exists()) {
@@ -130,7 +128,6 @@ public class FileManager {
 
         if (!isDb) {
 
-
             try {
                 cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
             } catch (NoSuchAlgorithmException e) {
@@ -140,19 +137,15 @@ public class FileManager {
             }
         }
 
-        Main.getLogger().log("WHILE");
         while (readChunk(chunkNo, username)) {
-            Main.getLogger().log("DECRYPT");
             if (!isDb) {
                 chunkData = decryptBytes(chunkData, cipher, Main.getDatabase().getPasswordByte());
             }
-            Main.getLogger().log("WRITE");
             if (chunkNo == 0) {
                 writeToFile(-1, chunkData, false, username, isDb);
             } else {
                 writeToFile(-1, chunkData, true, username, isDb);
             }
-            Main.getLogger().log("WRITTEN");
             if (!isDb) {
                 deleteChunk(chunkNo);
             }
@@ -259,7 +252,6 @@ public class FileManager {
     }
 
     private synchronized static byte[] encryptBytes(byte[] chunkData, Cipher cipher) {
-        Main.getLogger().log("Pass para o encrypt: " + new String(Main.getDatabase().getPasswordByte()));
         byte[] password = Main.getDatabase().getPasswordByte();
 
         SecretKeySpec key = null;
@@ -287,13 +279,11 @@ public class FileManager {
 
     private synchronized byte[] decryptBytes(byte[] chunkData, Cipher cipher, byte[] pass) {
         byte[] password = pass;
-        Main.getLogger().log("Pass para o decrypt: " + new String(password));
 
         SecretKeySpec key = null;
         key = new SecretKeySpec(password, "DES");
 
         try {
-            Main.getLogger().log("Merdou no init da Cypher");
             cipher.init(Cipher.DECRYPT_MODE, key);
         } catch (InvalidKeyException e) {
             e.printStackTrace();
@@ -301,7 +291,6 @@ public class FileManager {
             e.printStackTrace();
         }*/
 
-        Main.getLogger().log("Merdou a finalizar");
         try {
             return cipher.doFinal(chunkData);
         } catch (IllegalBlockSizeException e) {
@@ -331,7 +320,6 @@ public class FileManager {
                     ".part");
         } else {
             if (isDb) {
-                Main.getLogger().log("NAME:" + hashString.toString());
                 newFile = new File(username + "/database.cu");
             } else {
                 newFile = new File(Main.getDatabase().getFile(hashString.toString()));
@@ -400,15 +388,12 @@ public class FileManager {
     }
 
     public static void writeDb(String path, int chunkNo, byte[] db, boolean restoring) {
-        Main.getLogger().log("WRITEDB");
         File dir = null;
         if (restoring) {
             dir = new File(path);
         } else {
             dir = new File(Main.getDatabase().getUsername() + "/" + path);
         }
-
-        Main.getLogger().log("FILE");
 
         if (!dir.exists()) {
             Boolean result = dir.mkdir();
@@ -418,16 +403,12 @@ public class FileManager {
             }
         }
 
-        Main.getLogger().log("DIR");
-
         File newFile = null;
         if (restoring) {
             newFile = new File(path + "/" + chunkNo + ".part");
         } else {
             newFile = new File(Main.getDatabase().getUsername() + "/" + path + "/" + chunkNo + ".part");
         }
-
-        Main.getLogger().log("NEWFILE");
 
         if (!newFile.exists()) {
             try {
@@ -437,8 +418,6 @@ public class FileManager {
                 e.printStackTrace();
             }
         }
-
-        Main.getLogger().log("OUT");
 
         BufferedOutputStream out = null;
         try {
@@ -450,9 +429,6 @@ public class FileManager {
             e.printStackTrace();
         }
 
-        Main.getLogger().log("OUT WRITE");
-        Main.getLogger().log("SIZE: " + db.length);
-
         try {
             out.write(db);
         } catch (IOException e) {
@@ -462,15 +438,11 @@ public class FileManager {
             e.printStackTrace();
         }
 
-        Main.getLogger().log("CLOSE");
-
         try {
             out.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        Main.getLogger().log("FINISH");
 
     }
 

@@ -64,22 +64,16 @@ public class RestoreDB {
                 timeout = 0;
                 currentChunk++;
             } else if (timeout == 20) {
-                Main.getLogger().log("BREAK");
                 break;
             }
 
         } while (true);
 
         if (restored) {
-            Main.getLogger().log("RESTORING");
             FileManager fm = new FileManager(fileId, 0, true);
 
-            Main.getLogger().log("JOINING");
             fm.join(username, password, true);
-            Main.getLogger().log("JOINED");
         }
-
-        Main.getLogger().log("RETURN");
         return restored;
     }
 
