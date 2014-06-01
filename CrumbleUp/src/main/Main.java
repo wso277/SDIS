@@ -44,18 +44,10 @@ public class Main implements Serializable {
             C:\Users\Vinnie\Dropbox\ojogo.txt
         */
 
-        /*TODO:
-        * Write-Ahead Logging
-        */
-        /*TODO:
-        * Partilha da Base de Dados - Todos
-        */
-        /*TODO:
-        * Sliding window no restore
-        */
-        /*TODO:
-        * Velocidade de transferência
-        */
+        /*TODO: Write-Ahead Logging */
+        /*TODO: Partilha da Base de Dados - Todos */
+        /*TODO: Sliding window no restore */
+        /*TODO: Velocidade de transferência */
 
         // Initializing job queue
         service = Executors.newFixedThreadPool(15);
@@ -214,11 +206,6 @@ public class Main implements Serializable {
         System.arraycopy(arr, 0, C, 0, aLen);
         System.arraycopy(arr1, 0, C, aLen, bLen);
         return C;
-    }
-
-    public static boolean fileExists(String path) {
-        File file = new File(path);
-        return file.exists();
     }
 
     public static String getCRLF() {

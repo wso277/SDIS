@@ -35,6 +35,13 @@ public class FileManager {
 
     }
 
+    public static boolean fileExists(String path) {
+        File file = new File(path);
+        if (file.exists())
+            return file.isFile();
+        return false;
+    }
+
     public int getChunkSize(int chunkNo) {
         file = new File(Main.getDatabase().getUsername() + "/" + hashString.toString() + "/" + chunkNo + ".part");
         return (int) file.length();
