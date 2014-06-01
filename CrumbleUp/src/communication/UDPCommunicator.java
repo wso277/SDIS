@@ -1,10 +1,8 @@
 package communication;
 
 import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.InetAddress;
-import java.net.MulticastSocket;
-import java.net.UnknownHostException;
+import java.net.*;
+import java.util.Enumeration;
 
 public class UDPCommunicator {
 
@@ -21,6 +19,9 @@ public class UDPCommunicator {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
+
 
         try {
             socket.setTimeToLive(2);
@@ -39,6 +40,7 @@ public class UDPCommunicator {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
 
     }
 

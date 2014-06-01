@@ -42,12 +42,13 @@ public class RestoreSend {
                     e.printStackTrace();
                 }
 
-                if (timeout == 10) {
-                    if (waitingConfirmation != -1) {
-                        restored = true;
-                    }
+                if (timeout == 20) {
                     break;
                 }
+            }
+
+            if (waitingConfirmation != -1) {
+                restored = true;
             }
 
             if (restored) {

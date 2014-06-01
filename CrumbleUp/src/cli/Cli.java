@@ -239,7 +239,16 @@ public class Cli {
             e.printStackTrace();
         }
 
-        Main.setDatabase(new Database(username, password));
+        String mail = null;
+        System.out.println("Enter your E-mail: ");
+        try {
+            mail = reader.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        Main.setDatabase(new Database(username, password, mail));
         File dir = new File(username);
 
         if (!dir.exists()) {

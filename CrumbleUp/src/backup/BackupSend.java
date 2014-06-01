@@ -5,10 +5,7 @@ import main.FileManager;
 import main.Main;
 import space_reclaim.FileChunks;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 
 public class BackupSend extends Thread {
@@ -60,22 +57,18 @@ public class BackupSend extends Thread {
                     byte[] mssg = msg.getBytes(StandardCharsets.ISO_8859_1);
                     byte[] mssg1 = Main.appendArray(mssg, fm.getChunkData());
 
-                    if(repDegree != -1) {
-                        while (storeds < fm.getRep() && tries < 5) {
+                    while (storeds < fm.getRep() && tries < 5) {
 
-                            Main.getBackup().send(mssg1);
-
-                            try {
-                                sleep(time);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-
-                            tries++;
-                            time += time;
-                        }
-                    } else {
                         Main.getBackup().send(mssg1);
+
+                        try {
+                            sleep(time);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
+                        tries++;
+                        time += time;
                     }
 
                     int reps = 0;
@@ -99,8 +92,8 @@ public class BackupSend extends Thread {
                     storeds = 0;
                     time = 500;
                     tries = 0;
-                    sendPutDB();
                 }
+                Main.getService().submit(new BackupDB());
             } else {
                 System.out.println("Not enough space for backup!");
             }
@@ -109,41 +102,6 @@ public class BackupSend extends Thread {
         } else {
             backupChunk(chunkN);
         }
-    }
-
-    private void sendPutDB() {
-        StringBuffer hash = getDBHash();
-        Main.getService().submit(new BackupSend(hash.toString(),-1,false,0,0));
-    }
-
-    private StringBuffer getDBHash() {
-        String hash = Main.getDatabase().getUsername() + Main.getDatabase().getPassword();
-
-        MessageDigest digest = null;
-        try {
-            digest = MessageDigest.getInstance("SHA-256");
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-
-        byte[] hashFileName = null;
-
-        try {
-            assert digest != null;
-            hashFileName = digest.digest(hash.getBytes("UTF-8"));
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-
-
-        /*
-        Method to convert a byte array to hexadecimal form found on StackOverflow
-        */
-        StringBuffer hashString = new StringBuffer();
-        for (byte aHashFileName : hashFileName) {
-            hashString.append(Integer.toString((aHashFileName & 0xff) + 0x100, 16).substring(1));
-        }
-        return hashString;
     }
 
     public void backupChunk(Integer chunkNo) {

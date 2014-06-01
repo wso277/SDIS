@@ -226,7 +226,9 @@ public class FileManager {
                 Main.getDatabase().addChunk(chunk);
             }
 
-            Main.getDatabase().addFile(hashString.toString(), fileName);
+            if (rep != -1) {
+                Main.getDatabase().addFile(hashString.toString(), fileName);
+            }
 
         } else {
             System.err.println("Not enough space to backup file");
@@ -373,6 +375,50 @@ public class FileManager {
             hashString.append(Integer.toString((aHashFileName & 0xff) + 0x100, 16).substring(1));
         }
 
+    }
+
+    public static void writeDb(String path, int chunkNo, byte[] db) {
+        File dir = new File(Main.getDatabase().getUsername() + "/" + path);
+
+        if (!dir.exists()) {
+            Boolean result = dir.mkdir();
+
+            if (!result) {
+                System.err.println("Error creating folder!");
+            }
+        }
+
+        File newFile = new File(Main.getDatabase().getUsername() + "/" + path + "/" + chunkNo + ".part");
+
+        if (!newFile.exists()) {
+            try {
+                newFile.createNewFile();
+            } catch (IOException e) {
+                System.err.println("Error creating file!");
+                e.printStackTrace();
+            }
+        }
+
+        BufferedOutputStream out = null;
+        try {
+            out = new BufferedOutputStream(new FileOutputStream(newFile, false));
+        } catch (FileNotFoundException e) {
+            System.err.println("Error creating output stream");
+            e.printStackTrace();
+        }
+
+        try {
+            out.write(db);
+        } catch (IOException e) {
+            System.err.println("Error writing chunk to file");
+            e.printStackTrace();
+        }
+
+        try {
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public byte[] getChunkData() {
