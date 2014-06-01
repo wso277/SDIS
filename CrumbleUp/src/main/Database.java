@@ -171,12 +171,14 @@ public class Database implements Serializable {
     }
 
     public boolean login(StringBuffer password) {
-        Main.getLogger().log("Pass lida: " + password);
-        Main.getLogger().log("Pass DB: " + this.passwordHash);
 
-        if (this.passwordHash == password) {
+        if (passwordHash.toString().equals(password.toString())) {
+            Main.getLogger().log("Pass lida fixe: " + password);
+            Main.getLogger().log("Pass DB fixe: " + passwordHash);
             return true;
         } else {
+            Main.getLogger().log("Pass lida merda: " + password);
+            Main.getLogger().log("Pass DB merda: " + passwordHash);
             return false;
         }
     }

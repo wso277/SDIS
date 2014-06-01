@@ -48,7 +48,7 @@ public class RestoreDB {
                     e.printStackTrace();
                 }
 
-                if (timeout == 20 || timeout == 40) {
+                if (timeout == 10 || timeout == 20) {
                     break;
                 }
             }
@@ -63,7 +63,7 @@ public class RestoreDB {
                 }
                 timeout = 0;
                 currentChunk++;
-            } else if (timeout == 40) {
+            } else if (timeout == 20) {
                 Main.getLogger().log("BREAK");
                 break;
             }

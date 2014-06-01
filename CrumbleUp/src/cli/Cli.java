@@ -266,7 +266,7 @@ public class Cli {
                     Main.getLogger().log("FODEU");
                 }
                 Main.getLogger().log("CENAS");
-                while (Main.getDatabase().login(passwordHash)) {
+                while (!Main.getDatabase().login(passwordHash)) {
                     System.out.println("Wrong password!");
                     System.out.println("Enter your password: ");
                     try {
@@ -293,7 +293,7 @@ public class Cli {
         } else {
 
             Main.getLogger().log("OLD");
-            while (Main.getDatabase().login(passwordHash)) {
+            while (!Main.getDatabase().login(passwordHash)) {
                 System.out.println("Wrong password!");
                 System.out.println("Enter your password: ");
                 try {
