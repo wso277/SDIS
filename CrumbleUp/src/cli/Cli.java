@@ -6,6 +6,7 @@ import communication.Address;
 import communication.Network;
 import delete.Delete;
 import main.Database;
+import main.FileManager;
 import main.Main;
 import restore.RestoreSend;
 import space_reclaim.SpaceReclaim;
@@ -432,7 +433,7 @@ public class Cli {
             e.printStackTrace();
         }
 
-        if (Main.fileExists(filePath)) {
+        if (FileManager.fileExists(filePath)) {
             System.out.println("File Exists! Enter replication degree: ");
             String repDegree = "";
             try {

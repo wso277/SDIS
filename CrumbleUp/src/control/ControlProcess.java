@@ -104,7 +104,7 @@ class ControlProcess extends Thread {
 
             byte[] msg = message.getBytes(StandardCharsets.ISO_8859_1);
             Main.getRestore().send(msg);
-            Main.getLogger().log("Sent: " + msg);
+            Main.getLogger().log("Received: " + message);
 
             try {
                 TCPCommunicator tcpSocket = new TCPCommunicator(ip, tcp_port, true);
