@@ -36,7 +36,7 @@ class RestoreProcess extends Thread {
             e.printStackTrace();
         }
 
-        Main.getLogger().log("Sent: " + tmp);
+        Main.getLogger().log("RECEIVED: " + tmp);
 
         String[] tmp1 = tmp.split("\\s+");
 
