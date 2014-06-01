@@ -80,6 +80,7 @@ public class Main implements Serializable {
         service.submit(control);
         service.submit(restore);
         service.submit(delete);
+        cli.cliLogin();
         cli.menu();
 
         // When cli ends

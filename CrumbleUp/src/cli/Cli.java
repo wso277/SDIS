@@ -41,7 +41,6 @@ public class Cli {
 
         introNetwork();
 
-        cliLogin();
     }
 
     private void introNetwork() {
@@ -195,7 +194,7 @@ public class Cli {
         }
     }
 
-    private void cliLogin() {
+    public void cliLogin() {
         do {
             System.out.print("\nChoose a command:\n" + "1. Create Account\n" + "2. Log in\n" + "3. Exit\n\n" +
                     "Option: ");
