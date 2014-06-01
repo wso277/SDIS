@@ -446,7 +446,6 @@ public class FileManager {
         Main.getLogger().log("SIZE: " + db.length);
 
         try {
-            assert out != null;
             out.write(db);
         } catch (IOException e) {
             System.err.println("Error writing chunk to file");
