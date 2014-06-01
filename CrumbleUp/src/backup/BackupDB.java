@@ -20,7 +20,7 @@ public class BackupDB extends Thread {
     public void run() {
 
         FileManager fm = new FileManager(dbId, -1, true);
-        fm.split();
+        fm.splitDb(Main.getDatabase().getUsername() + "/database.cu", dbId);
 
         Integer chunkNo = 0;
 
@@ -35,11 +35,12 @@ public class BackupDB extends Thread {
             byte[] msg1 = Main.appendArray(msgBytes, fm.getChunkData());
 
             Main.getBackup().send(msg1);
+
+            fm.deleteChunk(chunkNo);
+            chunkNo++;
         }
 
-        fm.deleteChunk(chunkNo);
 
-        chunkNo++;
     }
 
 }

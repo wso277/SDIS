@@ -9,9 +9,7 @@ import delete.DeleteProcess;
 import restore.Restore;
 import restore.RestoreSend;
 
-import javax.crypto.Cipher;
 import java.io.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -56,6 +54,9 @@ public class Main implements Serializable {
         /*TODO:
         * Velocidade de transferência
         */
+        /*TODO:
+        * mensagem in para garantir replicacao
+         */
 
         // Initializing job queue
         service = Executors.newFixedThreadPool(15);
