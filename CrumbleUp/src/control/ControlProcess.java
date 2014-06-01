@@ -73,10 +73,16 @@ class ControlProcess extends Thread {
             Main.save(Main.getDatabase().getUsername());
         } else if (header.get(0).equals("GETDB")) {
             processDB();
+        } else if (header.get(0).equals("IN")) {
+            processIn();
         } else {
             System.err.println("Operation Invalid!");
         }
 
+    }
+
+    private void processIn() {
+        Main.getService().submit(new ReclaimProcess());
     }
 
     private void processDB() {

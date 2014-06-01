@@ -16,6 +16,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -276,6 +277,7 @@ public class Cli {
                     }
 
                 }
+
             } else {
 
                 Main.getLogger().log("NEW");
@@ -304,6 +306,7 @@ public class Cli {
             Main.getService().submit(new BackupDB());
         }
 
+        sendIn();
 
     }
 
@@ -344,7 +347,13 @@ public class Cli {
 
         }
 
+        sendIn();
         Main.save(username);
+    }
+
+    private void sendIn() {
+        String msg = "IN" + Main.getCRLF() + Main.getCRLF();
+        Main.getControl().send(msg.getBytes(StandardCharsets.ISO_8859_1));
     }
 
     private void processInput() {
