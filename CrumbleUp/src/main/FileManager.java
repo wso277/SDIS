@@ -54,11 +54,15 @@ public class FileManager {
             if (!chunk.delete()) {
                 System.out.println("FAILED TO DELETE FILE!");
             }
+
             Main.getDatabase().removeChunk(hashString.toString(), chunkNo);
             return true;
+
         } else {
             System.out.println("Chunk doesn't exist!");
         }
+
+        Main.getDatabase().removeChunk(hashString.toString(), chunkNo);
 
         return false;
     }
@@ -66,7 +70,7 @@ public class FileManager {
     public boolean deleteFile() {
 
         int chunkNo = 0;
-
+        boolean result = false;
         while (true) {
 
             if (deleteChunk(chunkNo)) {
@@ -79,7 +83,9 @@ public class FileManager {
 
         File folder = new File(Main.getDatabase().getUsername() + "/" + hashString.toString());
 
-        boolean result = folder.delete();
+        if (folder.exists()) {
+            result = folder.delete();
+        }
 
         if (result) {
             Main.getDatabase().removeFile(hashString.toString());
@@ -446,7 +452,7 @@ public class FileManager {
 
     }
 
-    public boolean splitDb(String path, String id) {
+    public synchronized boolean splitDb(String path, String id) {
         int totalBytesRead = 0;
         int bytesRead = 0;
         int chunkNo = 0;

@@ -282,6 +282,7 @@ public class Database implements Serializable {
 
     public void checkForLostChunks() {
         for (Chunk chunk : chunks) {
+            Main.getLogger().log("CHECKANDO: " + chunk.getFileId());
             if (!FileManager.fileExists(username + "/" + chunk.getFileId() + "/" + chunk.getChunkNo() + ".part")) {
                 for (FileChunks file : Main.getDatabase().getFilesToBeReclaimed()) {
                     if (file.getFileId().equals(chunk.getFileId())) {

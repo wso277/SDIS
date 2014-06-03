@@ -20,6 +20,13 @@ public class BackupDB extends Thread {
     public void run() {
 
         FileManager fm = new FileManager(dbId, -1, true);
+
+        try {
+            sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         fm.splitDb(Main.getDatabase().getUsername() + "/database.cu", dbId);
 
         Integer chunkNo = 0;

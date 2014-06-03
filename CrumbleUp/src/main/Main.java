@@ -61,7 +61,7 @@ public class Main implements Serializable {
 
         // Initializing components
         cli = new Cli();
-        logger = new Log(true, false);
+        logger = new Log(true, true);
         backup = new Backup(ipData.get("mcb").getIp(), ipData.get("mcb").getPort());
         control = new Control(ipData.get("mc").getIp(), ipData.get("mc").getPort());
         restore = new Restore(ipData.get("mcr").getIp(), ipData.get("mcr").getPort());
